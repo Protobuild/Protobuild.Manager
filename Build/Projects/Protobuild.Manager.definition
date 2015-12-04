@@ -2,7 +2,6 @@
 <Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App">
   <Properties>
     <Property Name="ApplicationIcon" Value="..\Other\GameIcon.ico" />
-    <Property Name="MonoDevelopPoliciesFile" Value="Build\Redpoint.appliedpolicy" />
     <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
   </Properties>
   <References>

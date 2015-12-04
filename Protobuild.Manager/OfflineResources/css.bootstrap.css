@@ -1,0 +1,273 @@
+﻿/**
+ * @provides bootstrap-css
+ * @generated
+ */
+
+@font-face
+{
+    font-family: Narkism;
+    src: url(/fonts/nrkis.eot);
+}
+
+@font-face
+{
+    font-family: Narkism;
+    src: url(/fonts/nrkis.ttf);
+}
+
+html, body
+{
+    width: 720px;
+    height: 400px;
+    overflow: hidden;
+    color: white !important;
+    position: relative;
+}
+
+#header h1 img
+{
+    width: 500px;
+}
+
+#header
+{
+    height: 121px;
+}
+
+#container, #working_container, #options_container, #prereq_container 
+{
+    margin: 0 auto;
+    width: 700px;
+    padding-left: 11px;
+}
+
+#working_container h1
+{
+    text-align: center;
+}
+
+#error_status
+{
+    color: red;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+#working_container, #options_container, #prereq_container 
+{
+    display: none;
+}
+
+#welcome_status
+{
+    text-align: center;
+    margin: 0 auto;
+    width: 500px;
+    margin-top: 100px;
+}
+
+#working_status
+{
+    text-align: center;
+    margin: 0 auto;
+    width: 500px;
+    margin-top: 40px;
+}
+
+.scrollable
+{
+    width: 495px;
+    height: 270px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+div.block
+{
+    width: 455px;
+    margin-left: 20px;
+    background: none;
+    color: white;
+    padding: 0px;
+}
+
+div.block a
+{
+    color: white !important;
+}
+
+div div.block:last-child {
+    margin-bottom: 0px;
+}
+
+a#advanced_options_toggle, a#save_and_return_toggle, span#loading_please_wait {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    color: white;
+}
+
+a#save_and_return_toggle {
+  display: none;
+}
+
+#login {
+    position: absolute;
+    top: 100px;
+    right: 35px;
+    height: 280px;
+    width: 160px;
+}
+
+#login input[type=text], #login input[type=password] {
+    width: 160px;
+    margin-bottom: 5px;
+}
+
+#register {
+    position: absolute;
+    top: 300px;
+    right: 35px;
+    height: 280px;
+    width: 160px;
+}
+
+#play, #register_go {
+    border: none;
+    width: 165px;
+    height: 37px;
+    background: transparent;
+    background-image: url(/image/button.png);
+    background-size: 165px 37px;
+    color: white;
+    font-family: Narkism;
+    cursor: pointer;
+    font-size: 15px;
+    padding-top: 3px;
+}
+
+#play {
+    margin-top: 14px;
+}
+
+#play:active, #register_go:active {
+  background-image: url(/image/button_press.png);
+}
+
+#play:disabled, #register_go:disabled {
+  background-image: url(/image/button_disabled.png);
+    cursor: not-allowed;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+h3.sub {
+    text-align: center;
+    border-bottom: white solid 1px;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+* {
+    -ms-overflow-style: none;
+}
+
+form h3.opt_group {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+form h3.opt_group:first-child {
+  margin-top: 0px;
+}
+
+form#options_form input[type=checkbox] {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 20px;
+  vertical-align: middle;
+}
+
+form#options_form label {
+  line-height: 15px;
+  vertical-align: middle;
+}
+
+form#options_form span.opt_group input[type=checkbox]:first-child {
+  margin-left: 0px;
+}
+
+div#progress_outer {
+  position: absolute;
+  bottom: 0px;
+  left: 25px;
+  right: 25px;
+  height: 10px;
+  border: solid 1px rgba(255, 255, 255, 0.4);
+  display: none;
+}
+
+div#progress_inner {
+  height: 10px;
+  display: block;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 0%;
+}
+
+div#progress_eta {
+  font-size: 10px;
+  position: absolute;
+  right: 4px;
+  top: 0px;
+  line-height: 10px;
+  height: 10px;
+  text-align: right;
+  display: block;
+  color: white;
+}
+
+div#outofdatemain {
+  margin: auto;
+  margin-top: 50px;
+  width: 350px;
+  text-align: center;
+}
+
+div#outofdatelink {
+  font-size: 24px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+div#outofdatesuffix {
+  margin: auto;
+  width: 350px;
+  text-align: center;
+}
+
+/*
+ * Hide these items initially, launcher will show them when ready
+ */
+
+a#advanced_options_toggle, form#login, form#register {
+  display: none;
+}
+
+a#enable_full_crash_dumps {
+  color: white;
+  margin-top: 20px;
+  display: none;
+  /* The launcher will display this when running on Windows */
+}
+
+div#full_crash_dumps_enabled {
+  color: white;
+  margin-top: 20px;
+  display: none;
+  /* The launcher will display this when running on Windows */
+}
+
+ 

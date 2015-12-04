@@ -1,0 +1,356 @@
+﻿/**
+ * @provides main-css
+ * @generated
+ */
+
+@font-face
+{
+    font-family: 'Source Sans Pro';
+    src: url(/fonts/SourceSansPro-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face
+{
+    font-family: 'Source Sans Pro';
+    src: url(/fonts/SourceSansPro-Italic.ttf);
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face
+{
+    font-family: 'Source Sans Pro';
+    src: url(/fonts/SourceSansPro-Bold.ttf);
+    font-weight: bold;
+}
+
+html, body
+{
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    background-color: #000000;
+    background-image: url(/image/background.jpg);
+    background-position: center -300px;
+    background-repeat: no-repeat;
+}
+
+a
+{
+    text-decoration: underline;
+    color: rgb(0, 0, 238);
+}
+
+p
+{
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+pre
+{
+    font-size: 13px;
+}
+
+div.block a:visited
+{
+    color: rgb(85, 26, 139);
+}
+
+div.block a:active
+{
+    color: rgb(255, 0, 0);
+}
+
+#container
+{
+    margin: 0 auto;
+    width: 800px;
+}
+
+#header
+{
+    padding: 0px;
+    margin: 0px;
+    height: 205px;
+}
+
+#header h1
+{
+    margin: 0;
+    color: #FFF;
+    font-size: 40px;
+    font-family: sans-serif;
+    letter-spacing: 4px;
+    text-shadow: 0px 2px 2px #000;
+    margin: 0px;
+    padding: 0px;
+    line-height: 86px;
+}
+
+#header h1 img
+{
+    width: 800px;
+    margin-left: 2px;
+}
+
+#navigation
+{
+    float: left;
+    width: 800px;
+    background:#333;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin-bottom: 16px;
+    border-top: solid #222 2px;
+    border-left: solid #222 2px;
+    border-right: solid #222 2px;
+}
+
+#navigation ul
+{
+    margin: 0;
+    padding: 0;
+}
+
+#navigation ul li
+{
+    list-style-type: none;
+    display: inline;
+}
+
+#navigation li a
+{
+    display: block;
+    float: left;
+    padding: 5px 12px;
+    padding-top: 8px;
+    color: #fff;
+    text-decoration: none;
+    border-right: 1px solid #fff;
+    border-bottom: solid 2px #333;
+    padding-bottom: 3px;
+}
+
+#navigation li.active a
+{
+    border-bottom: solid 2px #383;
+}
+
+#navigation li a:hover
+{
+    background:#383;
+    border-bottom: solid 2px #383;
+}
+
+iframe.video
+{
+    margin-bottom: 20px;
+}
+
+div.videohide
+{
+    margin-bottom: 20px;
+}
+
+div.alignment
+{
+    position: relative;
+    width: 800px;
+}
+
+div.right
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 240px;
+}
+
+div.left
+{
+    width: 500px;
+}
+
+div.block
+{
+    clear: left;
+    padding: 20px;
+    margin-bottom: 20px;
+    background:#fff;
+}
+
+div.block *:first-child, div.block h3, span.area *:first-child
+{
+    margin-top: 0px;
+}
+
+div.block *:last-child, span.area *:last-child
+{
+    margin-bottom: 0px;
+}
+
+div.block h2
+{
+    color:#000;
+    font-size: 160% !important;
+    margin: 0 0 .5em;
+}
+
+div.downloadhide
+{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 200;
+}
+
+div.downloadinst
+{
+    padding: 20px;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 10%;
+    width: 600px;
+    background:#fff;
+}
+
+div.downloadinst *:first-child, div.downloadinst h3, span.area *:first-child
+{
+    margin-top: 0px;
+}
+
+div.downloadinst *:last-child, span.area *:last-child
+{
+    margin-bottom: 0px;
+}
+
+#container > h2, h2.h2
+{
+    color: #fff;
+    font-size: 1.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+}
+
+#footer
+{
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#footer a
+{
+    color: #fff;
+}
+
+.phame .details
+{
+    float: right;
+    display: inline;
+    text-align: right;
+    margin: 0px;
+    margin-top: -4px !important;
+}
+
+.phame .details .author
+{
+    font-weight: bold;
+}
+
+.phame .details .date
+{
+    font-size: 12px;
+}
+
+.download a
+{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.download img
+{
+    display: inline;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+span.actions
+{
+    font-size: 12px;
+    text-decoration: none;
+    float:right;
+    line-height: 40px;
+}
+
+span.actions a, h2 a
+{
+    color: #fff;
+    text-decoration: underline;
+    cursor: auto;
+}
+
+table {
+  width: 100%;
+}
+
+table th {
+  text-align: left;
+}
+
+div.phabricator-crumbs-view {
+  display: none;
+}
+
+div.auth_bar {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+div.auth_bar a {
+  color: white;
+}
+
+#container .aphront-dialog-view {
+  width: auto;
+  margin-top: 0px;
+}
+
+#container .phui-box-border {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+}
+
+p.download {
+  height: 32px;
+}
+
+p.download span.outofdate {
+  margin-left: 46px;
+  font-size: 12px;
+  color: grey;
+  position: relative;
+  top: -10px;
+}
+
+p.download > img.imgfloat {
+  float: left;
+  margin-right: 13px;
+  margin-top: 4px;
+}
+
+div.phabricator-login-buttons {
+  display: none;
+}
+ 

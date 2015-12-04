@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App">
+  <Properties>
+    <Property Name="ApplicationIcon" Value="..\Other\GameIcon.ico" />
+    <Property Name="MonoDevelopPoliciesFile" Value="Build\Redpoint.appliedpolicy" />
+    <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
+  </Properties>
+  <References>
+    <Reference Include="Protobuild.Manager.ThirdParty" />
+  </References>
+  <Files>
+    <Compile Include="AppDelegate.cs">
+      <Platforms>MacOS</Platforms>
+    </Compile>
+    <Compile Include="AppHandlers\AppHandlerManager.cs" />
+    <Compile Include="AppHandlers\ChannelAppHandler.cs" />
+    <Compile Include="AppHandlers\ClearCacheAppHandler.cs" />
+    <Compile Include="AppHandlers\EnableFullCrashDumpsAppHandler.cs" />
+    <Compile Include="AppHandlers\IAppHandler.cs" />
+    <Compile Include="AppHandlers\IAppHandlerManager.cs" />
+    <Compile Include="AppHandlers\LoginAppHandler.cs" />
+    <Compile Include="AppHandlers\OptionAppHandler.cs" />
+    <Compile Include="AppHandlers\RegisterAppHandler.cs" />
+    <Compile Include="BrowserEmulation\BrowserEmulation.cs" />
+    <Compile Include="Channels\ChannelLoader.cs" />
+    <Compile Include="Channels\IChannelLoader.cs" />
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="DI\LightweightKernel.cs" />
+    <Compile Include="DI\LightweightKernelModule.cs" />
+    <Compile Include="ErrorLog.cs" />
+    <Compile Include="Execution\IExecution.cs" />
+    <Compile Include="Execution\LinuxExecution.cs" />
+    <Compile Include="Execution\MacOSExecution.cs" />
+    <Compile Include="Execution\WindowsExecution.cs" />
+    <Compile Include="GameUpdater.cs" />
+    <Compile Include="LinuxProgram.cs" />
+    <Compile Include="MacOSProgram.cs" />
+    <Compile Include="MainWindow.cs">
+      <Platforms>MacOS</Platforms>
+    </Compile>
+    <Compile Include="MainWindow.designer.cs">
+      <Platforms>MacOS</Platforms>
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindowController.cs">
+      <Platforms>MacOS</Platforms>
+    </Compile>
+    <Compile Include="News\INewsLoader.cs" />
+    <Compile Include="News\NewsLoader.cs" />
+    <Compile Include="OfflineDetection\IOfflineDetection.cs" />
+    <Compile Include="OfflineDetection\OfflineDetection.cs" />
+    <Compile Include="Path\IPathProvider.cs" />
+    <Compile Include="Path\PathProvider.cs" />
+    <Compile Include="Phabricator\ConduitClient.cs" />
+    <Compile Include="Phabricator\ConduitException.cs" />
+    <Compile Include="PrerequisiteChecks\AbstractPrerequisiteCheck.cs" />
+    <Compile Include="PrerequisiteChecks\DirectXPrerequisiteCheck.cs" />
+    <Compile Include="PrerequisiteChecks\IPrerequisiteCheck.cs" />
+    <Compile Include="PrerequisiteChecks\Mono380Check.cs" />
+    <Compile Include="PrerequisiteChecks\PrerequisiteCheckStatus.cs" />
+    <Compile Include="Progress\IProgressRenderer.cs" />
+    <Compile Include="Progress\ProgressRenderer.cs" />
+    <Compile Include="ProgressRetryDownloader.cs" />
+    <Compile Include="RuntimeServer\RuntimeServer.cs" />
+    <Compile Include="SelfUpdate\ILauncherSelfUpdate.cs" />
+    <Compile Include="SelfUpdate\InPlaceExecutableSwap.cs" />
+    <Compile Include="SelfUpdate\LauncherSelfUpdate.cs" />
+    <Compile Include="Startup\IStartup.cs" />
+    <Compile Include="Startup\Startup.cs" />
+    <Compile Include="UIManager\IUIManager.cs" />
+    <Compile Include="UIManager\LinuxUIManager.cs" />
+    <Compile Include="UIManager\WindowsUIManager.cs" />
+    <Compile Include="UrlConfig.cs" />
+    <Compile Include="VersionConfig.cs" />
+    <Compile Include="WindowsProgram.cs" />
+    <Compile Include="Workflows\AuthWorkflow.cs" />
+    <Compile Include="Workflows\InitialWorkflow.cs" />
+    <Compile Include="Workflows\IWorkflow.cs" />
+    <Compile Include="Workflows\IWorkflowFactory.cs" />
+    <Compile Include="Workflows\IWorkflowManager.cs" />
+    <Compile Include="Workflows\LaunchGameLinuxWorkflow.cs" />
+    <Compile Include="Workflows\LaunchGameMacOSWorkflow.cs" />
+    <Compile Include="Workflows\LaunchGameWindowsWorkflow.cs" />
+    <Compile Include="Workflows\LicenseWorkflow.cs" />
+    <Compile Include="Workflows\PrereqWorkflow.cs" />
+    <Compile Include="Workflows\UpdateGameWorkflow.cs" />
+    <Compile Include="Workflows\WorkflowFactory.cs" />
+    <Compile Include="Workflows\WorkflowManager.cs" />
+    <Content Include="..\Other\Unearth.icns">
+      <Platforms>MacOS</Platforms>
+      <Link>Unearth.icns</Link>
+    </Content>
+    <EmbeddedResource Include="..\CrashReport\CrashReportForm.resx">
+      <Link>CrashReport\CrashReportForm.resx</Link>
+      <DependentUpon>CrashReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Other\GameIcon.ico">
+      <Platforms>Windows,Linux</Platforms>
+      <Link>GameIcon.ico</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css.bootstrap.css">
+      <LogicalName>css.bootstrap.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css.font-awesome.min.css">
+      <LogicalName>css.font-awesome.min.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css.main.css">
+      <LogicalName>css.main.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css.prereq.css">
+      <LogicalName>css.prereq.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.FontAwesome.otf">
+      <LogicalName>fonts.FontAwesome.otf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.eot">
+      <LogicalName>fonts.fontawesome-webfont.eot</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.svg">
+      <LogicalName>fonts.fontawesome-webfont.svg</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.ttf">
+      <LogicalName>fonts.fontawesome-webfont.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.woff">
+      <LogicalName>fonts.fontawesome-webfont.woff</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.nrkis.eot">
+      <LogicalName>fonts.nrkis.eot</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.nrkis.ttf">
+      <LogicalName>fonts.nrkis.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.SourceSansPro-Bold.ttf">
+      <LogicalName>fonts.SourceSansPro-Bold.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.SourceSansPro-Italic.ttf">
+      <LogicalName>fonts.SourceSansPro-Italic.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\fonts.SourceSansPro-Regular.ttf">
+      <LogicalName>fonts.SourceSansPro-Regular.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\image.background.jpg">
+      <LogicalName>image.background.jpg</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\image.button.png">
+      <LogicalName>image.button.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\image.button_disabled.png">
+      <LogicalName>image.button_disabled.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\image.button_press.png">
+      <LogicalName>image.button_press.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\image.title_white_500.png">
+      <LogicalName>image.title_white_500.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\index.htm">
+      <LogicalName>index.htm</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js.jquery-1.11.1.min.js">
+      <LogicalName>js.jquery-1.11.1.min.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js.main.js">
+      <LogicalName>js.main.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\tpl.head.htm">
+      <LogicalName>tpl.head.htm</LogicalName>
+    </EmbeddedResource>
+    <InterfaceDefinition Include="MainMenu.xib">
+      <Platforms>MacOS</Platforms>
+    </InterfaceDefinition>
+    <InterfaceDefinition Include="MainWindow.xib">
+      <Platforms>MacOS</Platforms>
+    </InterfaceDefinition>
+    <None Include="Info.plist">
+      <Platforms>MacOS</Platforms>
+    </None>
+  </Files>
+</Project>

@@ -1,0 +1,23 @@
+﻿#prereq_container ul {
+    list-style: none;
+    margin-left: 16px;
+    padding-left: 0px;
+}
+
+#prereq_container li {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+#prereq_container .red { color: #c0392b; }
+#prereq_container .orange { color: #e67e22; }
+#prereq_container .yellow { color: #f1c40f; }
+#prereq_container .green { color: #139543; }
+#prereq_container .blue { color: #2980b9; }
+#prereq_container .sky { color: #3498db; }
+
+#prereq_container .back {
+    color: #EBECEE;
+    margin-right: -1.28571429em;
+}

@@ -8,7 +8,6 @@ namespace Unearth
     using System.Runtime.InteropServices;
     using System.Web;
     using System.Windows.Forms;
-    using CrashReport;
 
     public class WindowsUIManager : IUIManager
     {
@@ -34,7 +33,7 @@ namespace Unearth
             var form = new Form();
             this.m_ActiveForm = form;
             form.Text = "Unearth";
-            form.Icon = new Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream("Unearth.GameIcon.ico"));
+            //form.Icon = new Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream("Unearth.GameIcon.ico"));
             form.Width = 740;
             form.Height = 460;
             form.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -117,8 +116,6 @@ namespace Unearth
                     }
 
                     Application.DoEvents();
-
-                    CrashReporter.Record(e);
 
                     Application.Exit();
                 }

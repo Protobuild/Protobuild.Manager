@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Branding>
+  <!--
+  The name of the product, as displayed to the user.
+  -->
+  <ProductName>Protobuild</ProductName>
+  
+  <!--
+  The name of the storage folder to use when storing information
+  inside the Application Data (or Linux / Mac equivalent).  You
+  MUST change this value to something unique, or the configuration
+  of your branded application will clash with the configuration
+  settings of the generic Protobuild project manager.
+  -->
+  <ProductStorageID>.protobuild-manager</ProductStorageID>
+  
+  <!--
+  The online RSS feed URL that should be used for displaying news.  If
+  you leave this blank, no news will be displayed.
+  -->
+  <RSSFeedURL>https://medium.com/feed/protobuild-development-updates</RSSFeedURL>
+</Branding>

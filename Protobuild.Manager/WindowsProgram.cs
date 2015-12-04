@@ -3,7 +3,6 @@ namespace Unearth
 {
     using System;
     using System.Diagnostics;
-    using CrashReport;
 
     public static class Program
     {
@@ -16,8 +15,7 @@ namespace Unearth
             }
             else
             {
-                AppDomain.CurrentDomain.UnhandledException +=
-                    (sender, e) => CrashReporter.Record((Exception)e.ExceptionObject);
+                // TODO: Crash Reporting
 
                 try
                 {
@@ -35,7 +33,7 @@ namespace Unearth
                         IsSubmitting = true;
                     }
 
-                    CrashReporter.Record(e);
+                    // TODO: Crash Reporting
                 }
             }
         }

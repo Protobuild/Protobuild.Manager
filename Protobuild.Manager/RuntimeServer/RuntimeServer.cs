@@ -5,11 +5,18 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Xml;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class RuntimeServer
     {
+        private readonly LightweightKernel _kernel;
+
+        private readonly IErrorLog _errorLog;
+
         private HttpListener m_ActiveListener;
 
         private Dictionary<string, object> m_InjectedValues = new Dictionary<string, object>();
@@ -21,6 +28,12 @@ namespace Unearth
         private object m_InjectionLock = new object();
 
         public string BaseUri { get; private set; }
+
+        public RuntimeServer(LightweightKernel kernel, IErrorLog errorLog)
+        {
+            _kernel = kernel;
+            _errorLog = errorLog;
+        }
 
         public void Start()
         {
@@ -45,11 +58,9 @@ namespace Unearth
                 }
             }
 
-            var thread = new Thread(this.Run);
-            thread.IsBackground = true;
-            thread.Start();
+            Task.Run(Run);
 
-            ErrorLog.Log("Started runtime server on " + this.BaseUri);
+            _errorLog.Log("Started runtime server on " + this.BaseUri);
         }
 
         public void RegisterRuntimeInjector(Action<string> runtimeInjector)
@@ -162,7 +173,7 @@ namespace Unearth
                 .Replace("\"", "\\\"") + "\"";
         }
 
-        private void Run()
+        private async Task Run()
         {
             var listener = this.m_ActiveListener;
 
@@ -170,7 +181,7 @@ namespace Unearth
 
             while (true)
             {
-                var context = listener.GetContext();
+                var context = await listener.GetContextAsync();
                 var request = context.Request;
                 var response = context.Response;
 
@@ -184,6 +195,7 @@ namespace Unearth
                 if (resource == null)
                 {
                     response.StatusCode = 404;
+                    Console.Error.WriteLine("Request for resource failed (not found): " + embeddedUri);
                 }
                 else
                 {
@@ -211,17 +223,36 @@ namespace Unearth
 
                     if (extension == "htm")
                     {
-                        using (var reader = new StreamReader(resource))
+                        var xml = new XmlDocument();
+                        xml.Load(resource);
+
+                        xml.DocumentElement.SelectSingleNode("//style[@data-injection='true']").InnerText = @"
+*[data-template] {
+  display: none;
+}
+";
+                        
+                        foreach (var elem in xml.DocumentElement.SelectNodes("//meta[@name='needs-loadable']").OfType<XmlElement>())
                         {
-                            var headTpl = this.LoadTemplate(assembly, "tpl.head.htm");
+                            var @interface = elem.GetAttribute("interface");
+                            var type = typeof(RuntimeServer).Assembly.GetTypes().First(x => x.Name == @interface);
+                            var inst = _kernel.Get(type) as ILoadable;
+                            if (inst != null)
+                            {
+                                await Task.Run(inst.Load);
+                            }
+                        }
 
-                            var html = reader.ReadToEnd();
-                            html = html.Replace("{head}", headTpl + "<script type=\"text/javascript\">" + this.GetInjectionScript(true) + "</script>");
+                        ((XmlElement)xml.DocumentElement.SelectSingleNode("//script[@data-injection='true']")).InnerText = this.GetInjectionScript(true);
+                        ((XmlElement)xml.DocumentElement.SelectSingleNode("//script[@data-injection='true']")).SetAttribute("data-injection", "false");
 
-                            var bytes = System.Text.Encoding.UTF8.GetBytes(html);
-
-                            response.ContentLength64 = bytes.Length;
-                            response.OutputStream.Write(bytes, 0, bytes.Length);
+                        using (var stream = new MemoryStream())
+                        {
+                            xml.Save(stream);
+                            var len = stream.Position;
+                            stream.Seek(0, SeekOrigin.Begin);
+                            response.ContentLength64 = len;
+                            stream.CopyTo(response.OutputStream);
                         }
                     }
                     else

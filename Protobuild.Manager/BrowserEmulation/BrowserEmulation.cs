@@ -1,5 +1,5 @@
 ﻿#if PLATFORM_WINDOWS
-namespace Unearth
+namespace Protobuild.Manager
 {
     using System.IO;
     using System.Reflection;

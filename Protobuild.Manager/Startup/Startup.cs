@@ -1,12 +1,10 @@
-﻿namespace Unearth
+﻿namespace Protobuild.Manager
 {
-    public class Startup : IStartup
+    internal class Startup : IStartup
     {
         private readonly InitialWorkflow m_InitialWorkflow;
 
         private readonly LauncherSelfUpdate m_LauncherSelfUpdate;
-
-        private readonly NewsLoader m_NewsLoader;
 
         private readonly RuntimeServer m_RuntimeServer;
 
@@ -14,16 +12,14 @@
 
         private readonly IWorkflowManager m_WorkflowManager;
 
-        public Startup(
+        internal Startup(
             RuntimeServer runtimeServer,
-            NewsLoader newsLoader,
             LauncherSelfUpdate launcherSelfUpdate,
             IWorkflowManager workflowManager,
             InitialWorkflow initialWorkflow,
             IUIManager uiManager)
         {
             this.m_RuntimeServer = runtimeServer;
-            this.m_NewsLoader = newsLoader;
             this.m_LauncherSelfUpdate = launcherSelfUpdate;
             this.m_WorkflowManager = workflowManager;
             this.m_InitialWorkflow = initialWorkflow;
@@ -33,7 +29,6 @@
         public void Start()
         {
             this.m_RuntimeServer.Start();
-            this.m_NewsLoader.LoadNews();
             this.m_LauncherSelfUpdate.StartCheck();
             this.m_WorkflowManager.AppendWorkflow(this.m_InitialWorkflow);
             this.m_WorkflowManager.Start();

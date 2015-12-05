@@ -4,3 +4,4 @@
 bin/
 obj/
 .vs/Protobuild.Manager.Windows/v14/.suo
+/Protobuild.Manager.Linux.userprefs

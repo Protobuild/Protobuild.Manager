@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class OptionAppHandler : IAppHandler
     {
@@ -14,9 +14,9 @@ namespace Unearth
 
         public void Handle(NameValueCollection parameters)
         {
-            ConfigManager.SaveGameOptions(parameters["state"]);
+            //ConfigManager.SaveGameOptions(parameters["state"]);
 
-            this.m_RuntimeServer.Set("currentOptions", ConfigManager.LoadGameOptions());
+            //this.m_RuntimeServer.Set("currentOptions", ConfigManager.LoadGameOptions());
         }
     }
 }

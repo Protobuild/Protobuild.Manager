@@ -2,17 +2,24 @@
 using System.IO;
 using System.Net;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
-    public static class ErrorLog
+    internal class ErrorLog : IErrorLog
     {
-        private static object m_LogLock = new object();
+        private readonly IConfigManager _configManager;
 
-        public static void Log(Exception ex)
+        private object _logLock = new object();
+
+        internal ErrorLog(IConfigManager configManager)
         {
-            lock (m_LogLock)
+            _configManager = configManager;
+        }
+
+        public void Log(Exception ex)
+        {
+            lock (_logLock)
             {
-                var logPath = Path.Combine(ConfigManager.GetBasePath(), "launcher.log");
+                var logPath = Path.Combine(_configManager.GetBasePath(), "launcher.log");
 
                 using (var writer = new StreamWriter(logPath, true))
                 {
@@ -64,11 +71,11 @@ namespace Unearth
             }
         }
 
-        public static void Log(string s)
+        public void Log(string s)
         {
-            lock (m_LogLock)
+            lock (_logLock)
             {
-                var logPath = Path.Combine(ConfigManager.GetBasePath(), "launcher.log");
+                var logPath = Path.Combine(_configManager.GetBasePath(), "launcher.log");
 
                 using (var writer = new StreamWriter(logPath, true))
                 {

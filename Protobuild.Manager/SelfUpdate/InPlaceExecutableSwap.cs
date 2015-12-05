@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CSharp;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class InPlaceExecutableSwap
     {

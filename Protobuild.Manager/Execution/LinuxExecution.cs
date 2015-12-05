@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class LinuxExecution : IExecution
     {

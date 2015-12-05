@@ -20,6 +20,8 @@
 
 #if PLATFORM_WINDOWS
         System.Drawing.Icon WindowsIcon { get; }
+#elif PLATFORM_LINUX
+        Gdk.Pixbuf LinuxIcon { get; }
 #endif
     }
 }

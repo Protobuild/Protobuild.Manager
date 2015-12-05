@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class WorkflowFactory : IWorkflowFactory
     {
@@ -10,6 +10,8 @@ namespace Unearth
         {
             this.m_Kernel = kernel;
         }
+
+        /*
 
         public IWorkflow CreateAuthWorkflow(string username, string password, bool useCached)
         {
@@ -42,6 +44,8 @@ namespace Unearth
         {
             return this.m_Kernel.Get<PrereqWorkflow>();
         }
+
+*/
     }
 }
 

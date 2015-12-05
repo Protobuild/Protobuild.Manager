@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public interface ILauncherSelfUpdate
     {

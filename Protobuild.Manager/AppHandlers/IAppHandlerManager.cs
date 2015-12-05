@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
 	public interface IAppHandlerManager
 	{

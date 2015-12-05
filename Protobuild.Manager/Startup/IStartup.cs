@@ -1,4 +1,4 @@
-﻿namespace Unearth
+﻿namespace Protobuild.Manager
 {
     public interface IStartup
     {

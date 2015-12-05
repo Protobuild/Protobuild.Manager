@@ -1,17 +1,14 @@
 ﻿using System;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class InitialWorkflow : IWorkflow
     {
         private readonly RuntimeServer m_RuntimeServer;
 
-        private readonly IChannelLoader m_ChannelLoader;
-
-        public InitialWorkflow(RuntimeServer runtimeServer, IChannelLoader channelLoader)
+        public InitialWorkflow(RuntimeServer runtimeServer)
         {
             this.m_RuntimeServer = runtimeServer;
-            this.m_ChannelLoader = channelLoader;
         }
 
         public void Run()
@@ -23,9 +20,7 @@ namespace Unearth
             this.m_RuntimeServer.Set("view", "main");
             this.m_RuntimeServer.Set("availableChannelCount", 0);
             this.m_RuntimeServer.Set("newsCount", 0);
-            this.m_RuntimeServer.Set("currentOptions", ConfigManager.LoadGameOptions());
-
-            this.m_ChannelLoader.LoadInBackground();
+            /*this.m_RuntimeServer.Set("currentOptions", ConfigManager.LoadGameOptions());
 
             if (ConfigManager.GetSavedConfig(ref username, ref phid, ref certificate))
             {
@@ -35,7 +30,7 @@ namespace Unearth
             else
             {
                 this.m_RuntimeServer.Set("cachedPassword", false);
-            }
+            }*/
 
 #if PLATFORM_WINDOWS
             this.m_RuntimeServer.Set("canFullCrashDump", true);

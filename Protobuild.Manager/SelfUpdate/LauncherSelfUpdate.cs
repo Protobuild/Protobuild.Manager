@@ -8,9 +8,8 @@ using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading;
-using Phabricator.Conduit;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class LauncherSelfUpdate : ILauncherSelfUpdate
     {
@@ -36,10 +35,10 @@ namespace Unearth
 
         public void StartCheck()
         {
-            if (File.Exists(Path.Combine(ConfigManager.GetBasePath(), "disable-launcher-update")))
+            /*if (File.Exists(Path.Combine(ConfigManager.GetBasePath(), "disable-launcher-update")))
             {
                 return;
-            }
+            }*/
 
             var thread = new Thread(this.Run);
             thread.IsBackground = true;
@@ -48,6 +47,7 @@ namespace Unearth
 
         private void Run()
         {
+            /*
             var client = new ConduitClient(UrlConfig.CONDUIT);
             client.User = "channel-query";
             client.Certificate = "tmml6tmiq3tf5jiy6666r5eow6zazpct3r7f5lngtj7brq"
@@ -118,6 +118,7 @@ namespace Unearth
             swap.SwapWith(Path.Combine(ConfigManager.GetBasePath(), "Unearth.exe"));
 
             this.m_UIManager.Quit();
+            */
         }
 
         private string HashOfThisAssembly()

@@ -19,4 +19,18 @@
   you leave this blank, no news will be displayed.
   -->
   <RSSFeedURL>https://medium.com/feed/protobuild-development-updates</RSSFeedURL>
+
+  <!--
+  For an external icon on disk, use the full path to the .ico file.  For
+  an embedded resource, prefix it with the @ symbol, followed immediately
+  by the resource name.
+  -->
+  <WindowsIcon>@Protobuild.Icon.ico</WindowsIcon>
+
+  <!--
+  For an external icon on disk, use the full path to the .ico file.  For
+  an embedded resource, prefix it with the @ symbol, followed immediately
+  by the resource name.
+  -->
+  <LinuxIcon>@Protobuild.Icon.ico</LinuxIcon>
 </Branding>

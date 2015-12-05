@@ -2,14 +2,13 @@
 using System;
 using System.Diagnostics;
 using System.Web;
-using CrashReport;
 using GLib;
 using Gtk;
 using WebKit;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
-    public delegate void ResourceRequestDelegate(object obj, SignalArgs args);
+    public delegate void SignalDelegate(object obj, SignalArgs args);
 
     public static class Program
     {
@@ -26,12 +25,12 @@ namespace Unearth
             }
             else
             {
-                AppDomain.CurrentDomain.UnhandledException +=
-                    (sender, e) => CrashReporter.Record((Exception)e.ExceptionObject);
+                //AppDomain.CurrentDomain.UnhandledException +=
+                //    (sender, e) => CrashReporter.Record((Exception)e.ExceptionObject);
 
                 GLib.ExceptionManager.UnhandledException += (e) => 
                 {
-                    CrashReporter.Record((Exception)e.ExceptionObject);
+                    //CrashReporter.Record((Exception)e.ExceptionObject);
                     e.ExitApplication = true;
                 };
 
@@ -47,12 +46,12 @@ namespace Unearth
                     }
                     else
                     {
-                        CrashReporter.Record(e);
+                        //CrashReporter.Record(e);
                     }
                 }
                 catch (Exception e)
                 {
-                    CrashReporter.Record(e);
+                    //CrashReporter.Record(e);
                 }
             }
         }
@@ -78,12 +77,12 @@ namespace Unearth
 
         public static void Run(string[] args)
         {
-            ErrorLog.Log("Started game launcher on Linux platform");
-
             var kernel = new LightweightKernel();
             kernel.BindCommon();
             kernel.BindAndKeepInstance<IUIManager, LinuxUIManager>();
             kernel.BindAndKeepInstance<IExecution, LinuxExecution>();
+
+            kernel.Get<IErrorLog>().Log("Started game launcher on Linux platform");
 
             var startup = kernel.Get<IStartup>();
             startup.Start();

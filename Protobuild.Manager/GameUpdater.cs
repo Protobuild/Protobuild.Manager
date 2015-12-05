@@ -3,7 +3,7 @@
 // on the main Tychaia website (www.tychaia.com).  Changes to the         //
 // license on the website apply retroactively.                            //
 // ====================================================================== //
-namespace Unearth
+namespace Protobuild.Manager
 {
     using System;
     using System.Collections;
@@ -42,6 +42,7 @@ namespace Unearth
             Action<string> onFail,
             Action<float, TimeSpan> onProgress)
         {
+            /*
             var client = new Phabricator.Conduit.ConduitClient(UrlConfig.CONDUIT);
             client.Certificate = this.m_ConduitCertificate;
             client.User = this.m_ConduitUser;
@@ -126,6 +127,8 @@ namespace Unearth
                 onProgress,
                 onFail,
                 totalBytes);
+                */
+            return true;
         }
 
         private Dictionary<string, string> CalculateHashes()

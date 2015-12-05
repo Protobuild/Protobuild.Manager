@@ -1,13 +1,20 @@
-﻿namespace Unearth
+﻿namespace Protobuild.Manager
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
-    public static class ConfigManager
+    internal class ConfigManager : IConfigManager
     {
-        public static void SetSavedConfig(
+        private readonly IBrandingEngine _brandingEngine;
+
+        public ConfigManager(IBrandingEngine brandingEngine)
+        {
+            _brandingEngine = brandingEngine;
+        }
+
+        public void SetSavedConfig(
             string username,
             string phid,
             string certificate)
@@ -23,7 +30,7 @@
             }
         }
 
-        public static void ClearSavedConfig()
+        public void ClearSavedConfig()
         {
             var userInfoPath = Path.Combine(GetBasePath(), "userinfo");
 
@@ -33,7 +40,7 @@
             }
         }
 
-        public static bool GetSavedConfig(
+        public bool GetSavedConfig(
             ref string username,
             ref string phid,
             ref string certificate)
@@ -56,17 +63,17 @@
             return false;
         }
 
-        public static string GetBasePath()
+        public string GetBasePath()
         {
-            // Look under %appdata%/.tychaia.
+            // Look under %appdata%/(storage-id).
             var appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var path = Path.Combine(appdata, ".tychaia");
+            var path = Path.Combine(appdata, _brandingEngine.ProductStorageID);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             return path;
         }
 
-        public static string LoadGameOptions() 
+        public string LoadGameOptions() 
         {
             if (!File.Exists(Path.Combine(GetBasePath(), "settings")))
             {
@@ -85,7 +92,7 @@
             }
         }
 
-        public static void SaveGameOptions(string jsonOptions) 
+        public void SaveGameOptions(string jsonOptions) 
         {
             using (var writer = new StreamWriter(new FileStream(Path.Combine(GetBasePath(), "settings"), FileMode.Create, FileAccess.Write, FileShare.ReadWrite)))
             {
@@ -93,7 +100,7 @@
             }
         }
 
-        public static string LoadChannel()
+        public string LoadChannel()
         {
             if (File.Exists(Path.Combine(GetBasePath(), "channel")))
             {
@@ -107,7 +114,7 @@
             return "stable";
         }
 
-        public static void SaveChannel(string channel)
+        public void SaveChannel(string channel)
         {
             using (var writer = new StreamWriter(new FileStream(Path.Combine(GetBasePath(), "channel"), FileMode.Create, FileAccess.Write, FileShare.ReadWrite)))
             {
@@ -127,7 +134,7 @@
         }
 #endif
 
-        public static List<IPrerequisiteCheck> GetPrerequisiteChecksNotCompleted(List<IPrerequisiteCheck> checks)
+        public List<IPrerequisiteCheck> GetPrerequisiteChecksNotCompleted(List<IPrerequisiteCheck> checks)
         {
             if (!Directory.Exists(Path.Combine(GetBasePath(), "prereq")))
             {
@@ -137,7 +144,7 @@
             return checks.Where(check => !File.Exists(Path.Combine(GetBasePath(), "prereq", check.ID))).ToList();
         }
 
-        public static void MarkPrerequisiteAsPassed(string id)
+        public void MarkPrerequisiteAsPassed(string id)
         {
             using (var writer = new StreamWriter(Path.Combine(GetBasePath(), "prereq", id)))
             {

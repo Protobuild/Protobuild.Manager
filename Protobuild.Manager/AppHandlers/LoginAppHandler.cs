@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Collections.Specialized;
 
-namespace Unearth
+#if FALSE
+
+namespace Protobuild.Manager
 {
     public class LoginAppHandler : IAppHandler
     {
@@ -41,3 +43,4 @@ namespace Unearth
     }
 }
 
+#endif

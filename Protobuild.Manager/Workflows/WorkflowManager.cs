@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Collections.Concurrent;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class WorkflowManager : IWorkflowManager
     {

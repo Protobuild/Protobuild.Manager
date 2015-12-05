@@ -3,8 +3,9 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
+    /*
     public class LaunchGameMacOSWorkflow : IWorkflow
     {
         private readonly RuntimeServer m_RuntimeServer;
@@ -63,5 +64,6 @@ namespace Unearth
             this.m_UIManager.Quit();
         }
     }
+    */
 }
 

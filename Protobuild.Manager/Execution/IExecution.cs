@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public interface IExecution
     {

@@ -2,39 +2,42 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class AppHandlerManager : IAppHandlerManager
     {
-        private Dictionary<string, IAppHandler> m_AppHandlers;
+        private Dictionary<string, IAppHandler> _appHandlers;
 
-        private readonly LightweightKernel m_Kernel;
+        private readonly LightweightKernel _kernel;
 
-        private bool m_AppHandlersInit;
+        private bool _appHandlersInit;
 
         public AppHandlerManager(LightweightKernel kernel)
         {
-            this.m_Kernel = kernel;
-            this.m_AppHandlers = new Dictionary<string, IAppHandler>();
-            this.m_AppHandlersInit = false;
+            this._kernel = kernel;
+            this._appHandlers = new Dictionary<string, IAppHandler>();
+            this._appHandlersInit = false;
         }
 
         public void Handle(string absolutePath, NameValueCollection parameters)
         {
-            if (!this.m_AppHandlersInit)
+            if (!this._appHandlersInit)
             {
-                this.m_AppHandlers.Add("/login", this.m_Kernel.Get<LoginAppHandler>());
-                this.m_AppHandlers.Add("/register", this.m_Kernel.Get<RegisterAppHandler>());
-                this.m_AppHandlers.Add("/clearcache", this.m_Kernel.Get<ClearCacheAppHandler>());
-                this.m_AppHandlers.Add("/channel", this.m_Kernel.Get<ChannelAppHandler>());
-                this.m_AppHandlers.Add("/option", this.m_Kernel.Get<OptionAppHandler>());
-                this.m_AppHandlers.Add("/enablefullcrashdumps", this.m_Kernel.Get<EnableFullCrashDumpsAppHandler>());
-                this.m_AppHandlersInit = true;
+                _appHandlers.Add("/open-other", _kernel.Get<OpenOtherAppHandler>());
+                _appHandlers.Add("/create-new", _kernel.Get<CreateNewAppHandler>());
+
+                //this.m_AppHandlers.Add("/login", this.m_Kernel.Get<LoginAppHandler>());
+                //this.m_AppHandlers.Add("/register", this.m_Kernel.Get<RegisterAppHandler>());
+                //this.m_AppHandlers.Add("/clearcache", this.m_Kernel.Get<ClearCacheAppHandler>());
+                //this.m_AppHandlers.Add("/channel", this.m_Kernel.Get<ChannelAppHandler>());
+                //this.m_AppHandlers.Add("/option", this.m_Kernel.Get<OptionAppHandler>());
+                //this.m_AppHandlers.Add("/enablefullcrashdumps", this.m_Kernel.Get<EnableFullCrashDumpsAppHandler>());
+                this._appHandlersInit = true;
             }
 
-            if (this.m_AppHandlers.ContainsKey(absolutePath))
+            if (this._appHandlers.ContainsKey(absolutePath))
             {
-                this.m_AppHandlers[absolutePath].Handle(parameters);
+                this._appHandlers[absolutePath].Handle(parameters);
             }
         }
     }

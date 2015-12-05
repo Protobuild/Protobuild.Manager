@@ -1,5 +1,5 @@
 ﻿#if PLATFORM_LINUX || PLATFORM_MACOS
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class Mono380Check : AbstractPrerequisiteCheck
     {

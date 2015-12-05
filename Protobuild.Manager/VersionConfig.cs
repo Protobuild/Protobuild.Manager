@@ -3,7 +3,7 @@
 // on the main Tychaia website (www.tychaia.com).  Changes to the         //
 // license on the website apply retroactively.                            //
 // ====================================================================== //
-namespace Unearth
+namespace Protobuild.Manager
 {
     public static class VersionConfig
     {

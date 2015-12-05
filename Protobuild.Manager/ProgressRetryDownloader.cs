@@ -4,10 +4,17 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
-    public class ProgressRetryDownloader
+    internal class ProgressRetryDownloader
     {
+        private readonly IErrorLog _errorLog;
+
+        public ProgressRetryDownloader(IErrorLog errorLog)
+        {
+            _errorLog = errorLog;
+        }
+
         public bool DownloadFiles(
             Dictionary<string, string> toDownload,
             string destinationFolder,
@@ -96,7 +103,7 @@ namespace Unearth
 
                         if (error != null)
                         {
-                            ErrorLog.Log(error);
+                            _errorLog.Log(error);
 
                             var webExceptionError = error as WebException;
                             if (webExceptionError == null)

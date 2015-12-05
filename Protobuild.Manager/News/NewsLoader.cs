@@ -1,64 +1,64 @@
 ﻿using System;
-using Phabricator.Conduit;
 using System.Threading;
 using System.Collections.Generic;
 using System.Collections;
+using System.Threading.Tasks;
+using System.Net;
+using System.Xml;
+using System.IO;
+using System.Linq;
 
-namespace Unearth
+#if FALSE
+
+namespace Protobuild.Manager
 {
-    using System.Net;
-
-    public class NewsLoader : INewsLoader
+    internal class NewsLoader : INewsLoader
     {
         private readonly RuntimeServer m_RuntimeServer;
 
         private readonly IOfflineDetection m_OfflineDetection;
 
-        public NewsLoader(RuntimeServer runtimeServer, IOfflineDetection offlineDetection)
+        private readonly IBrandingEngine _brandingEngine;
+
+        internal NewsLoader(RuntimeServer runtimeServer, IOfflineDetection offlineDetection, IBrandingEngine brandingEngine)
         {
             this.m_RuntimeServer = runtimeServer;
             this.m_OfflineDetection = offlineDetection;
+            _brandingEngine = brandingEngine;
         }
 
         public void LoadNews()
         {
-            var thread = new Thread(this.Run);
-            thread.IsBackground = true;
-            thread.Start();
+            Task.Run(Run);
         }
 
-        private void Run()
+        private async Task Run()
         {
-            var client = new ConduitClient(UrlConfig.CONDUIT);
-
-            ArrayList posts;
-            try
+            if (string.IsNullOrWhiteSpace(_brandingEngine.RSSFeedURL))
             {
-                posts = client.Do<ArrayList>("unearth.getlauncherposts", new { });
-            }
-            catch (WebException)
-            {
-                this.m_OfflineDetection.MarkAsOffline();
                 return;
             }
 
+            var client = new WebClient();
+            var rss = await client.DownloadStringTaskAsync(_brandingEngine.RSSFeedURL);
+
+            var rssXml = new XmlDocument();
+            rssXml.LoadXml(rss);
+
+            var items = rssXml.DocumentElement.SelectNodes("channel/item").OfType<XmlElement>();
+
             var i = 0;
-            foreach (var postDict in posts)
+            foreach (var item in items)
             {
-                var post = (Dictionary<string, object>)postDict;
-                var content = (string)post["content"];
-                var author = (string)post["author"];
-                var date = (string)post["date"];
-                var title = (string)post["title"];
-                this.m_RuntimeServer.Set("newsContent" + i, content);
-                this.m_RuntimeServer.Set("newsAuthor" + i, author);
-                this.m_RuntimeServer.Set("newsDate" + i, date);
-                this.m_RuntimeServer.Set("newsTitle" + i, title);
+                this.m_RuntimeServer.Set("newsContent" + i, item.SelectNodes("description").OfType<XmlElement>().First().InnerText);
+                this.m_RuntimeServer.Set("newsAuthor" + i, item.SelectNodes("creator").OfType<XmlElement>().First().InnerText);
+                this.m_RuntimeServer.Set("newsDate" + i, item.SelectNodes("pubDate").OfType<XmlElement>().First().InnerText);
+                this.m_RuntimeServer.Set("newsTitle" + i, item.SelectNodes("title").OfType<XmlElement>().First().InnerText);
                 i++;
             }
-
             this.m_RuntimeServer.Set("newsCount", i);
         }
     }
 }
 
+#endif

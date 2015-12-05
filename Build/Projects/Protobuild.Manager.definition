@@ -13,26 +13,29 @@
     <Compile Include="AppHandlers\AppHandlerManager.cs" />
     <Compile Include="AppHandlers\ChannelAppHandler.cs" />
     <Compile Include="AppHandlers\ClearCacheAppHandler.cs" />
+    <Compile Include="AppHandlers\CreateNewAppHandler.cs" />
     <Compile Include="AppHandlers\EnableFullCrashDumpsAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandlerManager.cs" />
     <Compile Include="AppHandlers\LoginAppHandler.cs" />
+    <Compile Include="AppHandlers\OpenOtherAppHandler.cs" />
     <Compile Include="AppHandlers\OptionAppHandler.cs" />
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
-    <Compile Include="BrandingEngine\DefaultBrandingEngine.cs" />
+    <Compile Include="BrandingEngine\EmbeddedBrandingEngine.cs" />
     <Compile Include="BrandingEngine\IBrandingEngine.cs" />
     <Compile Include="BrowserEmulation\BrowserEmulation.cs" />
-    <Compile Include="Channels\ChannelLoader.cs" />
-    <Compile Include="Channels\IChannelLoader.cs" />
-    <Compile Include="ConfigManager.cs" />
+    <Compile Include="ConfigManager\ConfigManager.cs" />
+    <Compile Include="ConfigManager\IConfigManager.cs" />
     <Compile Include="DI\LightweightKernel.cs" />
     <Compile Include="DI\LightweightKernelModule.cs" />
-    <Compile Include="ErrorLog.cs" />
+    <Compile Include="ErrorLog\ErrorLog.cs" />
+    <Compile Include="ErrorLog\IErrorLog.cs" />
     <Compile Include="Execution\IExecution.cs" />
     <Compile Include="Execution\LinuxExecution.cs" />
     <Compile Include="Execution\MacOSExecution.cs" />
     <Compile Include="Execution\WindowsExecution.cs" />
     <Compile Include="GameUpdater.cs" />
+    <Compile Include="ILoadable.cs" />
     <Compile Include="LinuxProgram.cs" />
     <Compile Include="MacOSProgram.cs" />
     <Compile Include="MainWindow.cs">
@@ -47,10 +50,6 @@
     </Compile>
     <Compile Include="News\INewsLoader.cs" />
     <Compile Include="News\NewsLoader.cs" />
-    <Compile Include="OfflineDetection\IOfflineDetection.cs" />
-    <Compile Include="OfflineDetection\OfflineDetection.cs" />
-    <Compile Include="Path\IPathProvider.cs" />
-    <Compile Include="Path\PathProvider.cs" />
     <Compile Include="PrerequisiteChecks\AbstractPrerequisiteCheck.cs" />
     <Compile Include="PrerequisiteChecks\DirectXPrerequisiteCheck.cs" />
     <Compile Include="PrerequisiteChecks\IPrerequisiteCheck.cs" />
@@ -59,6 +58,8 @@
     <Compile Include="Progress\IProgressRenderer.cs" />
     <Compile Include="Progress\ProgressRenderer.cs" />
     <Compile Include="ProgressRetryDownloader.cs" />
+    <Compile Include="RecentProjects\IRecentProjectsManager.cs" />
+    <Compile Include="RecentProjects\RecentProjectsManager.cs" />
     <Compile Include="RuntimeServer\RuntimeServer.cs" />
     <Compile Include="SelfUpdate\ILauncherSelfUpdate.cs" />
     <Compile Include="SelfUpdate\InPlaceExecutableSwap.cs" />
@@ -88,75 +89,77 @@
       <Platforms>MacOS</Platforms>
       <Link>Unearth.icns</Link>
     </Content>
-    <Content Include="Branding.xml" />
-    <EmbeddedResource Include="OfflineResources\css.bootstrap.css">
+    <EmbeddedResource Include="Branding.xml">
+      <LogicalName>Branding.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css\bootstrap.css">
       <LogicalName>css.bootstrap.css</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\css.font-awesome.min.css">
+    <EmbeddedResource Include="OfflineResources\css\bootstrap-theme.css">
+      <LogicalName>css.bootstrap-theme.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css\branding.css">
+      <LogicalName>css.branding.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\css\font-awesome.min.css">
       <LogicalName>css.font-awesome.min.css</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\css.main.css">
+    <EmbeddedResource Include="OfflineResources\css\main.css">
       <LogicalName>css.main.css</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\css.prereq.css">
+    <EmbeddedResource Include="OfflineResources\css\prereq.css">
       <LogicalName>css.prereq.css</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.FontAwesome.otf">
+    <EmbeddedResource Include="OfflineResources\fonts\FontAwesome.otf">
       <LogicalName>fonts.FontAwesome.otf</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.eot">
+    <EmbeddedResource Include="OfflineResources\fonts\fontawesome-webfont.eot">
       <LogicalName>fonts.fontawesome-webfont.eot</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.svg">
+    <EmbeddedResource Include="OfflineResources\fonts\fontawesome-webfont.svg">
       <LogicalName>fonts.fontawesome-webfont.svg</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.ttf">
+    <EmbeddedResource Include="OfflineResources\fonts\fontawesome-webfont.ttf">
       <LogicalName>fonts.fontawesome-webfont.ttf</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.fontawesome-webfont.woff">
+    <EmbeddedResource Include="OfflineResources\fonts\fontawesome-webfont.woff">
       <LogicalName>fonts.fontawesome-webfont.woff</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.nrkis.eot">
-      <LogicalName>fonts.nrkis.eot</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.nrkis.ttf">
-      <LogicalName>fonts.nrkis.ttf</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.SourceSansPro-Bold.ttf">
+    <EmbeddedResource Include="OfflineResources\fonts\SourceSansPro-Bold.ttf">
       <LogicalName>fonts.SourceSansPro-Bold.ttf</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.SourceSansPro-Italic.ttf">
+    <EmbeddedResource Include="OfflineResources\fonts\SourceSansPro-Italic.ttf">
       <LogicalName>fonts.SourceSansPro-Italic.ttf</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\fonts.SourceSansPro-Regular.ttf">
+    <EmbeddedResource Include="OfflineResources\fonts\SourceSansPro-Regular.ttf">
       <LogicalName>fonts.SourceSansPro-Regular.ttf</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\image.background.jpg">
-      <LogicalName>image.background.jpg</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\image.button.png">
-      <LogicalName>image.button.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\image.button_disabled.png">
-      <LogicalName>image.button_disabled.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\image.button_press.png">
-      <LogicalName>image.button_press.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\image.title_white_500.png">
-      <LogicalName>image.title_white_500.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\index.htm">
       <LogicalName>index.htm</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\js.jquery-1.11.1.min.js">
+    <EmbeddedResource Include="OfflineResources\js\bootstrap.js">
+      <LogicalName>js.bootstrap.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\errorhandle.js">
+      <LogicalName>js.errorhandle.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\index.js">
+      <LogicalName>js.index.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\jquery-1.11.1.min.js">
       <LogicalName>js.jquery-1.11.1.min.js</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="OfflineResources\js.main.js">
+    <EmbeddedResource Include="OfflineResources\js\main.js">
       <LogicalName>js.main.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\template.js">
+      <LogicalName>js.template.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Protobuild.Icon.ico">
+      <LogicalName>Protobuild.Icon.ico</LogicalName>
     </EmbeddedResource>
     <InterfaceDefinition Include="MainMenu.xib">
       <Platforms>MacOS</Platforms>
@@ -167,5 +170,6 @@
     <None Include="Info.plist">
       <Platforms>MacOS</Platforms>
     </None>
+    <None Include="OfflineResources\css.bootstrap.css" />
   </Files>
 </Project>

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Collections.Specialized;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class RegisterAppHandler : IAppHandler
     {

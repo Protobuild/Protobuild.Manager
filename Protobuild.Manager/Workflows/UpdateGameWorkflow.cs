@@ -1,8 +1,8 @@
 ﻿using System;
-using Phabricator.Conduit;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
+    /*
     public class UpdateGameWorkflow : IWorkflow
     {
         private readonly RuntimeServer m_RuntimeServer;
@@ -31,6 +31,7 @@ namespace Unearth
 
         public void Run()
         {
+            /*
             var gamePath = this.m_PathProvider.GetGamePath();
 
             string username = string.Empty;
@@ -84,6 +85,7 @@ namespace Unearth
 
             this.m_WorkflowManager.AppendWorkflow(
                 this.m_WorkflowFactory.CreateLaunchGameWorkflow());
+
         }
 
         private void OnStatus(string status)
@@ -102,7 +104,6 @@ namespace Unearth
         private void OnUpdateProgress(float progress, TimeSpan eta)
         {
             this.m_ProgressRenderer.Update(progress, eta);
-        }
-    }
+        }*/
 }
 

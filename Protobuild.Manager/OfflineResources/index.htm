@@ -1,75 +1,39 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
-    {head}
+    <meta charset="UTF-8" />
+    <title data-value="title">Protobuild</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/branding.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/js/errorhandle.js"></script>
+    <script type="text/javascript" src="/js/template.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script type="text/javascript" data-injection="true"></script>
+    <style type="text/css" data-injection="true"></style>
+    <meta name="needs-loadable" interface="IRecentProjectsManager" />
   </head>
   <body>
     <div id="container">
       <div id="header">
-        <h1><img src="/image/title_white_500.png" alt="Unearth Game" /></h1>
+        <h1 data-value="title">Protobuild</h1>
       </div>
-      <a id="advanced_options_toggle" href="#">Advanced Options</a><span id="loading_please_wait">Loading (please wait...)</span>
-      <form id="login">
-        <h3 class="sub">
-          Existing Player?
-        </h3>
-        <input type="text" id="username" name="username" placeholder="Username" />
-        <input type="password" id="password" name="password" placeholder="Password" />
-        <input type="submit" id="play" value="PLAY" />
-        <span id="error_status"></span>
-        <input type="hidden" id="cached" name="cached" value="false" />
-      </form>
-      <form id="register">
-        <h3 class="sub">
-          New to Unearth?
-        </h3>
-        <input type="submit" id="register_go" value="REGISTER FREE" />
-      </form>
-      <div class="scrollable" id="news">
-        Loading latest news...
+      <div id="toplinks">
+        <a class="btn btn-default" href="app:///open-other">Open existing project</a>
+        <a class="btn btn-success" href="app:///create-new">Create new project</a>
       </div>
-    </div>
-    <div id="options_container">
-      <div id="header">
-        <h1><img src="/image/title_white_500.png" alt="Unearth Game" /></h1>
-      </div>
-      <a id="save_and_return_toggle" href="#">Save and Return</a>
-      <form id="options_form">
-        Game Version: 
-        <select id="active_channel" name="active_channel">
-          <option value="stable">stable</option>
-        </select>
-        <h3 class="opt_group">Input</h3>
-        <span class="opt_group"><input type="checkbox" id="option_IgnoreGamePad" name="option_IgnoreGamePad" value="true" /><label for="option_IgnoreGamePad">Ignore game pad inputs</label></span>
-        <h3 class="opt_group">Developer</h3>
-        <span class="opt_group"><input type="checkbox" id="option_ShowPlayerDebugInfo" name="option_ShowPlayerDebugInfo" value="true" /><label for="option_ShowPlayerDebugInfo">Show player debug info</label><input type="checkbox" id="option_VisibleProfiling" name="option_VisibleProfiling" value="true" /><label for="option_VisibleProfiling">Show the profiler</label><input type="checkbox" id="option_PerMethodProfiling" name="option_PerMethodProfiling" value="true" /><label for="option_PerMethodProfiling">Enable per-method profiling</label></span>
-        <h3 class="opt_group">Diagnostics</h3>
-        <span class="opt_group"><input type="checkbox" id="option_IgnoreSavedChunks" name="option_IgnoreSavedChunks" value="true" /><label for="option_IgnoreSavedChunks">Ignore saved chunks</label><input type="checkbox" id="option_WriteChunkTimestamps" name="option_WriteChunkTimestamps" value="true" /><label for="option_WriteChunkTimestamps">Write chunk timestamps</label></span>
-      </form>
-      <a id="enable_full_crash_dumps" href="#">Enable full crash dumps</a>
-      <div id="full_crash_dumps_enabled" href="#">Full crash dumps are enabled</div>
-    </div>
-    <div id="working_container">
-      <div id="header">
-        <h1><img src="/image/title_white_500.png" alt="Unearth Game" /></h1>
-      </div>
-      <div id="welcome_status"></div>
-      <div id="working_status"></div>
-      <div id="progress_outer">
-        <div id="progress_inner"></div>
-        <div id="progress_eta"></div>
-      </div>
-    </div>
-    <div id="prereq_container">
-      <div id="header">
-        <h1><img src="/image/title_white_500.png" alt="Unearth Game" /></h1>
-      </div>
-      <div class="scrollable">
-        <div class="block phame" id="test">
-          <p>Please wait while we check game requirements:</p>
-          <ul id="checks"></ul>
-        </div>
-      </div>
+      <ul class="recent">
+        <li data-template="recentitem" class="recent">
+          <a href="/recent?id=1">
+            <span class="title" data-value="title">Recent Project #1</span>
+            <span class="path" data-value="path">C:\Projects\June\MyProject</span>
+          </a>
+        </li>
+        <li data-template="norecentitems" class="norecent">
+          <span>You have no recent projects.  Would you like to <a href="app:///create-new">create a new project</a>?</span>
+        </li>
+      </ul>
     </div>
   </body>
 </html>

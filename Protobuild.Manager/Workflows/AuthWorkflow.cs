@@ -5,8 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
+    #if FALSE
     public class AuthWorkflow : IWorkflow
     {
         private readonly RuntimeServer m_RuntimeServer;
@@ -157,5 +158,6 @@ namespace Unearth
                 this.m_WorkflowFactory.CreateUpdateGameWorkflow());
         }
     }
+    #endif
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public class LightweightKernel
     {
@@ -78,7 +78,7 @@ namespace Unearth
                 actual = original;
             }
 
-            var constructor = actual.GetConstructors(BindingFlags.Public | BindingFlags.Instance).First();
+            var constructor = actual.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).First();
             var parameters = constructor.GetParameters();
 
             var resolved = new object[parameters.Length];

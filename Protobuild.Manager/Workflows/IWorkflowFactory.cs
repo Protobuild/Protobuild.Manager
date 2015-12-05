@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     public interface IWorkflowFactory
     {
-        IWorkflow CreateAuthWorkflow(string username, string password, bool useCached);
+        /*IWorkflow CreateAuthWorkflow(string username, string password, bool useCached);
 
         IWorkflow CreateUpdateGameWorkflow();
 
         IWorkflow CreateLaunchGameWorkflow();
 
-        IWorkflow CreatePrereqWorkflow();
+        IWorkflow CreatePrereqWorkflow();*/
     }
 }
 

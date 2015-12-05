@@ -3,6 +3,7 @@
  * @generated
  */
 
+/*
 @font-face
 {
     font-family: 'Source Sans Pro';
@@ -31,12 +32,13 @@ html, body
     padding: 0px;
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 14px;
-    background-color: #000000;
-    background-image: url(/image/background.jpg);
     background-position: center -300px;
     background-repeat: no-repeat;
+    color: #000;
 }
+*/
 
+/*
 a
 {
     text-decoration: underline;
@@ -353,4 +355,4 @@ p.download > img.imgfloat {
 div.phabricator-login-buttons {
   display: none;
 }
- 
+ */

@@ -44,14 +44,15 @@ namespace Protobuild.Manager
 
         public static void Run(string[] args)
         {
-            ErrorLog.Log("Started game launcher on Windows platform");
-
             var kernel = new LightweightKernel();
             kernel.BindCommon();
             kernel.BindAndKeepInstance<IUIManager, WindowsUIManager>();
             kernel.BindAndKeepInstance<IExecution, WindowsExecution>();
+            kernel.BindAndKeepInstance<IIDEControl, VisualStudioIDEControl>();
 
             kernel.Bind<IPrerequisiteCheck, DirectXPrerequisiteCheck>();
+
+            kernel.Get<IErrorLog>().Log("Started game launcher on Windows platform");
 
             var startup = kernel.Get<IStartup>();
             startup.Start();

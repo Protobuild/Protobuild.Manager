@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title data-value="title">Protobuild > MonoGame.Framework</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/branding.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/js/errorhandle.js"></script>
+    <script type="text/javascript" src="/js/template.js"></script>
+    <script type="text/javascript" src="/js/project.js"></script>
+    <script type="text/javascript" data-injection="true"></script>
+    <style type="text/css" data-injection="true"></style>
+    <meta name="needs-loadable" interface="IRecentProjectsManager" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        <h1 data-value="title">MonoGame.Framework</h1>
+      </div>
+      <div id="toplinks">
+        <a class="btn btn-default" href="app:///close">Close project</a>
+      </div>
+      <form class="form-inline">
+        <div class="form-group">
+          <label>Switch to platform:</label>
+          <select name="switchPlatform" id="switchPlatform">
+            <optgroup label="Desktop Platforms"/>
+            <option value="Windows">Windows</option>
+            <option value="MacOS" disabled="disabled">Mac OS</option>
+            <option value="Linux">Linux</option>
+            <optgroup label="Mobile Platforms" />
+            <option value="iOS">iOS</option>
+            <option value="Android">Android</option>
+            <option value="WindowsPhone">Windows Phone 8</option>
+            <option value="WindowsPhone81">Windows Phone 8.1</option>
+            <option value="Windows81">Windows Metro</option>
+            <option value="WindowsUniversal">Windows Universal</option>
+            <optgroup label="Other Platforms" />
+            <option value="Ouya">Ouya</option>
+            <option value="Web">Web</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

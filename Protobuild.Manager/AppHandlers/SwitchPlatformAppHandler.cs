@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 
 namespace Protobuild.Manager
 {
-    public class CreateNewAppHandler : IAppHandler
+    public class SwitchPlatformAppHandler : IAppHandler
     {
         private readonly IIDEControl _ideControl;
 
-        public CreateNewAppHandler(IIDEControl ideControl)
+        public SwitchPlatformAppHandler(IIDEControl ideControl)
         {
             _ideControl = ideControl;
         }
@@ -16,7 +16,7 @@ namespace Protobuild.Manager
         {
             Console.WriteLine("would move to create screen");
             
-            //_ideControl.LoadSolution(@"C:\Users\June\Documents\Projects\MonoGame", "MonoGame.Framework", "WindowsUniversal");
+            _ideControl.LoadSolution(@"C:\Users\June\Documents\Projects\MonoGame", "MonoGame.Framework", parameters["target"]);
         }
     }
 }

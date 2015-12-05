@@ -96,6 +96,11 @@ namespace Protobuild.Manager
             }
         }
 
+        public void Goto(string path)
+        {
+            this.m_RuntimeInjector("location.href = '/" + path + ".htm';");
+        }
+
         private string GetInjectionScript(bool firstLoad, string specificKey = null)
         {
             var text = "";

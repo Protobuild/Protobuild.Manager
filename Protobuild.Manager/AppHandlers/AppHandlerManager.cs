@@ -25,6 +25,7 @@ namespace Protobuild.Manager
             {
                 _appHandlers.Add("/open-other", _kernel.Get<OpenOtherAppHandler>());
                 _appHandlers.Add("/create-new", _kernel.Get<CreateNewAppHandler>());
+                _appHandlers.Add("/switch-platform", _kernel.Get<SwitchPlatformAppHandler>());
 
                 //this.m_AppHandlers.Add("/login", this.m_Kernel.Get<LoginAppHandler>());
                 //this.m_AppHandlers.Add("/register", this.m_Kernel.Get<RegisterAppHandler>());

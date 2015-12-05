@@ -35,6 +35,8 @@
     <Compile Include="Execution\MacOSExecution.cs" />
     <Compile Include="Execution\WindowsExecution.cs" />
     <Compile Include="GameUpdater.cs" />
+    <Compile Include="IDEControl\IIDEControl.cs" />
+    <Compile Include="IDEControl\VisualStudioIDEControl.cs" />
     <Compile Include="ILoadable.cs" />
     <Compile Include="LinuxProgram.cs" />
     <Compile Include="MacOSProgram.cs" />
@@ -91,6 +93,7 @@
     </Content>
     <EmbeddedResource Include="Branding.xml">
       <LogicalName>Branding.xml</LogicalName>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\css\bootstrap.css">
       <LogicalName>css.bootstrap.css</LogicalName>
@@ -152,8 +155,14 @@
     <EmbeddedResource Include="OfflineResources\js\main.js">
       <LogicalName>js.main.js</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\project.js">
+      <LogicalName>js.project.js</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\template.js">
       <LogicalName>js.template.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\project.htm">
+      <LogicalName>project.htm</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>

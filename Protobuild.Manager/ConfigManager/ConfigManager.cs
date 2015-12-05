@@ -125,12 +125,13 @@
 #if PLATFORM_WINDOWS
         public static void EnableFullCrashDumps()
         {
-            Directory.CreateDirectory(Path.Combine(GetBasePath(), "minidump"));
+            //Directory.CreateDirectory(Path.Combine(GetBasePath(), "minidump"));
         }
 
         public static bool IsFullCrashDumpsEnabled()
         {
-            return Directory.Exists(Path.Combine(GetBasePath(), "minidump"));
+            //return Directory.Exists(Path.Combine(GetBasePath(), "minidump"));
+            return false;
         }
 #endif
 

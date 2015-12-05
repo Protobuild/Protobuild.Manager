@@ -17,10 +17,13 @@ namespace Protobuild.Manager
 
         private readonly IAppHandlerManager m_AppHandlerManager;
 
-        public WindowsUIManager(RuntimeServer server, IAppHandlerManager appHandlerManager)
+        private readonly IBrandingEngine _brandingEngine;
+
+        public WindowsUIManager(RuntimeServer server, IAppHandlerManager appHandlerManager, IBrandingEngine brandingEngine)
         {
             this.m_RuntimeServer = server;
             this.m_AppHandlerManager = appHandlerManager;
+            _brandingEngine = brandingEngine;
         }
 
         public void Run()
@@ -32,10 +35,10 @@ namespace Protobuild.Manager
 
             var form = new Form();
             this.m_ActiveForm = form;
-            form.Text = "Unearth";
-            //form.Icon = new Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream("Unearth.GameIcon.ico"));
-            form.Width = 740;
-            form.Height = 460;
+            form.Text = _brandingEngine.ProductName;
+            form.Icon = _brandingEngine.WindowsIcon;
+            form.Width = 736;
+            form.Height = 439;
             form.FormBorderStyle = FormBorderStyle.FixedDialog;
             form.MaximizeBox = false;
             form.StartPosition = FormStartPosition.CenterScreen;
@@ -150,7 +153,12 @@ namespace Protobuild.Manager
         private static void ExecuteScript(WebBrowser browser, string script)
         {
             var uniqueName = "call" + m_NameCount++;
-            var head = browser.Document.GetElementsByTagName("head")[0];
+            var head = browser.Document?.GetElementsByTagName("head")[0];
+            if (head == null)
+            {
+                Console.WriteLine("WARNING: Can't execute script yet; document not ready!");
+                return;
+            }
             var scriptEl = browser.Document.CreateElement("script");
             var element = (IHTMLScriptElement)scriptEl.DomElement;
             element.text = "function " + uniqueName + "() { " + script + " }";

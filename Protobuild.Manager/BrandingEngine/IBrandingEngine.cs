@@ -1,6 +1,6 @@
 ﻿namespace Protobuild.Manager
 {
-    internal interface IBrandingEngine
+    public interface IBrandingEngine
     {
         /// <summary>
         /// The name of the product, as displayed to the user.

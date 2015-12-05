@@ -11,6 +11,8 @@ namespace Protobuild.Manager
         IWorkflow CreateLaunchGameWorkflow();
 
         IWorkflow CreatePrereqWorkflow();*/
+
+        IWorkflow CreateProjectOpenWorkflow(string modulePath, string moduleName);
     }
 }
 

@@ -1,6 +1,11 @@
 # Protobuild.Manager
 
-A cross-platform GUI manager for Protobuild modules.  This allows developers to easily change the platform they're working on through a graphical interface (**[click to play video](https://www.youtube.com/watch?v=v7j505P5AkM)**):
+A cross-platform GUI manager for Protobuild modules.  It's goals are:
+
+  * Make it easy to create cross-platform projects from templates
+  * Allow developers using Protobuild to easily change the platform they're working on
+
+This is extremely work-in-progress, but here's a video that demonstrates changing the platform through the graphical interface.  You'll notice that the tool communicates directly with Visual Studio to automatically save everything and re-open the newly generated project files as needed (**[click to play video](https://www.youtube.com/watch?v=v7j505P5AkM)**):
 
 [![Video of switching platforms in Visual Studio](http://img.youtube.com/vi/v7j505P5AkM/0.jpg)](https://www.youtube.com/watch?v=v7j505P5AkM)
 

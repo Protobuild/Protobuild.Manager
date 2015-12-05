@@ -116,3 +116,8 @@ ul.recent li.norecent span {
 }
 
 span {}
+
+#status {
+    max-height: 40px;
+    overflow-y: scroll;
+}

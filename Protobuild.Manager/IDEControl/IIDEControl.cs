@@ -1,7 +1,9 @@
-﻿namespace Protobuild.Manager
+﻿using System.Threading.Tasks;
+
+namespace Protobuild.Manager
 {
     public interface IIDEControl
     {
-        void LoadSolution(string modulePath, string moduleName, string targetPlatform);
+        Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail);
     }
 }

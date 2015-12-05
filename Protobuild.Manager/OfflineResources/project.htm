@@ -22,25 +22,30 @@
       <div id="toplinks">
         <a class="btn btn-default" href="app:///close">Close project</a>
       </div>
-      <form class="form-inline">
+      <p id="status">
+        Select a platform below to open this project in your IDE.
+      </p>
+      <form class="form-horizontal">
         <div class="form-group">
-          <label>Switch to platform:</label>
-          <select name="switchPlatform" id="switchPlatform">
-            <optgroup label="Desktop Platforms"/>
-            <option value="Windows">Windows</option>
-            <option value="MacOS" disabled="disabled">Mac OS</option>
-            <option value="Linux">Linux</option>
-            <optgroup label="Mobile Platforms" />
-            <option value="iOS">iOS</option>
-            <option value="Android">Android</option>
-            <option value="WindowsPhone">Windows Phone 8</option>
-            <option value="WindowsPhone81">Windows Phone 8.1</option>
-            <option value="Windows81">Windows Metro</option>
-            <option value="WindowsUniversal">Windows Universal</option>
-            <optgroup label="Other Platforms" />
-            <option value="Ouya">Ouya</option>
-            <option value="Web">Web</option>
-          </select>
+          <label for="switchPlatform" class="col-sm-3 control-label">Switch to platform:</label>
+          <div class="col-sm-5">
+            <select class="form-control" name="switchPlatform" id="switchPlatform">
+              <optgroup label="Desktop Platforms"/>
+              <option value="Windows">Windows</option>
+              <option value="MacOS" disabled="disabled">Mac OS</option>
+              <option value="Linux">Linux</option>
+              <optgroup label="Mobile Platforms"/>
+              <option value="iOS">iOS</option>
+              <option value="Android">Android</option>
+              <option value="WindowsPhone">Windows Phone 8</option>
+              <option value="WindowsPhone81">Windows Phone 8.1</option>
+              <option value="Windows81">Windows Metro</option>
+              <option value="WindowsUniversal">Windows Universal</option>
+              <optgroup label="Other Platforms"/>
+              <option value="Ouya">Ouya</option>
+              <option value="Web">Web</option>
+            </select>
+          </div>
         </div>
       </form>
     </div>

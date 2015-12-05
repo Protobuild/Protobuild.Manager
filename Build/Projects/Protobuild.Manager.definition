@@ -21,6 +21,7 @@
     <Compile Include="AppHandlers\OpenOtherAppHandler.cs" />
     <Compile Include="AppHandlers\OptionAppHandler.cs" />
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
+    <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />
     <Compile Include="BrandingEngine\EmbeddedBrandingEngine.cs" />
     <Compile Include="BrandingEngine\IBrandingEngine.cs" />
     <Compile Include="BrowserEmulation\BrowserEmulation.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Workflows\LaunchGameWindowsWorkflow.cs" />
     <Compile Include="Workflows\LicenseWorkflow.cs" />
     <Compile Include="Workflows\PrereqWorkflow.cs" />
+    <Compile Include="Workflows\ProjectOpenWorkflow.cs" />
     <Compile Include="Workflows\UpdateGameWorkflow.cs" />
     <Compile Include="Workflows\WorkflowFactory.cs" />
     <Compile Include="Workflows\WorkflowManager.cs" />

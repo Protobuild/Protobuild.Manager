@@ -35,18 +35,36 @@ namespace Protobuild.Manager
             }
         }
 
-        public string ProductName => GetXmlString("ProductName");
+        public string ProductName
+        {
+            get { return GetXmlString("ProductName"); }
+        }
 
-        public string ProductStorageID => GetXmlString("ProductStorageID");
+        public string ProductStorageID
+        {
+            get { return GetXmlString("ProductStorageID"); }
+        }
 
-        public string RSSFeedURL => GetXmlString("RSSFeedURL");
+        public string RSSFeedURL
+        {
+            get { return GetXmlString("RSSFeedURL"); }
+        }
 
 #if PLATFORM_WINDOWS
-        public Icon WindowsIcon => new Icon(GetBinaryStreamFromXmlReference("WindowsIcon"));
+        public Icon WindowsIcon
+        {
+            get { return new Icon(GetBinaryStreamFromXmlReference("WindowsIcon")); }
+        }
 #elif PLATFORM_LINUX
-        public Gdk.Pixbuf LinuxIcon => new Gdk.Pixbuf(GetBinaryStreamFromXmlReference("LinuxIcon"));
+        public Gdk.Pixbuf LinuxIcon
+        {
+            get { return new Gdk.Pixbuf(GetBinaryStreamFromXmlReference("LinuxIcon")); }
+        }
 #endif
 
-        public string TemplateSource => GetXmlString("TemplateSource");
+        public string TemplateSource
+        {
+            get { return GetXmlString("TemplateSource"); }
+        }
     }
 }

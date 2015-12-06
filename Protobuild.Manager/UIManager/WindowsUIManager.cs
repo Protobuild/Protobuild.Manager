@@ -153,7 +153,12 @@ namespace Protobuild.Manager
         private static void ExecuteScript(WebBrowser browser, string script)
         {
             var uniqueName = "call" + m_NameCount++;
-            var head = browser.Document?.GetElementsByTagName("head")[0];
+            var doc = browser.Document;
+            HtmlElement head = null;
+            if (doc != null)
+            {
+                head = doc.GetElementsByTagName("head")[0];
+            };
             if (head == null)
             {
                 Console.WriteLine("WARNING: Can't execute script yet; document not ready!");

@@ -2,6 +2,7 @@
 <Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows">
   <Properties>
     <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
+	<Property Name="LangVersion" Value="5" />
   </Properties>
   <References>
     <Reference Include="Protobuild.Manager.ThirdParty" />
@@ -173,6 +174,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\main.js">
       <LogicalName>js.main.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\nameproject.js">
+      <LogicalName>js.nameproject.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\project.js">
       <LogicalName>js.project.js</LogicalName>

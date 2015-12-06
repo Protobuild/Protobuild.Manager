@@ -58,7 +58,7 @@ namespace Protobuild.Manager
                 }
             }
 
-            Task.Run(Run);
+            Task.Run((Func<Task>)Run);
 
             _errorLog.Log("Started runtime server on " + this.BaseUri);
         }
@@ -252,7 +252,7 @@ namespace Protobuild.Manager
                             var inst = _kernel.Get(type) as ILoadable;
                             if (inst != null)
                             {
-                                await Task.Run(inst.Load);
+                                await Task.Run((Func<Task>)inst.Load);
                             }
                         }
 

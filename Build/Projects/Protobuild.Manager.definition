@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App">
+<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows">
   <Properties>
     <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
   </Properties>
@@ -11,18 +11,22 @@
       <Platforms>MacOS</Platforms>
     </Compile>
     <Compile Include="AppHandlers\AppHandlerManager.cs" />
+    <Compile Include="AppHandlers\CancelCreationAppHandler.cs" />
     <Compile Include="AppHandlers\ChannelAppHandler.cs" />
     <Compile Include="AppHandlers\ClearCacheAppHandler.cs" />
     <Compile Include="AppHandlers\CloseProjectAppHandler.cs" />
     <Compile Include="AppHandlers\CreateNewAppHandler.cs" />
     <Compile Include="AppHandlers\EnableFullCrashDumpsAppHandler.cs" />
+    <Compile Include="AppHandlers\FinalizeProjectAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandlerManager.cs" />
     <Compile Include="AppHandlers\LoginAppHandler.cs" />
+    <Compile Include="AppHandlers\NameProjectAppHandler.cs" />
     <Compile Include="AppHandlers\OpenOtherAppHandler.cs" />
     <Compile Include="AppHandlers\OpenRecentAppHandler.cs" />
     <Compile Include="AppHandlers\OptionAppHandler.cs" />
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
+    <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
     <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />
     <Compile Include="BrandingEngine\EmbeddedBrandingEngine.cs" />
     <Compile Include="BrandingEngine\IBrandingEngine.cs" />
@@ -90,6 +94,8 @@
     <Compile Include="Workflows\LaunchGameWindowsWorkflow.cs" />
     <Compile Include="Workflows\LicenseWorkflow.cs" />
     <Compile Include="Workflows\PrereqWorkflow.cs" />
+    <Compile Include="Workflows\ProjectNamingWorkflow.cs" />
+    <Compile Include="Workflows\ProjectNewWorkflow.cs" />
     <Compile Include="Workflows\ProjectOpenWorkflow.cs" />
     <Compile Include="Workflows\UpdateGameWorkflow.cs" />
     <Compile Include="Workflows\WorkflowFactory.cs" />
@@ -168,8 +174,14 @@
     <EmbeddedResource Include="OfflineResources\js\template.js">
       <LogicalName>js.template.js</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\nameproject.htm">
+      <LogicalName>nameproject.htm</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\project.htm">
       <LogicalName>project.htm</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\selecttemplate.htm">
+      <LogicalName>selecttemplate.htm</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>

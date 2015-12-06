@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title data-value="title">Protobuild > MonoGame.Framework</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/branding.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/js/errorhandle.js"></script>
+    <script type="text/javascript" src="/js/template.js"></script>
+    <script type="text/javascript" src="/js/project.js"></script>
+    <script type="text/javascript" data-injection="true"></script>
+    <style type="text/css" data-injection="true"></style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        <h1 data-value="title">Name Project</h1>
+      </div>
+      <div id="toplinks">
+        <a class="btn btn-default" href="app:///cancel-creation">Cancel</a>
+      </div>
+      <p id="status">
+        Select a name and path for your new project:
+      </p>
+      <form class="form-horizontal" action="app:///finalize-project" method="GET">
+        <div class="form-group">
+          <label for="name" class="col-sm-3 control-label">Name:</label>
+          <div class="col-sm-5">
+            <input id="name" name="name" type="text" required="required"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="path" class="col-sm-3 control-label">Path:</label>
+          <div class="col-sm-5">
+            <input id="path" name="path" type="text" required="required"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="submit" class="btn btn-lg btn-success" value="Create Project"/>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

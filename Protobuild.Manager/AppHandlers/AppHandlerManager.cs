@@ -28,6 +28,9 @@ namespace Protobuild.Manager
                 _appHandlers.Add("/create-new", _kernel.Get<CreateNewAppHandler>());
                 _appHandlers.Add("/switch-platform", _kernel.Get<SwitchPlatformAppHandler>());
                 _appHandlers.Add("/close", _kernel.Get<CloseProjectAppHandler>());
+                _appHandlers.Add("/select-template", _kernel.Get<SelectTemplateAppHandler>());
+                _appHandlers.Add("/cancel-creation", _kernel.Get<CancelCreationAppHandler>());
+                _appHandlers.Add("/finalize-project", _kernel.Get<FinalizeProjectAppHandler>());
 
                 //this.m_AppHandlers.Add("/login", this.m_Kernel.Get<LoginAppHandler>());
                 //this.m_AppHandlers.Add("/register", this.m_Kernel.Get<RegisterAppHandler>());

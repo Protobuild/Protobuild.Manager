@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title data-value="title">Protobuild</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/branding.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/js/errorhandle.js"></script>
+    <script type="text/javascript" src="/js/template.js"></script>
+    <script type="text/javascript" src="/js/selecttemplate.js"></script>
+    <script type="text/javascript" data-injection="true"></script>
+    <style type="text/css" data-injection="true"></style>
+    <meta name="needs-loadable" interface="IRecentProjectsManager" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        <h1 data-value="title">Select Template</h1>
+      </div>
+      <div id="toplinks">
+        <a class="btn btn-default" href="app:///cancel-creation">Cancel</a>
+      </div>
+      <ul class="recent">
+        <li class="recent">
+          <a href="app:///select-template?url=http://protobuild.org/MonoGame/Template.2DPlatformer@develop">
+            <span class="title" data-template-value="title">MonoGame 2D Platformer</span>
+            <span class="path" data-template-value="path">A cross-platform MonoGame project that runs a 2D platformer.</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

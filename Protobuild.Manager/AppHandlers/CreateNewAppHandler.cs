@@ -6,17 +6,19 @@ namespace Protobuild.Manager
     public class CreateNewAppHandler : IAppHandler
     {
         private readonly IIDEControl _ideControl;
+        private readonly IWorkflowFactory _workflowFactory;
+        private readonly IWorkflowManager _workflowManager;
 
-        public CreateNewAppHandler(IIDEControl ideControl)
+        public CreateNewAppHandler(IIDEControl ideControl, IWorkflowFactory workflowFactory, IWorkflowManager workflowManager)
         {
             _ideControl = ideControl;
+            _workflowFactory = workflowFactory;
+            _workflowManager = workflowManager;
         }
 
         public void Handle(NameValueCollection parameters)
         {
-            Console.WriteLine("would move to create screen");
-            
-            //_ideControl.LoadSolution(@"C:\Users\June\Documents\Projects\MonoGame", "MonoGame.Framework", "WindowsUniversal");
+            _workflowManager.AppendWorkflow(_workflowFactory.CreateProjectNewWorkflow());
         }
     }
 }

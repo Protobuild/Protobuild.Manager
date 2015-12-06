@@ -60,6 +60,20 @@ namespace Protobuild.Manager
             return new InitialWorkflow(
                 this.m_Kernel.Get<RuntimeServer>());
         }
+
+        public IWorkflow CreateProjectNewWorkflow()
+        {
+            return new ProjectNewWorkflow(
+                this.m_Kernel.Get<RuntimeServer>());
+        }
+
+        public IWorkflow CreateProjectNamingWorkflow()
+        {
+            return new ProjectNamingWorkflow(
+                this.m_Kernel.Get<IWorkflowManager>(),
+                this.m_Kernel.Get<IWorkflowFactory>(),
+                this.m_Kernel.Get<RuntimeServer>());
+        }
     }
 }
 

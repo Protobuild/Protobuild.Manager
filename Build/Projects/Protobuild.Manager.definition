@@ -13,12 +13,14 @@
     <Compile Include="AppHandlers\AppHandlerManager.cs" />
     <Compile Include="AppHandlers\ChannelAppHandler.cs" />
     <Compile Include="AppHandlers\ClearCacheAppHandler.cs" />
+    <Compile Include="AppHandlers\CloseProjectAppHandler.cs" />
     <Compile Include="AppHandlers\CreateNewAppHandler.cs" />
     <Compile Include="AppHandlers\EnableFullCrashDumpsAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandlerManager.cs" />
     <Compile Include="AppHandlers\LoginAppHandler.cs" />
     <Compile Include="AppHandlers\OpenOtherAppHandler.cs" />
+    <Compile Include="AppHandlers\OpenRecentAppHandler.cs" />
     <Compile Include="AppHandlers\OptionAppHandler.cs" />
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
     <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />
@@ -61,6 +63,9 @@
     <Compile Include="Progress\IProgressRenderer.cs" />
     <Compile Include="Progress\ProgressRenderer.cs" />
     <Compile Include="ProgressRetryDownloader.cs" />
+    <Compile Include="ProtobuildHost\IProtobuildHostingEngine.cs" />
+    <Compile Include="ProtobuildHost\ModuleHost.cs" />
+    <Compile Include="ProtobuildHost\ProtobuildHostingEngine.cs" />
     <Compile Include="RecentProjects\IRecentProjectsManager.cs" />
     <Compile Include="RecentProjects\RecentProjectsManager.cs" />
     <Compile Include="RuntimeServer\RuntimeServer.cs" />

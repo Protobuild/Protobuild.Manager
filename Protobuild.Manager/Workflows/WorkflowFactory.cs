@@ -46,9 +46,19 @@ namespace Protobuild.Manager
         }
 
 */
-        public IWorkflow CreateProjectOpenWorkflow(string modulePath, string moduleName)
+        public IWorkflow CreateProjectOpenWorkflow(string modulePath)
         {
-            return new ProjectOpenWorkflow(this.m_Kernel.Get<RuntimeServer>(), modulePath, moduleName);
+            return new ProjectOpenWorkflow(
+                this.m_Kernel.Get<RuntimeServer>(),
+                this.m_Kernel.Get<IProtobuildHostingEngine>(),
+                this.m_Kernel.Get<IRecentProjectsManager>(),
+                modulePath);
+        }
+
+        public IWorkflow CreateInitialWorkflow()
+        {
+            return new InitialWorkflow(
+                this.m_Kernel.Get<RuntimeServer>());
         }
     }
 }

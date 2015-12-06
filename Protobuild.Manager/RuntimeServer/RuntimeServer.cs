@@ -96,6 +96,14 @@ namespace Protobuild.Manager
             }
         }
 
+        public T Get<T>(string key)
+        {
+            lock (this.m_InjectorLock)
+            {
+                return (T)this.m_InjectedValues[key];
+            }
+        }
+
         public void Goto(string path)
         {
             this.m_RuntimeInjector("location.href = '/" + path + ".htm';");

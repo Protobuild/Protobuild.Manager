@@ -12,7 +12,9 @@ namespace Protobuild.Manager
 
         IWorkflow CreatePrereqWorkflow();*/
 
-        IWorkflow CreateProjectOpenWorkflow(string modulePath, string moduleName);
+        IWorkflow CreateProjectOpenWorkflow(string modulePath);
+
+        IWorkflow CreateInitialWorkflow();
     }
 }
 

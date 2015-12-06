@@ -9,8 +9,10 @@ window.addTemplate = function(name, values) {
   var copy = original.clone();
   
   for (var k in values){
-    if (target.hasOwnProperty(k)) {
-      copy.find("[data-template-value=\"" + k + "\"]").each(function(e) { e.innerText = values[k]; });
+      if (values.hasOwnProperty(k)) {
+          copy.find("[data-template-value=\"" + k + "\"]").each(function (idx, elem) {
+              $(elem).text(values[k]);
+            });
     }
   }
 

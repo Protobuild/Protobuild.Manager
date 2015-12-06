@@ -17,6 +17,8 @@ function stateChange(state) {
         $("#switchPlatform").val(state.setplatform);
         oldPlatform = state.setplatform;
     }
+
+    $("[data-value=\"title\"]").text(state.loadedModuleName);
 }
 
 $(document).bind("statechange", function (event, state) {

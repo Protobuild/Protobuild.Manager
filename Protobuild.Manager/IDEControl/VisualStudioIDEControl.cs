@@ -16,18 +16,19 @@ namespace Protobuild.Manager
             _runtimeServer = runtimeServer;
         }
 
-        public async Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail)
+        public async Task LoadSolution(string modulePath, string moduleName, string targetPlatform,
+            string oldPlatformOnFail)
         {
             try
             {
                 _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
 
                 Func<dynamic, Task> launchLogic = null;
-                
+
                 var existing = FindExistingVisualStudioInstance(modulePath, moduleName);
                 if (existing == null)
                 {
-                    launchLogic = async (dteRef) =>
+                    launchLogic = async dteRef =>
                     {
                         _runtimeServer.Set("status", "Starting Visual Studio...");
                         Process.Start(
@@ -46,7 +47,7 @@ namespace Protobuild.Manager
                 }
                 else
                 {
-                    launchLogic = async (dteRef) =>
+                    launchLogic = async dteRef =>
                     {
                         _runtimeServer.Set("status", "Opening solution for " + targetPlatform + "...");
 
@@ -135,14 +136,14 @@ namespace Protobuild.Manager
         {
             IRunningObjectTable rot;
             IEnumMoniker enumMoniker;
-            int retVal = GetRunningObjectTable(0, out rot);
+            var retVal = GetRunningObjectTable(0, out rot);
 
             if (retVal == 0)
             {
                 rot.EnumRunning(out enumMoniker);
 
-                IntPtr fetched = IntPtr.Zero;
-                IMoniker[] moniker = new IMoniker[1];
+                var fetched = IntPtr.Zero;
+                var moniker = new IMoniker[1];
                 while (enumMoniker.Next(1, moniker, fetched) == 0)
                 {
                     IBindCtx bindCtx;
@@ -150,28 +151,41 @@ namespace Protobuild.Manager
                     string displayName;
                     moniker[0].GetDisplayName(bindCtx, null, out displayName);
 
-                    if (displayName.StartsWith("!VisualStudio.DTE"))
+                    try
                     {
-                        // See if this Visual Studio instance has no solution open.
-                        object obj;
-                        rot.GetObject(moniker[0], out obj);
-                        dynamic dte = obj;
-                        if (!dte.Solution.IsOpen)
+                        if (displayName.StartsWith("!VisualStudio.DTE"))
                         {
-                            // Re-use an empty instance.
-                            return dte;
+                            // See if this Visual Studio instance has no solution open.
+                            object obj;
+                            rot.GetObject(moniker[0], out obj);
+                            dynamic dte = obj;
+                            if (!dte.Solution.IsOpen)
+                            {
+                                // Re-use an empty instance.
+                                return dte;
+                            }
+                        }
+
+                        if (
+                            displayName.ToLowerInvariant()
+                                .StartsWith(Path.Combine(modulePath, moduleName + ".").ToLowerInvariant()) &&
+                            displayName.ToLowerInvariant().EndsWith(".sln"))
+                        {
+                            // Found an open solution for this module.
+                            object obj;
+                            rot.GetObject(moniker[0], out obj);
+                            return obj;
                         }
                     }
-
-                    if (
-                        displayName.ToLowerInvariant()
-                            .StartsWith(Path.Combine(modulePath, moduleName + ".").ToLowerInvariant()) &&
-                        displayName.ToLowerInvariant().EndsWith(".sln"))
+                    catch (COMException ex)
                     {
-                        // Found an open solution for this module.
-                        object obj;
-                        rot.GetObject(moniker[0], out obj);
-                        return obj;
+                        unchecked
+                        {
+                            if (ex.HResult == (int) 0x8001010A)
+                            {
+                                continue;
+                            }
+                        }
                     }
                 }
             }

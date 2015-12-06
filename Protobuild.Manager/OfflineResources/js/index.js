@@ -10,10 +10,11 @@ function stateChange(state) {
             window.addTemplate("norecentitems", {});
         } else {
             for (var i = 0; i < state.recentProjectsCount; i++) {
-                window.addTemplate("recentitem", {
+                var tpl = window.addTemplate("recentitem", {
                     title: state["recentProjectTitle" + i],
                     path: state["recentProjectPath" + i],
                 });
+                $(tpl).find("a").attr("href", "app:///open-recent?path=" + encodeURIComponent(state["recentProjectPath" + i]));
             }
         }
 

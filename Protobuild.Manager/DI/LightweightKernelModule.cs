@@ -31,6 +31,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<ILauncherSelfUpdate, LauncherSelfUpdate>();
             kernel.BindAndKeepInstance<IStartup, Startup>();
             //kernel.BindAndKeepInstance<IOfflineDetection, OfflineDetection>();
+            kernel.BindAndKeepInstance<IProtobuildHostingEngine, ProtobuildHostingEngine>();
 
             kernel.BindAndKeepInstance<IRecentProjectsManager, RecentProjectsManager>();
         }

@@ -33,4 +33,12 @@
   by the resource name.
   -->
   <LinuxIcon>@Protobuild.Icon.ico</LinuxIcon>
+
+  <!--
+  The source to draw on templates from.  Supports the following options:
+    * builtin
+    * online
+    * dir:<path to a folder on disk>
+  -->
+  <TemplateSource>builtin</TemplateSource>
 </Branding>

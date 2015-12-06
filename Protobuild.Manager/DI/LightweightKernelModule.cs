@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.IO;
 
 namespace Protobuild.Manager
@@ -11,8 +12,7 @@ namespace Protobuild.Manager
             var brandingPath = Path.Combine(assemblyDirPath, "Branding.xml");
             if (File.Exists(brandingPath))
             {
-                // TODO: ExternalBindingEngine
-                kernel.BindAndKeepInstance<IBrandingEngine, EmbeddedBrandingEngine>();
+                kernel.BindAndKeepInstance<IBrandingEngine, ExternalBrandingEngine>();
             }
             else
             {
@@ -34,6 +34,20 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IProtobuildHostingEngine, ProtobuildHostingEngine>();
 
             kernel.BindAndKeepInstance<IRecentProjectsManager, RecentProjectsManager>();
+
+            var branding = kernel.Get<IBrandingEngine>();
+            if (branding.TemplateSource == "builtin")
+            {
+                kernel.BindAndKeepInstance<ITemplateSource, BuiltinTemplateSource>();
+            }
+            else if (branding.TemplateSource == "online")
+            {
+                throw new NotSupportedException();
+            }
+            else if (branding.TemplateSource.StartsWith("dir:"))
+            {
+                kernel.BindAndKeepInstance<ITemplateSource, OnDiskTemplateSource>();
+            }
         }
     }
 }

@@ -28,7 +28,9 @@
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
     <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
     <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />
+    <Compile Include="BrandingEngine\BaseBrandingEngine.cs" />
     <Compile Include="BrandingEngine\EmbeddedBrandingEngine.cs" />
+    <Compile Include="BrandingEngine\ExternalBrandingEngine.cs" />
     <Compile Include="BrandingEngine\IBrandingEngine.cs" />
     <Compile Include="BrowserEmulation\BrowserEmulation.cs" />
     <Compile Include="ConfigManager\ConfigManager.cs" />
@@ -78,6 +80,10 @@
     <Compile Include="SelfUpdate\LauncherSelfUpdate.cs" />
     <Compile Include="Startup\IStartup.cs" />
     <Compile Include="Startup\Startup.cs" />
+    <Compile Include="TemplateSourcing\BuiltinTemplateSource.cs" />
+    <Compile Include="TemplateSourcing\ITemplateSource.cs" />
+    <Compile Include="TemplateSourcing\OnDiskTemplateSource.cs" />
+    <Compile Include="TemplateSourcing\TemplateInfo.cs" />
     <Compile Include="UIManager\IUIManager.cs" />
     <Compile Include="UIManager\LinuxUIManager.cs" />
     <Compile Include="UIManager\WindowsUIManager.cs" />
@@ -170,6 +176,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\project.js">
       <LogicalName>js.project.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\selecttemplate.js">
+      <LogicalName>js.selecttemplate.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\template.js">
       <LogicalName>js.template.js</LogicalName>

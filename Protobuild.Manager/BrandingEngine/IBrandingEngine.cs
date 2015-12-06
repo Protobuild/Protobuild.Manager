@@ -23,5 +23,10 @@
 #elif PLATFORM_LINUX
         Gdk.Pixbuf LinuxIcon { get; }
 #endif
+
+        /// <summary>
+        /// The template source to draw from.
+        /// </summary>
+        string TemplateSource { get; }
     }
 }

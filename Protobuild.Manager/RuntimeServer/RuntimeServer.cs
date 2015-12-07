@@ -96,6 +96,17 @@ namespace Protobuild.Manager
             }
         }
 
+        public void Flush()
+        {
+            if (this.m_RuntimeInjector != null)
+            {
+                lock (this.m_InjectionLock)
+                {
+                    this.m_RuntimeInjector(this.GetInjectionScript(false));
+                }
+            }
+        }
+
         public T Get<T>(string key)
         {
             lock (this.m_InjectorLock)

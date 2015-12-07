@@ -2,7 +2,7 @@
 
 namespace Protobuild.Manager
 {
-    internal interface ITemplateSource
+    public interface ITemplateSource
     {
         List<TemplateInfo> GetTemplates();
     }

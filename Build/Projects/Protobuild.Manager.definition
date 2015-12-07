@@ -67,9 +67,15 @@
     <Compile Include="PrerequisiteChecks\IPrerequisiteCheck.cs" />
     <Compile Include="PrerequisiteChecks\Mono380Check.cs" />
     <Compile Include="PrerequisiteChecks\PrerequisiteCheckStatus.cs" />
+    <Compile Include="ProcessExtensions.cs" />
     <Compile Include="Progress\IProgressRenderer.cs" />
     <Compile Include="Progress\ProgressRenderer.cs" />
     <Compile Include="ProgressRetryDownloader.cs" />
+    <Compile Include="ProjectCreation\CreateProjectRequest.cs" />
+    <Compile Include="ProjectCreation\IProjectCreator.cs" />
+    <Compile Include="ProjectCreation\ProjectCreator.cs" />
+    <Compile Include="ProjectDefaultPath\IProjectDefaultPath.cs" />
+    <Compile Include="ProjectDefaultPath\ProjectDefaultPath.cs" />
     <Compile Include="ProtobuildHost\IProtobuildHostingEngine.cs" />
     <Compile Include="ProtobuildHost\ModuleHost.cs" />
     <Compile Include="ProtobuildHost\ProtobuildHostingEngine.cs" />
@@ -116,6 +122,9 @@
     <EmbeddedResource Include="Branding.xml">
       <LogicalName>Branding.xml</LogicalName>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\create.htm">
+      <LogicalName>create.htm</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\css\bootstrap.css">
       <LogicalName>css.bootstrap.css</LogicalName>
@@ -164,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\bootstrap.js">
       <LogicalName>js.bootstrap.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OfflineResources\js\create.js">
+      <LogicalName>js.create.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\js\errorhandle.js">
       <LogicalName>js.errorhandle.js</LogicalName>

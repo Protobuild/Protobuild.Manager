@@ -47,6 +47,9 @@ namespace Protobuild.Manager
             {
                 kernel.BindAndKeepInstance<ITemplateSource, OnDiskTemplateSource>();
             }
+
+            kernel.BindAndKeepInstance<IProjectCreator, ProjectCreator>();
+            kernel.BindAndKeepInstance<IProjectDefaultPath, ProjectDefaultPath>();
         }
     }
 }

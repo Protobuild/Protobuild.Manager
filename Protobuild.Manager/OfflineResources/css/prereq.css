@@ -1,23 +1,43 @@
-﻿#prereq_container ul {
+﻿ul#checks {
     list-style: none;
     margin-left: 16px;
     padding-left: 0px;
 }
 
-#prereq_container li {
+ul#checks li {
     list-style: none;
     margin-left: 0px;
     padding-left: 0px;
 }
 
-#prereq_container .red { color: #c0392b; }
-#prereq_container .orange { color: #e67e22; }
-#prereq_container .yellow { color: #f1c40f; }
-#prereq_container .green { color: #139543; }
-#prereq_container .blue { color: #2980b9; }
-#prereq_container .sky { color: #3498db; }
+ul#checks .red { color: #c0392b; }
+ul#checks .orange { color: #e67e22; }
+ul#checks .yellow { color: #f1c40f; }
+ul#checks .green { color: #139543; }
+ul#checks .blue { color: #2980b9; }
+ul#checks .sky { color: #3498db; }
 
-#prereq_container .back {
+ul#checks .back {
     color: #EBECEE;
     margin-right: -1.28571429em;
+}
+
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+ul#checks .spin {
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 10000ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    animation-name: spin;
+    animation-duration: 10000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }

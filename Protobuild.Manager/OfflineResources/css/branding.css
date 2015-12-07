@@ -132,3 +132,46 @@ form.form-horizontal {
     max-height: 278px;
     overflow-x: hidden;
 }
+ul#checks {
+    list-style: none;
+    margin-left: 16px;
+    padding-left: 0px;
+}
+
+ul#checks li {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+ul#checks .red { color: #c0392b; }
+ul#checks .orange { color: #e67e22; }
+ul#checks .yellow { color: #f1c40f; }
+ul#checks .green { color: #139543; }
+ul#checks .blue { color: #2980b9; }
+ul#checks .sky { color: #3498db; }
+
+ul#checks .back {
+    color: #EBECEE;
+    margin-right: -1.28571429em;
+}
+
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+ul#checks .spin {
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 10000ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    animation-name: spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}

@@ -15,6 +15,23 @@ namespace Protobuild.Manager
             _brandingEngine = brandingEngine;
         }
 
+        private Dictionary<string, BaseVariant> ProcessVariants(ArrayList list, string basePath)
+        {
+            var dict = new Dictionary<string, BaseVariant>();
+            foreach (var item in list.OfType<Dictionary<string, object>>())
+            {
+                var id = (string) item["ID"];
+                var name = (string)item["Name"];
+                var overlay = Path.Combine(basePath, (string)item["Overlay"]);
+                dict[id] = new BaseVariant
+                {
+                    Name = name,
+                    OverlayPath = overlay
+                };
+            }
+            return dict;
+        }
+
         public List<TemplateInfo> GetTemplates()
         {
             var directory = new DirectoryInfo(_brandingEngine.TemplateSource.Substring(4));
@@ -31,8 +48,8 @@ namespace Protobuild.Manager
 
                     var name = (string) data["Name"];
                     var description = (string) data["Description"];
-                    var protobuildVariants = ((Dictionary<string, object>)data["ProtobuildVariants"]).ToDictionary(k => k.Key, v => (string)v.Value);
-                    var standardVariants = ((Dictionary<string, object>)data["StandardVariants"]).ToDictionary(k => k.Key, v => (string)v.Value);
+                    var protobuildVariants = ProcessVariants((ArrayList)data["ProtobuildVariants"], directory.FullName);
+                    var standardVariants = ProcessVariants((ArrayList)data["StandardVariants"], directory.FullName);
                     var optionalVariants = new List<OptionalVariant>();
 
                     foreach (var variant in ((ArrayList) data["OptionalVariants"]).OfType<Dictionary<string, object>>())
@@ -51,7 +68,7 @@ namespace Protobuild.Manager
                             {
                                 ID = (string)option["ID"],
                                 Name = (string)option["Name"],
-                                OverlayPath = (string)option["Overlay"],
+                                OverlayPath = Path.Combine(directory.FullName, (string)option["Overlay"]),
                             });
                         }
 
@@ -63,7 +80,7 @@ namespace Protobuild.Manager
                             {
                                 ID = (string)option["ID"],
                                 Name = (string)option["Name"],
-                                OverlayPath = (string)option["Overlay"],
+                                OverlayPath = Path.Combine(directory.FullName, (string)option["Overlay"]),
                             });
                         }
 

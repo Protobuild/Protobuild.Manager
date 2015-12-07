@@ -16,13 +16,17 @@ namespace Protobuild.Manager
         private readonly IWorkflowManager _workflowManager;
         private readonly IWorkflowFactory _workflowFactory;
         private readonly IProjectDefaultPath _projectDefaultPath;
+        private readonly IProjectOverlay _projectOverlay;
 
-        public ProjectCreator(RuntimeServer runtimeServer, IWorkflowManager workflowManager, IWorkflowFactory workflowFactory, IProjectDefaultPath projectDefaultPath)
+        public ProjectCreator(RuntimeServer runtimeServer, IWorkflowManager workflowManager,
+            IWorkflowFactory workflowFactory, IProjectDefaultPath projectDefaultPath,
+            IProjectOverlay projectOverlay)
         {
             _runtimeServer = runtimeServer;
             _workflowManager = workflowManager;
             _workflowFactory = workflowFactory;
             _projectDefaultPath = projectDefaultPath;
+            _projectOverlay = projectOverlay;
         }
 
         public void CreateProject(CreateProjectRequest request)
@@ -53,14 +57,14 @@ namespace Protobuild.Manager
                     (isStandard
                         ? request.Template.AdditionalStandardProjectVariants
                         : request.Template.AdditionalProtobuildVariants)[projectFormatId];
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Apply '" + variant + "' project format overlay", (x, y) => ApplyProjectFormatOverlay(x, y, projectFormatId)));
+                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Apply '" + variant.Name + "' project format overlay", (x, y) => ApplyOverlay(x, y, variant.OverlayPath)));
             }
 
             foreach (var v in request.Template.OptionVariants)
             {
                 var sv = (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(x => x.ID == request.Parameters[v.ID]);
                 steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
-                    "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOptionalFormatOverlay(x, y, sv.OverlayPath)));
+                    "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOverlay(x, y, sv.OverlayPath)));
             }
             
             if (isStandard)
@@ -133,14 +137,10 @@ namespace Protobuild.Manager
             }
             await startProcess.WaitForExitAsync();
         }
-
-        private async Task ApplyProjectFormatOverlay(CreateProjectRequest createProjectRequest, Action<string, string> update, string projectFormatId)
+        
+        private async Task ApplyOverlay(CreateProjectRequest createProjectRequest, Action<string, string> update, string overlayPath)
         {
-            await Task.Yield();
-        }
-
-        private async Task ApplyOptionalFormatOverlay(CreateProjectRequest createProjectRequest, Action<string, string> update, string overlayPath)
-        {
+            _projectOverlay.ApplyProjectTemplateOverlay(overlayPath, createProjectRequest.Path, createProjectRequest.Name);
             await Task.Yield();
         }
 
@@ -198,6 +198,11 @@ namespace Protobuild.Manager
             await generateProcess.WaitForExitAsync();
             allowUpdate = false;
 
+            if (generateProcess.ExitCode != 0)
+            {
+                throw new InvalidOperationException("Protobuild exited with a non-zero exit code!");
+            }
+
             update("Resolve packages", null);
         }
 
@@ -254,6 +259,11 @@ namespace Protobuild.Manager
 
             await generateProcess.WaitForExitAsync();
             allowUpdate = false;
+
+            if (generateProcess.ExitCode != 0)
+            {
+                throw new InvalidOperationException("Protobuild exited with a non-zero exit code!");
+            }
 
             update("Generate projects", null);
         }

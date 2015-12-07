@@ -39,7 +39,7 @@ namespace Protobuild.Manager
                     foreach (var kv in template.AdditionalStandardProjectVariants)
                     {
                         _runtimeServer.Set("templateStandardVariantsID" + a, kv.Key);
-                        _runtimeServer.Set("templateStandardVariantsName" + a, kv.Value);
+                        _runtimeServer.Set("templateStandardVariantsName" + a, kv.Value.Name);
                         a++;
                     }
                     _runtimeServer.Set("templateStandardVariantsCount", a);
@@ -48,7 +48,7 @@ namespace Protobuild.Manager
                     foreach (var kv in template.AdditionalProtobuildVariants)
                     {
                         _runtimeServer.Set("templateProtobuildVariantsID" + a, kv.Key);
-                        _runtimeServer.Set("templateProtobuildVariantsName" + a, kv.Value);
+                        _runtimeServer.Set("templateProtobuildVariantsName" + a, kv.Value.Name);
                         a++;
                     }
                     _runtimeServer.Set("templateProtobuildVariantsCount", a);

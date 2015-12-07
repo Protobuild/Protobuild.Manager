@@ -119,7 +119,7 @@ span {}
 
 #status {
     max-height: 40px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 div.checkbox {

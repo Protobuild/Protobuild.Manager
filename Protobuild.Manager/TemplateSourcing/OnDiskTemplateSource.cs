@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web.Script.Serialization;
 
 namespace Protobuild.Manager
 {
@@ -17,24 +20,64 @@ namespace Protobuild.Manager
             var directory = new DirectoryInfo(_brandingEngine.TemplateSource.Substring(4));
             var templates = new List<TemplateInfo>();
 
-            foreach (var subdir in directory.GetDirectories())
+            foreach (var info in directory.GetFiles("*.json"))
             {
-                var info = Path.Combine(subdir.FullName, "info.txt");
-                if (!File.Exists(info))
-                {
-                    continue;
-                }
+                var serializer = new JavaScriptSerializer();
 
-                using (var reader = new StreamReader(info))
+                using (var reader = new StreamReader(info.FullName))
                 {
-                    var name = reader.ReadLine();
-                    var description = reader.ReadToEnd();
+                    var str = reader.ReadToEnd();
+                    var data = serializer.Deserialize<Dictionary<string, object>>(str);
 
+                    var name = (string) data["Name"];
+                    var description = (string) data["Description"];
+                    var protobuildVariants = ((Dictionary<string, object>)data["ProtobuildVariants"]).ToDictionary(k => k.Key, v => (string)v.Value);
+                    var standardVariants = ((Dictionary<string, object>)data["StandardVariants"]).ToDictionary(k => k.Key, v => (string)v.Value);
+                    var optionalVariants = new List<OptionalVariant>();
+
+                    foreach (var variant in ((ArrayList) data["OptionalVariants"]).OfType<Dictionary<string, object>>())
+                    {
+                        var newVariant = new OptionalVariant();
+                        newVariant.ID = (string) variant["ID"];
+                        newVariant.Name = (string)variant["Name"];
+                        newVariant.ProtobuildOptions = new List<OptionalVariantOverlay>();
+                        newVariant.StandardOptions = new List<OptionalVariantOverlay>();
+
+                        foreach (
+                            var option in
+                                ((ArrayList)variant["ProtobuildOptions"]).OfType<Dictionary<string, object>>())
+                        {
+                            newVariant.ProtobuildOptions.Add(new OptionalVariantOverlay
+                            {
+                                ID = (string)option["ID"],
+                                Name = (string)option["Name"],
+                                OverlayPath = (string)option["Overlay"],
+                            });
+                        }
+
+                        foreach (
+                            var option in
+                                ((ArrayList)variant["StandardOptions"]).OfType<Dictionary<string, object>>())
+                        {
+                            newVariant.StandardOptions.Add(new OptionalVariantOverlay
+                            {
+                                ID = (string)option["ID"],
+                                Name = (string)option["Name"],
+                                OverlayPath = (string)option["Overlay"],
+                            });
+                        }
+
+                        optionalVariants.Add(newVariant);
+                    }
+                    
                     templates.Add(new TemplateInfo
                     {
                         TemplateName = name,
                         TemplateDescription = description.Trim(),
-                        TemplateURI = "local-template://" + subdir.FullName
+                        TemplateURI = "local-template://" + Path.Combine(info.DirectoryName) + info.Name.Substring(0, info.Name.Length - info.Extension.Length),
+                        AdditionalProtobuildVariants = protobuildVariants,
+                        AdditionalStandardProjectVariants = standardVariants,
+                        OptionVariants = optionalVariants,
                     });
                 }
             }

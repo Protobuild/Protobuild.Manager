@@ -44,13 +44,12 @@
         <div class="form-group">
           <label for="structure" class="col-sm-3 control-label">Project Format:</label>
           <div class="col-sm-5">
-            <select class="form-control" name="structure" id="structure">
-              <option value="protobuild">Protobuild</option>
-              <option value="standard">Standard C# Projects</option>
+            <select class="form-control" name="projectFormat" id="projectFormat">
+              <option data-template="variantitem" value="protobuild">Protobuild</option>
             </select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group optionalvariant" data-template="optionalvariant">
           <label for="structure" class="col-sm-3 control-label">Reference MonoGame:</label>
           <div class="col-sm-5">
             <select class="form-control" name="libraryRefType" id="libraryRefType">
@@ -59,67 +58,74 @@
             </select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="platforms" style="display: none; margin-bottom: 0px;">
           <label for="path" class="col-sm-3 control-label">Platforms:</label>
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom: 0px;">
             <div class="col-sm-8">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_Windows" value="true"> Windows
+                  <input type="checkbox" name="platform_Windows" value="true" checked="checked"/> Windows
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_MacOS" value="true"> Mac OS
+                  <input type="checkbox" name="platform_MacOS" value="true" checked="checked"/> Mac OS
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_Linux" value="true"> Linux
+                  <input type="checkbox" name="platform_Linux" value="true" checked="checked"/> Linux
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_iOS" value="true"> iOS
+                  <input type="checkbox" name="platform_iOS" value="true" checked="checked"/> iOS
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_Android" value="true"> Android
+                  <input type="checkbox" name="platform_Android" value="true" checked="checked"/> Android
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_WindowsPhone" value="true"> Windows Phone 8
+                  <input type="checkbox" name="platform_WindowsPhone" value="true" checked="checked"/> Windows Phone 8
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_WindowsPhone81" value="true"> Windows Phone 8.1
+                  <input type="checkbox" name="platform_WindowsPhone81" value="true" checked="checked"/> Windows Phone 8.1
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_Windows81" value="true"> Windows 8.1
+                  <input type="checkbox" name="platform_Windows81" value="true" checked="checked"/> Windows 8.1
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_WindowsUniversal" value="true"> Windows Universal App
+                  <input type="checkbox" name="platform_WindowsUniversal" value="true" checked="checked"/> Windows Universal App
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_Ouya" value="true"> Ouya
+                  <input type="checkbox" name="platform_Ouya" value="true" checked="checked"/> Ouya
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="platform_Web" value="true"> Web
+                  <input type="checkbox" name="platform_Web" value="true" checked="checked" /> Web
                 </label>
               </div>
             </div>
           </div>
+        </div>
+        <div class="form-group" id="platformsNoSelect" style="display: none; margin-bottom: 0px;">
+          <label class="col-sm-3 control-label">Platforms:</label>
+          <label class="col-sm-8 control-label" style="text-align: left; font-weight: normal;">
+            Protobuild projects do not need to select a platform on project creation; you can
+            switch the target platform any time during development.
+          </label>
         </div>
       </form>
     </div>

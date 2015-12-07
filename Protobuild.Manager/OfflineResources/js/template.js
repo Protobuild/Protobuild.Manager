@@ -1,4 +1,4 @@
-window.addTemplate = function(name, values) {
+window.addTemplate = function(name, values, insert) {
   console.log("requested to spawn template with name '" + name + "'");
 
   var original = $("[data-template=\"" + name + "\"]");
@@ -17,7 +17,10 @@ window.addTemplate = function(name, values) {
   }
 
   copy.removeAttr("data-template");
-  original.parent().append(copy);
+    if (insert)
+        copy.insertAfter(original);
+    else
+        original.parent().append(copy);
 
   console.log("template spawned and added to parent");
 

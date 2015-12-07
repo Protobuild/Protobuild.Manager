@@ -236,36 +236,50 @@ namespace Protobuild.Manager
 
                     if (extension == "htm")
                     {
-                        var xml = new XmlDocument();
-                        xml.Load(resource);
+                        try
+                        {
+                            var xml = new XmlDocument();
+                            xml.Load(resource);
 
-                        xml.DocumentElement.SelectSingleNode("//style[@data-injection='true']").InnerText = @"
+                            xml.DocumentElement.SelectSingleNode("//style[@data-injection='true']").InnerText = @"
 *[data-template] {
   display: none;
 }
 ";
-                        
-                        foreach (var elem in xml.DocumentElement.SelectNodes("//meta[@name='needs-loadable']").OfType<XmlElement>())
-                        {
-                            var @interface = elem.GetAttribute("interface");
-                            var type = typeof(RuntimeServer).Assembly.GetTypes().First(x => x.Name == @interface);
-                            var inst = _kernel.Get(type) as ILoadable;
-                            if (inst != null)
+
+                            foreach (
+                                var elem in
+                                    xml.DocumentElement.SelectNodes("//meta[@name='needs-loadable']")
+                                        .OfType<XmlElement>())
                             {
-                                await Task.Run((Func<Task>)inst.Load);
+                                var @interface = elem.GetAttribute("interface");
+                                var type = typeof (RuntimeServer).Assembly.GetTypes().First(x => x.Name == @interface);
+                                var inst = _kernel.Get(type) as ILoadable;
+                                if (inst != null)
+                                {
+                                    await Task.Run((Func<Task>) inst.Load);
+                                }
                             }
+
+                            ((XmlElement) xml.DocumentElement.SelectSingleNode("//script[@data-injection='true']"))
+                                .InnerText = this.GetInjectionScript(true);
+                            ((XmlElement) xml.DocumentElement.SelectSingleNode("//script[@data-injection='true']"))
+                                .SetAttribute("data-injection", "false");
+
+                            using (var stream = new MemoryStream())
+                            {
+                                xml.Save(stream);
+                                var len = stream.Position;
+                                stream.Seek(0, SeekOrigin.Begin);
+                                response.ContentLength64 = len;
+                                stream.CopyTo(response.OutputStream);
+                            }
+
                         }
-
-                        ((XmlElement)xml.DocumentElement.SelectSingleNode("//script[@data-injection='true']")).InnerText = this.GetInjectionScript(true);
-                        ((XmlElement)xml.DocumentElement.SelectSingleNode("//script[@data-injection='true']")).SetAttribute("data-injection", "false");
-
-                        using (var stream = new MemoryStream())
+                        catch (Exception ex)
                         {
-                            xml.Save(stream);
-                            var len = stream.Position;
-                            stream.Seek(0, SeekOrigin.Begin);
-                            response.ContentLength64 = len;
-                            stream.CopyTo(response.OutputStream);
+                            response.StatusCode = 500;
+                            Console.Error.WriteLine(ex);
                         }
                     }
                     else

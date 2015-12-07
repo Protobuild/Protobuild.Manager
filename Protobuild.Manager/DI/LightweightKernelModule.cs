@@ -8,8 +8,7 @@ namespace Protobuild.Manager
     {
         public static void BindCommon(this LightweightKernel kernel)
         {
-            var assemblyDirPath = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
-            var brandingPath = Path.Combine(assemblyDirPath, "Branding.xml");
+            var brandingPath = Path.Combine(Environment.CurrentDirectory, "Branding.xml");
             if (File.Exists(brandingPath))
             {
                 kernel.BindAndKeepInstance<IBrandingEngine, ExternalBrandingEngine>();

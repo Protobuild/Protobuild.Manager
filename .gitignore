@@ -6,3 +6,4 @@ obj/
 .vs/Protobuild.Manager.Windows/v14/.suo
 /Protobuild.Manager.Linux.userprefs
 .vs/
+Protobuild.Manager/Protobuild.Manager.Windows.csproj.user

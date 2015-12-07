@@ -1,6 +1,8 @@
 function stateChange(state) {
     console.log("state change");
 
+    $("h1[data-value=\"title\"").text(state.productName);
+
     if (state.recentProjectsCount !== undefined) {
         // remove all children of the recent UL that aren't template
         // items.

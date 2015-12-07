@@ -58,7 +58,8 @@ namespace Protobuild.Manager
         public IWorkflow CreateInitialWorkflow()
         {
             return new InitialWorkflow(
-                this.m_Kernel.Get<RuntimeServer>());
+                this.m_Kernel.Get<RuntimeServer>(),
+                this.m_Kernel.Get<IBrandingEngine>());
         }
 
         public IWorkflow CreateProjectNewWorkflow()

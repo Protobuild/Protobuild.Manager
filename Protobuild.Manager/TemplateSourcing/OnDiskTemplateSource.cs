@@ -74,7 +74,7 @@ namespace Protobuild.Manager
                     {
                         TemplateName = name,
                         TemplateDescription = description.Trim(),
-                        TemplateURI = "local-template://" + Path.Combine(info.DirectoryName) + info.Name.Substring(0, info.Name.Length - info.Extension.Length),
+                        TemplateURI = "local-template://" + Path.Combine(info.DirectoryName, info.Name.Substring(0, info.Name.Length - info.Extension.Length)),
                         AdditionalProtobuildVariants = protobuildVariants,
                         AdditionalStandardProjectVariants = standardVariants,
                         OptionVariants = optionalVariants,

@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace Protobuild.Manager
@@ -23,24 +24,58 @@ namespace Protobuild.Manager
         {
             var name = parameters["name"];
             var path = parameters["path"];
+            var projectFormat = parameters["projectFormat"];
 
             Directory.CreateDirectory(path);
 
             var client = new WebClient();
             client.DownloadFile("http://protobuild.org/get", Path.Combine(path, "Protobuild.exe"));
 
-            var syncProcess = Process.Start(new ProcessStartInfo(Path.Combine(path, "Protobuild.exe"), "--start \"" + _runtimeServer.Get<string>("templateurl") + "\" \"" + name + "\"")
+            var startProcess = Process.Start(new ProcessStartInfo(Path.Combine(path, "Protobuild.exe"), "--start \"" + _runtimeServer.Get<string>("templateurl") + "\" \"" + name + "\"")
             {
                 WorkingDirectory = path,
                 UseShellExecute = false
             });
-            if (syncProcess == null)
+            if (startProcess == null)
             {
                 throw new InvalidOperationException("can't create");
             }
-            syncProcess.WaitForExit();
+            startProcess.WaitForExit();
 
-            _workflowManager.AppendWorkflow(_workflowFactory.CreateProjectOpenWorkflow(path));
+            if (projectFormat == "standard" || projectFormat.StartsWith("standard-"))
+            {
+                // Generate for all selected platforms.
+                var platforms =
+                    parameters.Keys.OfType<string>().Where(x => x.StartsWith("platform_"))
+                        .Select(x => x.Substring(9))
+                        .Aggregate((a, b) => a + "," + b);
+                var generateProcess =
+                    Process.Start(new ProcessStartInfo(Path.Combine(path, "Protobuild.exe"), "--generate " + platforms)
+                    {
+                        WorkingDirectory = path,
+                        UseShellExecute = false
+                    });
+                if (generateProcess == null)
+                {
+                    throw new InvalidOperationException("can't generate");
+                }
+                generateProcess.WaitForExit();
+
+                // Remove the Protobuild.exe file and Build folders.
+                Directory.Delete(Path.Combine(path, "Build"), true);
+                File.Delete(Path.Combine(path, "Protobuild.exe"));
+
+#if PLATFORM_WINDOWS
+                System.Windows.Forms.MessageBox.Show("Your project has been created.");
+#endif
+
+                _runtimeServer.Goto("index");
+                _workflowManager.AppendWorkflow(_workflowFactory.CreateInitialWorkflow());
+            }
+            else
+            {
+                _workflowManager.AppendWorkflow(_workflowFactory.CreateProjectOpenWorkflow(path));
+            }
         }
     }
 }

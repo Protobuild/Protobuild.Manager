@@ -45,6 +45,7 @@ namespace Protobuild.Manager
 
             var webBrowser = new WebBrowser();
             webBrowser.Dock = DockStyle.Fill;
+            webBrowser.ObjectForScripting = new ScriptInterface();
             form.Controls.Add(webBrowser);
 
             this.m_RuntimeServer.RegisterRuntimeInjector(x =>
@@ -82,6 +83,20 @@ namespace Protobuild.Manager
             };
 
             Application.Run();
+        }
+
+        [System.Runtime.InteropServices.ComVisible(true)]
+        public class ScriptInterface
+        {
+            public void ReportError(string errorMessage, string url, int lineNumber)
+            {
+                Console.WriteLine(url + ":" + lineNumber + ": " + errorMessage);
+            }
+
+            public void Log(string errorMessage)
+            {
+                Console.WriteLine(errorMessage);
+            }
         }
 
         public void Quit()

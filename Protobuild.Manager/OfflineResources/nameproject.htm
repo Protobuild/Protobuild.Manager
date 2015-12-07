@@ -19,12 +19,13 @@
         <h1 data-value="title">Name Project</h1>
       </div>
       <div id="toplinks">
+        <a class="btn btn-success" href="javascript:submitForm()">Create Project</a>
         <a class="btn btn-default" href="app:///cancel-creation">Cancel</a>
       </div>
       <p id="status">
         Select a name and path for your new project:
       </p>
-      <form class="form-horizontal" action="app:///finalize-project" method="GET">
+      <form class="form-horizontal" action="app:///finalize-project" method="GET" id="form">
         <div class="form-group">
           <label for="name" class="col-sm-3 control-label">Name:</label>
           <div class="col-sm-5">
@@ -36,9 +37,89 @@
           <div class="col-sm-5">
             <input id="path" name="path" type="text" required="required" class="form-control"/>
           </div>
+          <div class="col-sm-1">
+            <input type="button" class="btn" value="..." />
+          </div>
         </div>
         <div class="form-group">
-          <input type="submit" class="btn btn-lg btn-success" value="Create Project"/>
+          <label for="structure" class="col-sm-3 control-label">Project Format:</label>
+          <div class="col-sm-5">
+            <select class="form-control" name="structure" id="structure">
+              <option value="protobuild">Protobuild</option>
+              <option value="standard">Standard C# Projects</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="structure" class="col-sm-3 control-label">Reference MonoGame:</label>
+          <div class="col-sm-5">
+            <select class="form-control" name="libraryRefType" id="libraryRefType">
+              <option value="package">As a Package</option>
+              <option value="submodule">Use a Git submodule</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="path" class="col-sm-3 control-label">Platforms:</label>
+          <div class="form-group">
+            <div class="col-sm-8">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_Windows" value="true"> Windows
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_MacOS" value="true"> Mac OS
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_Linux" value="true"> Linux
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_iOS" value="true"> iOS
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_Android" value="true"> Android
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_WindowsPhone" value="true"> Windows Phone 8
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_WindowsPhone81" value="true"> Windows Phone 8.1
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_Windows81" value="true"> Windows 8.1
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_WindowsUniversal" value="true"> Windows Universal App
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_Ouya" value="true"> Ouya
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="platform_Web" value="true"> Web
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
     </div>

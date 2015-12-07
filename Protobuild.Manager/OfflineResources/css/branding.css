@@ -121,3 +121,14 @@ span {}
     max-height: 40px;
     overflow-y: scroll;
 }
+
+div.checkbox {
+    float: left;
+    margin-right: 10px;
+}
+
+form.form-horizontal {
+    overflow-y: auto;
+    max-height: 278px;
+    overflow-x: hidden;
+}

@@ -27,4 +27,5 @@ $(document).bind("statechange", function (event, state) {
 
 $(document).ready(function() {
     location.href = "app:///switch-platform?target=Windows&old=Windows";
+    log("running");
 })

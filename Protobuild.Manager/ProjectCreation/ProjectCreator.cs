@@ -212,7 +212,7 @@ namespace Protobuild.Manager
                     .Select(x => x.Substring(9))
                     .Aggregate((a, b) => a + "," + b);
             var generateProcess =
-                Process.Start(new ProcessStartInfo(Path.Combine(arg.Path, "Protobuild.exe"), "--no-host-generate --generate " + platforms)
+                Process.Start(new ProcessStartInfo(Path.Combine(arg.Path, "Protobuild.exe"), "--no-host-generate --no-resolve --generate " + platforms)
                 {
                     WorkingDirectory = arg.Path,
                     UseShellExecute = false,

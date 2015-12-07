@@ -10,13 +10,20 @@ namespace Protobuild.Manager
         {
             var path = Path.Combine(modulePath, "Protobuild.exe");
 
-            Assembly.LoadFrom(path);
+            var assembly = Assembly.LoadFrom(path);
+            var stream = assembly.GetManifestResourceStream("Protobuild.Internal.dll.lzma");
 
+            /*
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Stream stream = null;
             Assembly assembly = null;
             foreach (var a in assemblies)
             {
+                if (a.IsDynamic)
+                {
+                    continue;
+                }
+
                 var s = a.GetManifestResourceStream("Protobuild.Internal.dll.lzma");
                 if (s != null)
                 {
@@ -25,6 +32,7 @@ namespace Protobuild.Manager
                     break;
                 }
             }
+            */
 
             if (stream == null)
             {

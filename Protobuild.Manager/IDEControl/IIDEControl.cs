@@ -4,6 +4,6 @@ namespace Protobuild.Manager
 {
     public interface IIDEControl
     {
-        Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail);
+        Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail, bool isProtobuild);
     }
 }

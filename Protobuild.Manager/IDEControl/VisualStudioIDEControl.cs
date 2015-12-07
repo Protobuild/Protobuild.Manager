@@ -16,8 +16,7 @@ namespace Protobuild.Manager
             _runtimeServer = runtimeServer;
         }
 
-        public async Task LoadSolution(string modulePath, string moduleName, string targetPlatform,
-            string oldPlatformOnFail)
+        public async Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail, bool isProtobuild)
         {
             try
             {
@@ -94,31 +93,37 @@ namespace Protobuild.Manager
                         dte.ExecuteCommand("File.SaveAll");
                         dte.Solution.Close(true);
 
-                        _runtimeServer.Set("status", "Synchronising for " + oldPlatform + " platform...");
-                        var syncProcess = Process.Start(new ProcessStartInfo(protobuild, "--sync " + oldPlatform)
+                        if (isProtobuild)
                         {
-                            WorkingDirectory = modulePath,
-                            UseShellExecute = false
-                        });
-                        if (syncProcess == null)
-                        {
-                            throw new InvalidOperationException("can't sync");
+                            _runtimeServer.Set("status", "Synchronising for " + oldPlatform + " platform...");
+                            var syncProcess = Process.Start(new ProcessStartInfo(protobuild, "--sync " + oldPlatform)
+                            {
+                                WorkingDirectory = modulePath,
+                                UseShellExecute = false
+                            });
+                            if (syncProcess == null)
+                            {
+                                throw new InvalidOperationException("can't sync");
+                            }
+                            syncProcess.WaitForExit();
                         }
-                        syncProcess.WaitForExit();
                     }
                 }
 
-                _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
-                var process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
+                if (isProtobuild)
                 {
-                    WorkingDirectory = modulePath,
-                    UseShellExecute = false
-                });
-                if (process == null)
-                {
-                    throw new InvalidOperationException("can't generate");
+                    _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
+                    var process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
+                    {
+                        WorkingDirectory = modulePath,
+                        UseShellExecute = false
+                    });
+                    if (process == null)
+                    {
+                        throw new InvalidOperationException("can't generate");
+                    }
+                    process.WaitForExit();
                 }
-                process.WaitForExit();
 
                 await launchLogic(dte);
 

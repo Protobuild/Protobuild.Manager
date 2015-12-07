@@ -68,12 +68,9 @@ namespace Protobuild.Manager
                 steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Resolve packages", ResolvePackages));
                 steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Generate projects", GeneratePlatforms));
                 steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Clean up", CleanUpForStandardProjects));
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Open project", OpenStandardProject));
             }
-            else
-            {
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Open project", OpenProtobuildProject));
-            }
+
+            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Open project", OpenProject));
 
             var i = 0;
             foreach (var step in steps)
@@ -270,21 +267,9 @@ namespace Protobuild.Manager
             await Task.Yield();
         }
 
-        private async Task OpenProtobuildProject(CreateProjectRequest arg, Action<string, string> update)
+        private async Task OpenProject(CreateProjectRequest arg, Action<string, string> update)
         {
             _workflowManager.AppendWorkflow(_workflowFactory.CreateProjectOpenWorkflow(arg.Path));
-
-            await Task.Yield();
-        }
-
-        private async Task OpenStandardProject(CreateProjectRequest arg, Action<string, string> update)
-        {
-#if PLATFORM_WINDOWS
-            System.Windows.Forms.MessageBox.Show("Your project has been created.");
-#endif
-
-            _runtimeServer.Goto("index");
-            _workflowManager.AppendWorkflow(_workflowFactory.CreateInitialWorkflow());
 
             await Task.Yield();
         }

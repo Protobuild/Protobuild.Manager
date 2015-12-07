@@ -25,7 +25,7 @@ namespace Protobuild.Manager
 
         private object m_InjectorLock = new object();
 
-        private object m_InjectionLock = new object();
+        private SemaphoreSlim m_InjectionMutex = new SemaphoreSlim(1, 1);
 
         public string BaseUri { get; private set; }
 
@@ -67,10 +67,9 @@ namespace Protobuild.Manager
         {
             this.m_RuntimeInjector = runtimeInjector;
 
-            lock (this.m_InjectionLock)
-            {
-                this.m_RuntimeInjector(this.GetInjectionScript(false));
-            }
+            this.m_InjectionMutex.Wait();
+            this.m_RuntimeInjector(this.GetInjectionScript(false));
+            this.m_InjectionMutex.Release();
         }
 
         public void Set(string key, object value)
@@ -82,7 +81,7 @@ namespace Protobuild.Manager
 
             if (this.m_RuntimeInjector != null)
             {
-                lock (this.m_InjectionLock)
+                if (this.m_InjectionMutex.Wait(500))
                 {
                     try
                     {
@@ -92,6 +91,10 @@ namespace Protobuild.Manager
                     {
                         this.m_RuntimeInjector(this.GetInjectionScript(false));
                     }
+                    finally
+                    {
+                        this.m_InjectionMutex.Release();
+                    }
                 }
             }
         }
@@ -100,9 +103,16 @@ namespace Protobuild.Manager
         {
             if (this.m_RuntimeInjector != null)
             {
-                lock (this.m_InjectionLock)
+                if (this.m_InjectionMutex.Wait(500))
                 {
-                    this.m_RuntimeInjector(this.GetInjectionScript(false));
+                    try
+                    {
+                        this.m_RuntimeInjector(this.GetInjectionScript(false));
+                    }
+                    finally
+                    {
+                        this.m_InjectionMutex.Release();
+                    }
                 }
             }
         }

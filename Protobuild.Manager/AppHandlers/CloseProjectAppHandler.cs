@@ -22,10 +22,14 @@ namespace Protobuild.Manager
 
         public void Handle(NameValueCollection parameters)
         {
+            _runtimeServer.Set("disableStateUpdate", true);
+
+            _runtimeServer.Goto("index");
+
             _runtimeServer.Set("loadedModuleName", null);
             _runtimeServer.Set("loadedModulePath", null);
 
-            _runtimeServer.Goto("index");
+            _runtimeServer.Set("disableStateUpdate", false);
 
             _workflowManager.AppendWorkflow(_workflowFactory.CreateInitialWorkflow());
         }

@@ -21,15 +21,16 @@ namespace Protobuild.Manager
 
             Task.Run(async () =>
             {
-                await HandleInBackground(parameters["target"], parameters["old"]);
+                await HandleInBackground(parameters["target"], parameters["old"], parameters["protobuild"] == "true");
             });
         }
 
-        private async Task HandleInBackground(string targetPlatform, string oldPlatformOnFail)
+        private async Task HandleInBackground(string targetPlatform, string oldPlatformOnFail, bool isProtobuild)
         {
             await
                 _ideControl.LoadSolution(_runtimeServer.Get<string>("loadedModulePath"),
-                    _runtimeServer.Get<string>("loadedModuleName"), targetPlatform, oldPlatformOnFail);
+                    _runtimeServer.Get<string>("loadedModuleName"), targetPlatform, oldPlatformOnFail,
+                    isProtobuild);
         }
     }
 }

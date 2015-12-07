@@ -28,26 +28,7 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("templateName" + i, template.TemplateName);
                 _runtimeServer.Set("templateDescription" + i, template.TemplateDescription);
                 _runtimeServer.Set("templateURI" + i, template.TemplateURI);
-
-                /*
-                var a = 0;
-                foreach (var kv in template.AdditionalStandardProjectVariants)
-                {
-                    _runtimeServer.Set("templateStandardVariants" + i + "_id" + a, kv.Key);
-                    _runtimeServer.Set("templateStandardVariants" + i + "_name" + a, kv.Value);
-                    a++;
-                }
-                _runtimeServer.Set("templateStandardVariantsCount", a);
                 
-                foreach (var kv in template.AdditionalStandardProjectVariants)
-                {
-                    _runtimeServer.Set("templateProtobuildVariants" + i + "_id" + a, kv.Key);
-                    _runtimeServer.Set("templateProtobuildVariants" + i + "_name" + a, kv.Value);
-                    a++;
-                }
-                _runtimeServer.Set("templateProtobuildVariantsCount", a);
-                */
-
                 i++;
             }
 

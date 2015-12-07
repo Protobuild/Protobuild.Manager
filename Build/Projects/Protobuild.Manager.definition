@@ -2,7 +2,7 @@
 <Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows">
   <Properties>
     <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
-	<Property Name="LangVersion" Value="5" />
+    <Property Name="LangVersion" Value="5" />
   </Properties>
   <References>
     <Reference Include="Protobuild.Manager.ThirdParty" />
@@ -84,6 +84,8 @@
     <Compile Include="TemplateSourcing\BuiltinTemplateSource.cs" />
     <Compile Include="TemplateSourcing\ITemplateSource.cs" />
     <Compile Include="TemplateSourcing\OnDiskTemplateSource.cs" />
+    <Compile Include="TemplateSourcing\OptionalVariant.cs" />
+    <Compile Include="TemplateSourcing\OptionalVariantOverlay.cs" />
     <Compile Include="TemplateSourcing\TemplateInfo.cs" />
     <Compile Include="UIManager\IUIManager.cs" />
     <Compile Include="UIManager\LinuxUIManager.cs" />

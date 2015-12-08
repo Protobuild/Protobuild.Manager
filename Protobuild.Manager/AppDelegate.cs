@@ -1,8 +1,8 @@
 ﻿using System;
-using MonoMac.AppKit;
-using MonoMac.Foundation;
+using AppKit;
+using Foundation;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
     [Register("AppDelegate")]
     public partial class AppDelegate : NSApplicationDelegate
@@ -13,11 +13,11 @@ namespace Unearth
         {
         }
 
-        public override void FinishedLaunching(NSObject notification)
-        {
-            this.m_MainWindowController = new MainWindowController();
-            this.m_MainWindowController.Window.MakeKeyAndOrderFront(this);
-        }
+		public override void DidFinishLaunching (NSNotification notification)
+		{
+			this.m_MainWindowController = MacOSUIManager.KernelReference.Get<MainWindowController>();
+			this.m_MainWindowController.Window.MakeKeyAndOrderFront(this);
+		}
 
         public override bool ApplicationShouldTerminateAfterLastWindowClosed(NSApplication sender)
         {

@@ -4,16 +4,16 @@
 // actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
-using MonoMac.Foundation;
+using Foundation;
 using System.CodeDom.Compiler;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
 	[Register ("MainWindowController")]
 	partial class MainWindowController
 	{
 		[Outlet]
-		MonoMac.WebKit.WebView WebViewOutlet { get; set; }
+		WebKit.WebView WebViewOutlet { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

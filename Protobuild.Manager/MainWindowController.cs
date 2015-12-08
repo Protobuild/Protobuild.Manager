@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
+using Foundation;
+using AppKit;
 using System.Threading;
-using MonoMac.WebKit;
+using WebKit;
 using System.Web;
 
-namespace Unearth
+namespace Protobuild.Manager
 {
-    public partial class MainWindowController : MonoMac.AppKit.NSWindowController
+    public partial class MainWindowController : NSWindowController
     {
+		private readonly IBrandingEngine _brandingEngine;
+
         #region Constructors
+
+		public MainWindowController(IBrandingEngine brandingEngine) : base() {
+			_brandingEngine = brandingEngine;
+		}
 
         // Called when created from unmanaged code
         public MainWindowController(IntPtr handle) : base(handle)
@@ -44,9 +50,11 @@ namespace Unearth
             base.AwakeFromNib();
 
             this.Window.BackgroundColor = NSColor.Black;
+			this.Window.Title = _brandingEngine.ProductName;
 
             this.WebViewOutlet.DrawsBackground = false;
 
+			#if FALSE
             AuthLogic.StartSearchForChannels(
                 snapshots =>
                 {
@@ -231,6 +239,8 @@ document.getElementById('status').style.fontStyle = 'bold';"));
 
                 WebView.DecideIgnore(a.DecisionToken);
             };
+
+			#endif
         }
 
         //strongly typed window accessor

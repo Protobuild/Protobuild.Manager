@@ -25,11 +25,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IAppHandlerManager, AppHandlerManager>();
             kernel.BindAndKeepInstance<IProgressRenderer, ProgressRenderer>();
             kernel.BindAndKeepInstance<IWorkflowFactory, WorkflowFactory>();
-            //kernel.BindAndKeepInstance<IPathProvider, PathProvider>();
-            //kernel.BindAndKeepInstance<INewsLoader, NewsLoader>();
-            kernel.BindAndKeepInstance<ILauncherSelfUpdate, LauncherSelfUpdate>();
             kernel.BindAndKeepInstance<IStartup, Startup>();
-            //kernel.BindAndKeepInstance<IOfflineDetection, OfflineDetection>();
             kernel.BindAndKeepInstance<IProtobuildHostingEngine, ProtobuildHostingEngine>();
 
             kernel.BindAndKeepInstance<IRecentProjectsManager, RecentProjectsManager>();

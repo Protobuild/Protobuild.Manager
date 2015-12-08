@@ -3,8 +3,7 @@ namespace Protobuild.Manager
 {
     using System;
     using System.Diagnostics;
-    using CrashReport;
-    using MonoMac.AppKit;
+    using AppKit;
 
     public static class Program
     {
@@ -16,8 +15,8 @@ namespace Protobuild.Manager
             }
             else
             {
-                AppDomain.CurrentDomain.UnhandledException +=
-                    (sender, e) => CrashReporter.Record((Exception)e.ExceptionObject);
+                //AppDomain.CurrentDomain.UnhandledException +=
+                //    (sender, e) => CrashReporter.Record((Exception)e.ExceptionObject);
 
                 try
                 {
@@ -25,7 +24,7 @@ namespace Protobuild.Manager
                 }
                 catch (Exception e)
                 {
-                    CrashReporter.Record(e);
+                    //CrashReporter.Record(e);
 
                     Environment.Exit(1);
                 }
@@ -33,11 +32,16 @@ namespace Protobuild.Manager
         }
 
         public static void Run(string[] args)
-        {
-            ErrorLog.Log("Started game launcher on Mac platform");
+		{
+			var kernel = new LightweightKernel();
+			kernel.BindCommon();
+			kernel.BindAndKeepInstance<IUIManager, MacOSUIManager>();
+			kernel.BindAndKeepInstance<IExecution, MacOSExecution>();
 
-            NSApplication.Init();
-            NSApplication.Main(args);
+			kernel.Get<IErrorLog>().Log("Started game launcher on Mac platform");
+
+			var startup = kernel.Get<IStartup>();
+			startup.Start();
         }
     }
 }

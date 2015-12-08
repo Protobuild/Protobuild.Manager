@@ -28,6 +28,13 @@
   <WindowsIcon>@Protobuild.Icon.ico</WindowsIcon>
 
   <!--
+  For an external icon on disk, use the full path to the .icns file.  For
+  an embedded resource, prefix it with the @ symbol, followed immediately
+  by the resource name.
+  -->
+  <MacOSIcon>@Protobuild.Icon.icns</MacOSIcon>
+
+  <!--
   For an external icon on disk, use the full path to the .ico file.  For
   an embedded resource, prefix it with the @ symbol, followed immediately
   by the resource name.

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows">
+<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows,MacOS">
   <Properties>
     <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
     <Property Name="LangVersion" Value="5" />
@@ -76,15 +76,14 @@
     <Compile Include="ProjectCreation\ProjectCreator.cs" />
     <Compile Include="ProjectDefaultPath\IProjectDefaultPath.cs" />
     <Compile Include="ProjectDefaultPath\ProjectDefaultPath.cs" />
+    <Compile Include="ProjectOverlay\IProjectOverlay.cs" />
+    <Compile Include="ProjectOverlay\ProjectOverlay.cs" />
     <Compile Include="ProtobuildHost\IProtobuildHostingEngine.cs" />
     <Compile Include="ProtobuildHost\ModuleHost.cs" />
     <Compile Include="ProtobuildHost\ProtobuildHostingEngine.cs" />
     <Compile Include="RecentProjects\IRecentProjectsManager.cs" />
     <Compile Include="RecentProjects\RecentProjectsManager.cs" />
     <Compile Include="RuntimeServer\RuntimeServer.cs" />
-    <Compile Include="SelfUpdate\ILauncherSelfUpdate.cs" />
-    <Compile Include="SelfUpdate\InPlaceExecutableSwap.cs" />
-    <Compile Include="SelfUpdate\LauncherSelfUpdate.cs" />
     <Compile Include="Startup\IStartup.cs" />
     <Compile Include="Startup\Startup.cs" />
     <Compile Include="TemplateSourcing\BuiltinTemplateSource.cs" />
@@ -95,6 +94,7 @@
     <Compile Include="TemplateSourcing\TemplateInfo.cs" />
     <Compile Include="UIManager\IUIManager.cs" />
     <Compile Include="UIManager\LinuxUIManager.cs" />
+    <Compile Include="UIManager\MacOSUIManager.cs" />
     <Compile Include="UIManager\WindowsUIManager.cs" />
     <Compile Include="UrlConfig.cs" />
     <Compile Include="VersionConfig.cs" />
@@ -115,9 +115,8 @@
     <Compile Include="Workflows\UpdateGameWorkflow.cs" />
     <Compile Include="Workflows\WorkflowFactory.cs" />
     <Compile Include="Workflows\WorkflowManager.cs" />
-    <Content Include="..\Other\Unearth.icns">
+    <Content Include="Protobuild.Icon.icns">
       <Platforms>MacOS</Platforms>
-      <Link>Unearth.icns</Link>
     </Content>
     <EmbeddedResource Include="Branding.xml">
       <LogicalName>Branding.xml</LogicalName>

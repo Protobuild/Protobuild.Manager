@@ -47,6 +47,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IProjectCreator, ProjectCreator>();
             kernel.BindAndKeepInstance<IProjectDefaultPath, ProjectDefaultPath>();
             kernel.BindAndKeepInstance<IProjectOverlay, ProjectOverlay>();
+			kernel.BindAndKeepInstance<IProcessLog, RuntimeServerProcessLog>();
         }
     }
 }

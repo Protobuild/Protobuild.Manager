@@ -5,9 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Unearth Launcher</string>
 	<key>CFBundleIdentifier</key>
-	<string>au.com.redpointsoftware.UnearthLauncher</string>
-	<key>CFBundleName</key>
-	<string>Unearth.MacOS</string>
+	<string>au.com.redpointgames.ProtobuildManager</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
@@ -17,6 +15,8 @@
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>CFBundleIconFile</key>
-	<string>Unearth</string>
+	<string>Protobuild.Icon</string>
+	<key>CFBundleName</key>
+	<string>Protobuild.Manager.MacOS</string>
 </dict>
 </plist>

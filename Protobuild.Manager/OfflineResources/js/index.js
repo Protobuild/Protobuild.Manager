@@ -1,29 +1,34 @@
-function stateChange(state) {
-    console.log("state change");
+var windowState = {};
 
-    $("h1[data-value=\"title\"").text(state.productName);
+function stateChange() {
+    $('h1[data-value="title"]').text(windowState.productName);
 
-    if (state.recentProjectsCount !== undefined) {
+    if (windowState.recentProjectsCount !== undefined) {
         // remove all children of the recent UL that aren't template
         // items.
         $("ul.recent").children(":not([data-template])").remove();
 
-        if (state.recentProjectsCount == 0) {
+        if (windowState.recentProjectsCount == 0) {
             window.addTemplate("norecentitems", {});
         } else {
-            for (var i = 0; i < state.recentProjectsCount; i++) {
+            for (var i = 0; i < windowState.recentProjectsCount; i++) {
                 var tpl = window.addTemplate("recentitem", {
-                    title: state["recentProjectTitle" + i],
-                    path: state["recentProjectPath" + i],
+                    title: windowState["recentProjectTitle" + i],
+                    path: windowState["recentProjectPath" + i],
                 });
-                $(tpl).find("a").attr("href", "app:///open-recent?path=" + encodeURIComponent(state["recentProjectPath" + i]));
+                $(tpl).find("a").attr("href", "app:///open-recent?path=" + encodeURIComponent(windowState["recentProjectPath" + i]));
             }
         }
 
-        state.recentProjectsFilled = true;
+        windowState.recentProjectsFilled = true;
     }
 }
 
 $(document).bind("statechange", function (event, state) {
-    stateChange(state);
+    windowState = state;
+    stateChange();
+});
+
+$(document).ready(function (event) {
+    stateChange();
 });

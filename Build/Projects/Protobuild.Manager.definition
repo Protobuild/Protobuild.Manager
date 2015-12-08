@@ -37,6 +37,7 @@
     <Compile Include="ConfigManager\ConfigManager.cs" />
     <Compile Include="ConfigManager\IConfigManager.cs" />
     <Compile Include="DI\LightweightKernel.cs" />
+    <Compile Include="DI\LightweightKernelInjectionPreferredAttribute.cs" />
     <Compile Include="DI\LightweightKernelModule.cs" />
     <Compile Include="ErrorLog\ErrorLog.cs" />
     <Compile Include="ErrorLog\IErrorLog.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="GameUpdater.cs" />
     <Compile Include="IDEControl\IIDEControl.cs" />
     <Compile Include="IDEControl\VisualStudioIDEControl.cs" />
+    <Compile Include="IDEControl\XamarinStudioMacIDEControl.cs" />
     <Compile Include="ILoadable.cs" />
     <Compile Include="LinuxProgram.cs" />
     <Compile Include="MacOSProgram.cs" />
@@ -68,6 +70,8 @@
     <Compile Include="PrerequisiteChecks\Mono380Check.cs" />
     <Compile Include="PrerequisiteChecks\PrerequisiteCheckStatus.cs" />
     <Compile Include="ProcessExtensions.cs" />
+    <Compile Include="ProcessLog\IProcessLog.cs" />
+    <Compile Include="ProcessLog\RuntimeServerProcessLog.cs" />
     <Compile Include="Progress\IProgressRenderer.cs" />
     <Compile Include="Progress\ProgressRenderer.cs" />
     <Compile Include="ProgressRetryDownloader.cs" />
@@ -115,9 +119,7 @@
     <Compile Include="Workflows\UpdateGameWorkflow.cs" />
     <Compile Include="Workflows\WorkflowFactory.cs" />
     <Compile Include="Workflows\WorkflowManager.cs" />
-    <Content Include="Protobuild.Icon.icns">
-      <Platforms>MacOS</Platforms>
-    </Content>
+    <Content Include="Protobuild.Icon.icns" />
     <EmbeddedResource Include="Branding.xml">
       <LogicalName>Branding.xml</LogicalName>
       <SubType>Designer</SubType>

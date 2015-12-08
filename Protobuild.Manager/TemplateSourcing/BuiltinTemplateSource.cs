@@ -12,7 +12,10 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "MonoGame 2D Platformer",
                     TemplateDescription = "A cross-platform MonoGame project that runs a 2D platformer.",
-                    TemplateURI = "http://protobuild.org/MonoGame/Template.2DPlatformer@develop"
+                    TemplateURI = "http://protobuild.org/MonoGame/Template.2DPlatformer@develop",
+					AdditionalProtobuildVariants = new Dictionary<string, BaseVariant>(),
+					AdditionalStandardProjectVariants = new Dictionary<string, BaseVariant>(),
+					OptionVariants = new List<OptionalVariant>(),
                 }
             };
         }

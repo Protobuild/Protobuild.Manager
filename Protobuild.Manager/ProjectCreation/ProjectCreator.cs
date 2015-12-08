@@ -17,17 +17,21 @@ namespace Protobuild.Manager
         private readonly IWorkflowFactory _workflowFactory;
         private readonly IProjectDefaultPath _projectDefaultPath;
         private readonly IProjectOverlay _projectOverlay;
+		private readonly IExecution _execution;
+		private readonly IProcessLog _processLog;
 
         public ProjectCreator(RuntimeServer runtimeServer, IWorkflowManager workflowManager,
             IWorkflowFactory workflowFactory, IProjectDefaultPath projectDefaultPath,
-            IProjectOverlay projectOverlay)
+			IProjectOverlay projectOverlay, IExecution execution, IProcessLog processLog)
         {
             _runtimeServer = runtimeServer;
             _workflowManager = workflowManager;
             _workflowFactory = workflowFactory;
             _projectDefaultPath = projectDefaultPath;
             _projectOverlay = projectOverlay;
-        }
+			_execution = execution;
+			_processLog = processLog;
+		}
 
         public void CreateProject(CreateProjectRequest request)
         {
@@ -49,7 +53,7 @@ namespace Protobuild.Manager
 
             steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Create project directory", CreateProjectDirectory));
             steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Download Protobuild", DownloadProtobuild));
-            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Instantiate from base template", InstantiateFromBaseTemplate));
+            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Create project from template", InstantiateFromBaseTemplate));
             
             if (request.ProjectFormat != "standard" && request.ProjectFormat != "protobuild")
             {
@@ -125,17 +129,44 @@ namespace Protobuild.Manager
 
         private async Task InstantiateFromBaseTemplate(CreateProjectRequest arg, Action<string, string> update)
         {
-            var startProcess = Process.Start(new ProcessStartInfo(Path.Combine(arg.Path, "Protobuild.exe"), "--start \"" + arg.Template.TemplateURI + "\" \"" + arg.Name + "\"")
-            {
-                WorkingDirectory = arg.Path,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            });
+			var startProcess = _execution.ExecuteConsoleExecutable(
+				Path.Combine(arg.Path, "Protobuild.exe"), 
+				"--no-generate --start \"" + arg.Template.TemplateURI + "\" \"" + arg.Name + "\"",
+				si =>
+				{
+					si.WorkingDirectory = arg.Path;
+					si.UseShellExecute = false;
+					si.CreateNoWindow = true;
+					si.RedirectStandardOutput = true;
+				});
             if (startProcess == null)
             {
                 throw new InvalidOperationException("can't create");
-            }
-            await startProcess.WaitForExitAsync();
+			}
+			var allowUpdate = true;
+			startProcess.OutputDataReceived += (sender, args) =>
+			{
+				if (!allowUpdate)
+				{
+					return;
+				}
+
+				var line = args.Data;
+				update("Create project from template", line);
+			};
+			_processLog.AttachToProcess(startProcess);
+			startProcess.BeginOutputReadLine();
+			startProcess.EnableRaisingEvents = true;
+
+			await startProcess.WaitForExitAsync();
+			allowUpdate = false;
+
+			if (startProcess.ExitCode != 0)
+			{
+				throw new InvalidOperationException("Protobuild exited with a non-zero exit code!");
+			}
+
+			update("Create project from template", null);
         }
         
         private async Task ApplyOverlay(CreateProjectRequest createProjectRequest, Action<string, string> update, string overlayPath)
@@ -150,15 +181,17 @@ namespace Protobuild.Manager
             var platforms =
                 arg.Parameters.Keys.OfType<string>().Where(x => x.StartsWith("platform_"))
                     .Select(x => x.Substring(9))
-                    .Aggregate((a, b) => a + "," + b);
-            var generateProcess =
-                Process.Start(new ProcessStartInfo(Path.Combine(arg.Path, "Protobuild.exe"), "--resolve " + platforms)
-                {
-                    WorkingDirectory = arg.Path,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                });
+					.Aggregate((a, b) => a + "," + b);
+			var generateProcess = _execution.ExecuteConsoleExecutable(
+				Path.Combine(arg.Path, "Protobuild.exe"), 
+				"--resolve " + platforms,
+				si =>
+				{
+					si.WorkingDirectory = arg.Path;
+					si.UseShellExecute = false;
+					si.CreateNoWindow = true;
+					si.RedirectStandardOutput = true;
+				});
             if (generateProcess == null)
             {
                 throw new InvalidOperationException("can't generate");
@@ -191,7 +224,8 @@ namespace Protobuild.Manager
                 {
                     update("Resolve packages", line);
                 }
-            };
+			};
+			_processLog.AttachToProcess(generateProcess);
             generateProcess.BeginOutputReadLine();
             generateProcess.EnableRaisingEvents = true;
 
@@ -212,15 +246,17 @@ namespace Protobuild.Manager
             var platforms =
                 arg.Parameters.Keys.OfType<string>().Where(x => x.StartsWith("platform_"))
                     .Select(x => x.Substring(9))
-                    .Aggregate((a, b) => a + "," + b);
-            var generateProcess =
-                Process.Start(new ProcessStartInfo(Path.Combine(arg.Path, "Protobuild.exe"), "--no-host-generate --no-resolve --generate " + platforms)
-                {
-                    WorkingDirectory = arg.Path,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                });
+					.Aggregate((a, b) => a + "," + b);
+			var generateProcess = _execution.ExecuteConsoleExecutable(
+				Path.Combine(arg.Path, "Protobuild.exe"), 
+				"--no-host-generate --no-resolve --generate " + platforms,
+				si =>
+				{
+					si.WorkingDirectory = arg.Path;
+					si.UseShellExecute = false;
+					si.CreateNoWindow = true;
+					si.RedirectStandardOutput = true;
+				});
             if (generateProcess == null)
             {
                 throw new InvalidOperationException("can't generate");
@@ -253,7 +289,8 @@ namespace Protobuild.Manager
                 {
                     update("Generate projects", line);
                 }
-            };
+			};
+			_processLog.AttachToProcess(generateProcess);
             generateProcess.BeginOutputReadLine();
             generateProcess.EnableRaisingEvents = true;
 
@@ -273,6 +310,10 @@ namespace Protobuild.Manager
             // Remove the Protobuild.exe file and Build folders.
             Directory.Delete(Path.Combine(arg.Path, "Build"), true);
             File.Delete(Path.Combine(arg.Path, "Protobuild.exe"));
+			foreach (var file in new DirectoryInfo(arg.Path).GetFiles("*.speccache").ToList())
+			{
+				File.Delete(file.FullName);
+			}
 
             await Task.Yield();
         }

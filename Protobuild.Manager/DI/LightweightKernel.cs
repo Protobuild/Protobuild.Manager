@@ -78,7 +78,17 @@ namespace Protobuild.Manager
                 actual = original;
             }
 
-            var constructor = actual.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).First();
+			ConstructorInfo constructor;
+			var constructors = actual.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToList();
+			if (constructors.Count == 1)
+			{
+				constructor = constructors[0];
+			}
+			else
+			{
+				constructor = constructors.OrderBy(x => x.GetCustomAttribute<LightweightKernelInjectionPreferredAttribute>() != null ? 0 : 1).First();
+			}
+
             var parameters = constructor.GetParameters();
 
             var resolved = new object[parameters.Length];

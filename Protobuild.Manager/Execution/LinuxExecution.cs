@@ -6,12 +6,12 @@ namespace Protobuild.Manager
 {
     public class LinuxExecution : IExecution
     {
-        public void ExecuteConsoleExecutable(string path)
+		public Process ExecuteConsoleExecutable(string path, string arguments, Action<ProcessStartInfo> configureStartInfo, Action<Process> configureProcessBeforeStart)
         {
-            this.ExecuteApplicationExecutable(path);
+			return this.ExecuteApplicationExecutable(path, arguments, configureStartInfo, configureProcessBeforeStart);
         }
 
-        public void ExecuteApplicationExecutable(string path)
+		public Process ExecuteApplicationExecutable(string path, string arguments, Action<ProcessStartInfo> configureStartInfo, Action<Process> configureProcessBeforeStart)
         {
             // If we are running Linux, we need to mark the file as executable.
             // This allows the server to run as a seperate process.
@@ -22,14 +22,27 @@ namespace Protobuild.Manager
             }
             catch (Exception ex)
             {
-                throw new Exception("Can't mark game as executable");
+                throw new Exception("Can't mark application as executable");
             }
 
             var startInfo = new ProcessStartInfo();
-            startInfo.FileName = path;
-            startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
+			startInfo.FileName = path;
+			startInfo.Arguments = arguments;
+			startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
+			if (configureStartInfo != null)
+			{
+				configureStartInfo(startInfo);
+			}
 
-            Process.Start(startInfo);
+			var process = new Process();
+			process.StartInfo = startInfo;
+			if (configureProcessBeforeStart != null)
+			{
+				configureProcessBeforeStart(process);
+			}
+
+			process.Start();
+			return process;
         }
     }
 }

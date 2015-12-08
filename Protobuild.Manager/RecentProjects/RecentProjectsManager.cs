@@ -48,6 +48,7 @@ namespace Protobuild.Manager
             }
 
             _runtimeServer.Set("recentProjectsCount", i);
+			_runtimeServer.Flush();
         }
 
         public void AddEntry(string name, string path)

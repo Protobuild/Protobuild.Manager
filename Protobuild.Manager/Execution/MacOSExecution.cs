@@ -6,7 +6,7 @@ namespace Protobuild.Manager
 {
     public class MacOSExecution : IExecution
     {
-        public void ExecuteConsoleExecutable(string path)
+		public Process ExecuteConsoleExecutable(string path, string arguments, Action<ProcessStartInfo> configureStartInfo, Action<Process> configureProcessBeforeStart)
         {
             try
             {
@@ -15,18 +15,30 @@ namespace Protobuild.Manager
             }
             catch (Exception ex)
             {
-                throw new Exception("Can't mark game as executable");
+                throw new Exception("Can't mark console program as executable");
             }
 
             var startInfo = new ProcessStartInfo();
             startInfo.FileName = "/usr/bin/mono";
-            startInfo.Arguments = path;
-            startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
+            startInfo.Arguments = path + " " + arguments;
+			startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
+			if (configureStartInfo != null)
+			{
+				configureStartInfo(startInfo);
+			}
 
-            Process.Start(startInfo);
+			var process = new Process();
+			process.StartInfo = startInfo;
+			if (configureProcessBeforeStart != null)
+			{
+				configureProcessBeforeStart(process);
+			}
+
+			process.Start();
+			return process;
         }
 
-        public void ExecuteApplicationExecutable(string path)
+		public Process ExecuteApplicationExecutable(string path, string arguments, Action<ProcessStartInfo> configureStartInfo, Action<Process> configureProcessBeforeStart)
         {
             var info = new FileInfo(path);
             var name = info.Name.Substring(0, info.Name.Length - info.Extension.Length);
@@ -38,32 +50,27 @@ namespace Protobuild.Manager
             }
             catch (Exception ex)
             {
-                throw new Exception("Can't mark game as executable");
+                throw new Exception("Can't mark application as executable");
             }
 
             var startInfo = new ProcessStartInfo();
             startInfo.FileName = "/usr/bin/open";
-            startInfo.Arguments = "-a " + path;
-            startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardError = true;
-            startInfo.RedirectStandardOutput = true;
+            startInfo.Arguments = "-a " + path + " --args " + arguments;
+			startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
+			if (configureStartInfo != null)
+			{
+				configureStartInfo(startInfo);
+			}
 
-            var process = Process.Start(startInfo);
-            var output = string.Empty;
+			var process = new Process();
+			process.StartInfo = startInfo;
+			if (configureProcessBeforeStart != null)
+			{
+				configureProcessBeforeStart(process);
+			}
 
-            process.OutputDataReceived += (sender, e) => output += e.Data;
-            process.ErrorDataReceived += (sender, e) => output += e.Data;
-
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
-            process.WaitForExit();
-
-            if (process.ExitCode == 1)
-            {
-                throw new Exception("Game executable unable to start");
-            }
+			process.Start();
+			return process;
         }
     }
 }

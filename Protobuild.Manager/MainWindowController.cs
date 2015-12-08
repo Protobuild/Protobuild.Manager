@@ -9,15 +9,15 @@ using System.Web;
 
 namespace Protobuild.Manager
 {
-    public partial class MainWindowController : NSWindowController
+	public partial class MainWindowController : NSWindowController, IWebUIDelegate
     {
-		private readonly IBrandingEngine _brandingEngine;
+		private IBrandingEngine _brandingEngine;
+
+		private RuntimeServer _runtimeServer;
+
+		private IAppHandlerManager _appManagerHandler;
 
         #region Constructors
-
-		public MainWindowController(IBrandingEngine brandingEngine) : base() {
-			_brandingEngine = brandingEngine;
-		}
 
         // Called when created from unmanaged code
         public MainWindowController(IntPtr handle) : base(handle)
@@ -33,6 +33,7 @@ namespace Protobuild.Manager
         }
 
         // Call to load from the XIB/NIB file
+		[LightweightKernelInjectionPreferred]
         public MainWindowController() : base("MainWindow")
         {
             Initialize();
@@ -41,6 +42,9 @@ namespace Protobuild.Manager
         // Shared initialization code
         void Initialize()
         {
+			_brandingEngine = MacOSUIManager.KernelReference.Get<IBrandingEngine>();
+			_runtimeServer = MacOSUIManager.KernelReference.Get<RuntimeServer>();
+			_appManagerHandler = MacOSUIManager.KernelReference.Get<IAppHandlerManager>();
         }
 
         #endregion
@@ -52,196 +56,48 @@ namespace Protobuild.Manager
             this.Window.BackgroundColor = NSColor.Black;
 			this.Window.Title = _brandingEngine.ProductName;
 
-            this.WebViewOutlet.DrawsBackground = false;
+			this.Window.MaxSize = new CoreGraphics.CGSize(720, 400);
+			this.Window.MinSize = new CoreGraphics.CGSize(720, 400);
+			this.Window.ContentMaxSize = new CoreGraphics.CGSize(720, 400);
+			this.Window.SetContentSize(new CoreGraphics.CGSize(720, 400));
 
-			#if FALSE
-            AuthLogic.StartSearchForChannels(
-                snapshots =>
-                {
-                    this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("window.resetSnapshots();"));
-                    foreach (var snapshot in snapshots)
-                    {
-                        var snapshot1 = snapshot;
+			this.WebViewOutlet.DrawsBackground = true;
 
-                        this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("window.addSnapshot('" + snapshot1 + "');"));
-                    }
-                    this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("window.setActiveSnapshot('" + ConfigManager.LoadChannel() + "');"));
-                });
+			_runtimeServer.RegisterRuntimeInjector(x => 
+				this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString(x)));
 
-            var monitor = true;
+			this.WebViewOutlet.CommitedLoad += (o, a) => this.Window.Title = _brandingEngine.ProductName;
+			this.WebViewOutlet.FinishedLoad += (o, a) => this.Window.Title = _brandingEngine.ProductName;
 
-            var thread = new Thread(() =>
-            {
-                while (monitor)
-                {
-                    Thread.Sleep(100);
-                    this.WebViewOutlet.InvokeOnMainThread(() =>
-                    {
-                        if ((this.WebViewOutlet.EstimatedProgress * 100).ToString("F0") != "0")
-                        {
-                            this.Window.Title = "Unearth (" + (this.WebViewOutlet.EstimatedProgress * 100).ToString("F0") + "% Loaded)";
-                        }
-                    });
-                }
-            });
-            thread.IsBackground = true;
-            thread.Start();
+			this.WebViewOutlet.UIDelegate = this; 
 
-            this.WebViewOutlet.CommitedLoad += (o, a) => this.Window.Title = "Unearth";
-            this.WebViewOutlet.FailedLoadWithError += (o, a) =>
-            {
-                if (monitor)
-                {
-                    monitor = false;
+			this.WebViewOutlet.MainFrame.LoadRequest(new NSUrlRequest(new NSUrl(_runtimeServer.BaseUri)));
 
-                    this.Window.Title = "Unearth (Failed to Load)";
-                }
-            };
+			this.WebViewOutlet.DecidePolicyForNavigation += (o, a) => {
+				var url = a.Request.Url.ToString();
+				var uri = new Uri(url);
 
-            EventHandler<WebFrameErrorEventArgs> failedStartup = null;
-            EventHandler<WebFrameEventArgs> startup = null;
+				if (uri.Scheme != "app")
+				{
+					WebView.DecideUse(a.DecisionToken);
+					return;
+				}
 
-            failedStartup = (o, a) =>
-            {
-                monitor = false;
+				_appManagerHandler.Handle(uri.AbsolutePath, HttpUtility.ParseQueryString(uri.Query));
 
-                this.Window.Title = "Unearth";
-
-                this.WebViewOutlet.FailedProvisionalLoad -= failedStartup;
-                this.WebViewOutlet.FinishedLoad -= startup;
-
-                Console.WriteLine("OFFLINE MODE DETECTED");
-
-                this.WebViewOutlet.MainFrame.LoadHtmlString(
-                    AuthLogic.GetOfflineHtml(),
-                    new NSUrl("http://localhost/offline"));
-            };
-
-            startup = (o, a) =>
-            {
-                monitor = false;
-
-                this.Window.Title = "Unearth";
-
-                this.WebViewOutlet.FailedProvisionalLoad -= failedStartup;
-                this.WebViewOutlet.FinishedLoad -= startup;
-
-                this.WebViewOutlet.StringByEvaluatingJavaScriptFromString(AuthLogic.GetStartJavascript());
-
-                AuthLogic.ReadyForChannels();
-            };
-
-            this.WebViewOutlet.FailedProvisionalLoad += failedStartup;
-            this.WebViewOutlet.FinishedLoad += startup;
-
-            this.Window.Title = "Unearth (0% Loaded)";
-            this.WebViewOutlet.MainFrame.LoadRequest(new NSUrlRequest(new NSUrl(UrlConfig.BASE + "?platform=mac&version=" + VersionConfig.VersionNumber)));
-
-            this.WebViewOutlet.DecidePolicyForNavigation += (o, a) => {
-                var url = a.Request.Url.ToString();
-                var uri = new Uri(url);
-
-                switch (uri.AbsolutePath)
-                {
-                    case "/login":
-
-                        var parameters = ParseQueryString(uri.Query);
-                        AuthLogic.PerformAuth(
-                            parameters["username"] ?? string.Empty,
-                            parameters.ContainsKey("password") ? parameters["password"] : string.Empty,
-                            parameters["cached"] == "true",
-                            () => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("window.toWorking()"),
-                            s => {
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("document.getElementById('welcome_status').innerHTML = '" + s + "';"));
-                        },
-                            s => {
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("document.getElementById('working_status').innerHTML = '" + s + "';"));
-                        },
-                            s => {
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString(
-                                "document.getElementById('error_status').innerHTML = '" + s + "'; window.toNormal()"));
-                        },
-                            (x, ts) => {
-
-                            var eta = "";
-                            if (ts.TotalSeconds >= 1)
-                            {
-                                eta = "";
-                                if (ts.TotalHours >= 1)
-                                {
-                                    eta += ts.TotalHours.ToString("F0") + " hrs ";
-                                    eta += ((int)ts.Minutes).ToString("D2") + " mins ";
-                                    eta += ((int)ts.Seconds).ToString("D2") + " secs ";
-                                }
-                                else if (ts.TotalMinutes >= 1)
-                                {
-                                    eta += ts.Minutes.ToString("F0") + " mins ";
-                                    eta += ((int)ts.Seconds).ToString("D2") + " secs ";
-                                }
-                                else if (ts.TotalSeconds >= 1)
-                                {
-                                    eta += ts.Seconds.ToString("F0") + " secs ";
-                                }
-                                eta += "remaining";
-                            }
-
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("window.setUpdateProgress(" + x + ", '" + eta + "');"));
-                        },
-                            () => {
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.Window.Close());
-                        });
-
-                        break;
-                    case "/register":
-
-                        this.WebViewOutlet.StringByEvaluatingJavaScriptFromString(AuthLogic.PerformRegister());
-
-                        break;
-                    case "/offline":
-                        WebView.DecideUse(a.DecisionToken);
-
-                        return;
-                    case "/offlineplay":
-
-                        AuthLogic.PerformOfflinePlay(
-                            s => {
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString("document.getElementById('status').innerHTML = '" + s + "';"));
-                        },
-                            s => {
-                            this.WebViewOutlet.InvokeOnMainThread(() => this.WebViewOutlet.StringByEvaluatingJavaScriptFromString(@"
-document.getElementById('status').innerHTML = '" + s + @"';
-document.getElementById('status').style.color = 'red';
-document.getElementById('status').style.fontStyle = 'bold';"));
-                        },
-                            () => {
-                            this.Window.Close();
-                        });
-
-                        break;
-                    case "/clearcache":
-
-                        ConfigManager.ClearSavedConfig();
-
-                        break;
-                    case "/option":
-
-                        var optparameters = ParseQueryString(uri.Query);
-                        ConfigManager.SaveGameOptions(optparameters["state"]);
-
-                        break;
-                    case "/channel":
-
-                        var chnlparameters = ParseQueryString(uri.Query);
-                        ConfigManager.SaveChannel(chnlparameters["name"]);
-
-                        break;
-                }
-
-                WebView.DecideIgnore(a.DecisionToken);
-            };
-
-			#endif
+				WebView.DecideIgnore(a.DecisionToken);
+			};
         }
+
+		[Export("webView:addMessageToConsole:")]
+		public void AddMessageToConsole(WebView wv, NSDictionary message)
+		{
+			var url = message["sourceURL"];
+			var line = message["lineNumber"];
+			var err = message["message"];
+
+			Console.Error.WriteLine(url + ":" + line + ": " + err);
+		}
 
         //strongly typed window accessor
         public new MainWindow Window
@@ -250,34 +106,6 @@ document.getElementById('status').style.fontStyle = 'bold';"));
             {
                 return (MainWindow)base.Window;
             }
-        }
-
-        /// <summary>
-        /// Parses the query string.  Use this on Mac to avoid System.Web reference.
-        /// </summary>
-        public static Dictionary<string, string> ParseQueryString(string s)
-        {
-            var nvc = new Dictionary<string, string>();
-
-            if(s.Contains("?"))
-            {
-                s = s.Substring(s.IndexOf('?') + 1);
-            }
-
-            foreach (string vp in System.Text.RegularExpressions.Regex.Split(s, "&"))
-            {
-                string[] singlePair = System.Text.RegularExpressions.Regex.Split(vp, "=");
-                if (singlePair.Length == 2)
-                {
-                    nvc.Add(singlePair[0], Uri.UnescapeDataString(singlePair[1]));
-                }
-                else
-                {
-                    nvc.Add(singlePair[0], string.Empty);
-                }
-            }
-
-            return nvc;
         }
     }
 }

@@ -23,7 +23,15 @@ namespace Protobuild.Manager
 
             if (File.Exists(Path.Combine(path, "Protobuild.exe")))
             {
-                ModuleHost = protobuildHostingEngine.LoadModule(path);
+				try
+				{
+                	ModuleHost = protobuildHostingEngine.LoadModule(path);
+				}
+				catch (BadImageFormatException)
+				{
+					// TODO: Repair Protobuild automatically here
+					IsStandardProject = true;
+				}
             }
             else
             {

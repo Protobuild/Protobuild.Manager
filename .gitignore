@@ -7,3 +7,4 @@ obj/
 /Protobuild.Manager.Linux.userprefs
 .vs/
 Protobuild.Manager/Protobuild.Manager.Windows.csproj.user
+*.userprefs

@@ -5,9 +5,9 @@ namespace Protobuild.Manager
 {
     public interface IExecution
     {
-        void ExecuteConsoleExecutable(string path);
+		Process ExecuteConsoleExecutable(string path, string arguments, Action<ProcessStartInfo> configureStartInfo = null, Action<Process> configureProcessBeforeStart = null);
 
-        void ExecuteApplicationExecutable(string path);
+		Process ExecuteApplicationExecutable(string path, string arguments, Action<ProcessStartInfo> configureStartInfo = null, Action<Process> configureProcessBeforeStart = null);
     }
 }
 

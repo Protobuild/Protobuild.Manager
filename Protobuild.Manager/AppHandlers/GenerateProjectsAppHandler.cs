@@ -19,7 +19,7 @@ namespace Protobuild.Manager
         {
             Task.Run(async () =>
             {
-                await HandleInBackground(parameters["platform"], parameters["platform"], parameters["protobuild"] == "true");
+                await HandleInBackground(parameters["platform"], parameters["platform"], true);
             });
         }
 

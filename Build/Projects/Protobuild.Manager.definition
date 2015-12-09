@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows,MacOS,Linux">
   <Properties>
-    <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
     <Property Name="LangVersion" Value="5" />
+    <Property Name="WindowsApplicationIcon" Value="..\Images\Protobuild.Icon.ico" />
   </Properties>
   <References>
     <Reference Include="Protobuild.Manager.ThirdParty" />
@@ -215,7 +215,8 @@
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Protobuild.Icon.ico">
+    <EmbeddedResource Include="..\Images\Protobuild.Icon.ico">
+      <Link>Protobuild.Icon.ico</Link>
       <LogicalName>Protobuild.Icon.ico</LogicalName>
     </EmbeddedResource>
     <InterfaceDefinition Include="MainMenu.xib">

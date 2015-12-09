@@ -5,54 +5,20 @@ using System;
 
 namespace Protobuild.Manager
 {
-    public class MonoDevelopLinuxIDEControl : IIDEControl
+    public class MonoDevelopLinuxIDEControl : LinuxIDEControl
     {
-        private readonly RuntimeServer _runtimeServer;
-
-        public MonoDevelopLinuxIDEControl(RuntimeServer runtimeServer)
+        public MonoDevelopLinuxIDEControl(RuntimeServer runtimeServer) : base(runtimeServer)
         {
-            _runtimeServer = runtimeServer;
         }
 
-        public async Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail, bool isProtobuild)
+        protected override async Task OpenIDE(string modulePath, string moduleName, string targetPlatform)
         {
-            Process process;
-
-            if (isProtobuild)
-            {
-                var protobuild = Path.Combine(modulePath, "Protobuild.exe");
-
-                _runtimeServer.Set("status", "Synchronising for " + oldPlatformOnFail + " platform...");
-                process = Process.Start(new ProcessStartInfo(protobuild, "--sync " + oldPlatformOnFail)
-                    {
-                        WorkingDirectory = modulePath,
-                        UseShellExecute = false
-                    });
-                if (process == null)
-                {
-                    throw new InvalidOperationException("can't sync");
-                }
-                await process.WaitForExitAsync();
-
-                _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
-                process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
-                    {
-                        WorkingDirectory = modulePath,
-                        UseShellExecute = false
-                    });
-                if (process == null)
-                {
-                    throw new InvalidOperationException("can't generate");
-                }
-                await process.WaitForExitAsync();
-            }
-
             var startInfo = new ProcessStartInfo();
             startInfo.FileName = "/usr/bin/monodevelop";
             startInfo.Arguments = "\"" + Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln") + "\"";
             startInfo.WorkingDirectory = modulePath;
 
-            process = new Process();
+            var process = new Process();
             process.StartInfo = startInfo;
             process.Start();
             await process.WaitForExitAsync();

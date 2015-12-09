@@ -19,7 +19,7 @@ function updateState(state) {
                 classes += "red fa-times-circle";
                 break;
             case "Processing":
-                classes += "sky fa-spinner spin";
+                classes += "sky fa-spinner fa-spin";
                 break;
             case "Pending":
                 classes += "sky fa-circle-o";

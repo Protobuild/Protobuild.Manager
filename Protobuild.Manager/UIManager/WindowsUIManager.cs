@@ -172,7 +172,11 @@ namespace Protobuild.Manager
             HtmlElement head = null;
             if (doc != null)
             {
-                head = doc.GetElementsByTagName("head")[0];
+                var tags = doc.GetElementsByTagName("head");
+                if (tags.Count == 1)
+                {
+                    head = tags[0];
+                }
             };
             if (head == null)
             {

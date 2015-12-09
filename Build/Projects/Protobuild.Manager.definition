@@ -12,13 +12,16 @@
       <Platforms>MacOS</Platforms>
     </Compile>
     <Compile Include="AppHandlers\AppHandlerManager.cs" />
+    <Compile Include="AppHandlers\AutomatedBuildAppHandler.cs" />
     <Compile Include="AppHandlers\CancelCreationAppHandler.cs" />
     <Compile Include="AppHandlers\ChannelAppHandler.cs" />
     <Compile Include="AppHandlers\ClearCacheAppHandler.cs" />
     <Compile Include="AppHandlers\CloseProjectAppHandler.cs" />
     <Compile Include="AppHandlers\CreateNewAppHandler.cs" />
+    <Compile Include="AppHandlers\CreatePackageAppHandler.cs" />
     <Compile Include="AppHandlers\EnableFullCrashDumpsAppHandler.cs" />
     <Compile Include="AppHandlers\FinalizeProjectAppHandler.cs" />
+    <Compile Include="AppHandlers\GenerateProjectsAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandlerManager.cs" />
     <Compile Include="AppHandlers\LoginAppHandler.cs" />
@@ -29,6 +32,7 @@
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
     <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
     <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />
+    <Compile Include="AppHandlers\SyncProjectsAppHandler.cs" />
     <Compile Include="BrandingEngine\BaseBrandingEngine.cs" />
     <Compile Include="BrandingEngine\EmbeddedBrandingEngine.cs" />
     <Compile Include="BrandingEngine\ExternalBrandingEngine.cs" />
@@ -47,6 +51,7 @@
     <Compile Include="Execution\WindowsExecution.cs" />
     <Compile Include="GameUpdater.cs" />
     <Compile Include="IDEControl\IIDEControl.cs" />
+    <Compile Include="IDEControl\LinuxIDEControl.cs" />
     <Compile Include="IDEControl\MonoDevelopLinuxIDEControl.cs" />
     <Compile Include="IDEControl\VisualStudioIDEControl.cs" />
     <Compile Include="IDEControl\XamarinStudioMacIDEControl.cs" />
@@ -121,6 +126,10 @@
     <Compile Include="Workflows\WorkflowFactory.cs" />
     <Compile Include="Workflows\WorkflowManager.cs" />
     <Content Include="Protobuild.Icon.icns" />
+    <EmbeddedResource Include="..\Images\Protobuild.Icon.ico">
+      <Link>Protobuild.Icon.ico</Link>
+      <LogicalName>Protobuild.Icon.ico</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Branding.xml">
       <LogicalName>Branding.xml</LogicalName>
       <SubType>Designer</SubType>
@@ -214,10 +223,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Images\Protobuild.Icon.ico">
-      <Link>Protobuild.Icon.ico</Link>
-      <LogicalName>Protobuild.Icon.ico</LogicalName>
     </EmbeddedResource>
     <InterfaceDefinition Include="MainMenu.xib">
       <Platforms>MacOS</Platforms>

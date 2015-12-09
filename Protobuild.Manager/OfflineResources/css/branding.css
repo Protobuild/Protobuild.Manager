@@ -118,6 +118,7 @@ ul.recent li.norecent span {
 span {}
 
 #status {
+    height: 24px;
     max-height: 40px;
     overflow-y: auto;
 }
@@ -144,12 +145,12 @@ ul#checks li {
     padding-left: 0px;
 }
 
-ul#checks .red { color: #c0392b; }
-ul#checks .orange { color: #e67e22; }
-ul#checks .yellow { color: #f1c40f; }
-ul#checks .green { color: #139543; }
-ul#checks .blue { color: #2980b9; }
-ul#checks .sky { color: #3498db; }
+.red { color: #c0392b; }
+.orange { color: #e67e22; }
+.yellow { color: #f1c40f; }
+.green { color: #139543; }
+.blue { color: #2980b9; }
+.sky { color: #3498db; }
 
 ul#checks .back {
     color: #EBECEE;
@@ -165,7 +166,7 @@ ul#checks .back {
     to {transform:rotate(360deg);}
 }
 
-ul#checks .spin {
+.spin {
     -webkit-animation-name: spin;
     -webkit-animation-duration: 10000ms;
     -webkit-animation-iteration-count: infinite;

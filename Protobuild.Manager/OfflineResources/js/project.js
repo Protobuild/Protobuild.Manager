@@ -28,8 +28,42 @@ function stateChange(state) {
         return;
     }
     windowState = state;
+    if (state.busy !== undefined) {
+        var elementsToDisable = [
+            "#switchProtobuildPlatform",
+            "#syncNow",
+            "#regenerateProjects",
+            "#createPackage",
+            "#automatedBuild"
+        ];
+        if (state.busy) {
+            $.each(elementsToDisable, function(idx, elem) {
+                $(elem).addClass('disabled').attr('disabled', 'disabled');
+            });
+        } else {
+            $.each(elementsToDisable, function (idx, elem) {
+                $(elem).removeClass('disabled').removeAttr('disabled');
+            });
+        }
+    }
     if (state.status !== undefined) {
-        $("#status").text(state.status);
+        var classes = "fa fa-fw ";
+        switch (state.statusMode) {
+            case "Okay":
+                classes += "green fa-check-circle";
+                break;
+            case "Error":
+                classes += "red fa-times-circle";
+                break;
+            case "Processing":
+                classes += "sky fa-spinner fa-spin";
+                break;
+        }
+
+        $("#status").html($("<li></li>")
+          .append($("<i></i>")
+            .addClass(classes))
+          .append(" " + state.status).html());
     }
     if (state.setplatform !== undefined && state.setplatform !== null) {
         $("#switchProtobuildPlatform").val(state.setplatform);
@@ -64,6 +98,12 @@ function stateChange(state) {
     } else {
         $("#standardProject").hide();
         $("#protobuildProject").show();
+    }
+
+    if (oldPlatform !== null) {
+        $("#syncNow").attr('href', 'app:///sync-projects?platform=' + oldPlatform);
+        $("#regenerateProjects").attr('href', 'app:///generate-projects?platform=' + oldPlatform);
+        $("#createPackage").attr('href', 'app:///create-package?platform=' + oldPlatform);
     }
 
     if (state.loadedModuleName !== null) {

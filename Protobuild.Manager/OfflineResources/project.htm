@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title data-value="title">Protobuild > MonoGame.Framework</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="/css/branding.css" />
@@ -31,21 +32,54 @@
             <label for="switchProtobuildPlatform" class="col-sm-3 control-label">Switch to platform:</label>
             <div class="col-sm-5">
               <select class="form-control" name="switchProtobuildPlatform" id="switchProtobuildPlatform">
-                <optgroup label="Desktop Platforms" />
+                <optgroup label="Desktop Platforms"/>
                 <option value="Windows">Windows</option>
                 <option value="MacOS" disabled="disabled">Mac OS</option>
                 <option value="Linux">Linux</option>
-                <optgroup label="Mobile Platforms" />
+                <optgroup label="Mobile Platforms"/>
                 <option value="iOS">iOS</option>
                 <option value="Android">Android</option>
                 <option value="WindowsPhone">Windows Phone 8</option>
                 <option value="WindowsPhone81">Windows Phone 8.1</option>
                 <option value="Windows81">Windows Metro</option>
                 <option value="WindowsUniversal">Windows Universal</option>
-                <optgroup label="Other Platforms" />
+                <optgroup label="Other Platforms"/>
                 <option value="Ouya">Ouya</option>
                 <option value="Web">Web</option>
               </select>
+            </div>
+            <div class="col-sm-1">
+              <a id="syncNow" href="app:///sync-projects?platform=" class="btn btn-default">Sync Now</a>
+            </div>
+          </div>
+        </form>
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="active"><a href="#">Common Operations</a></li>
+        </ul>
+        <br/>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-3">
+              <a id="regenerateProjects" href="app:///generate-projects?platform=" class="btn btn-default col-sm-12">Re-generate Projects</a>
+            </div>
+            <div class="col-sm-9" style="line-height: 34px;">
+              Discards changes made in your IDE to the project files, and generates them again.
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3">
+              <a id="createPackage" href="app:///package-module?platform=" class="btn btn-default col-sm-12">Create Package</a>
+            </div>
+            <div class="col-sm-9" style="line-height: 34px;">
+              Creates a package of your project and places it in the root of the module.
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3">
+              <a id="automatedBuild" href="app:///automated-build" class="btn btn-default col-sm-12">Automated Build</a>
+            </div>
+            <div class="col-sm-9" style="line-height: 34px;">
+              Uses the <code>automated.build</code> file in the root of your repository to build your project.
             </div>
           </div>
         </form>

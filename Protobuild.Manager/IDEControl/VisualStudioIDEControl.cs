@@ -20,6 +20,8 @@ namespace Protobuild.Manager
         {
             try
             {
+                _runtimeServer.Set("busy", true);
+                _runtimeServer.Set("statusMode", "Processing");
                 _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
 
                 Func<dynamic, Task> launchLogic = null;
@@ -72,6 +74,7 @@ namespace Protobuild.Manager
                         {
                             if (ex.HResult == (int) 0x8001010A)
                             {
+                                _runtimeServer.Set("statusMode", "Error");
                                 _runtimeServer.Set("status",
                                     "Visual Studio is currently busy; can't switch platforms right now!");
                                 _runtimeServer.Set("setplatform", oldPlatformOnFail);
@@ -127,13 +130,206 @@ namespace Protobuild.Manager
 
                 await launchLogic(dte);
 
+                _runtimeServer.Set("statusMode", "Okay");
                 _runtimeServer.Set("status", "Platforms switched successfully.");
             }
             catch (Exception exx)
             {
+                _runtimeServer.Set("statusMode", "Error");
                 _runtimeServer.Set("status", exx.ToString());
                 _runtimeServer.Set("setplatform", oldPlatformOnFail);
                 _runtimeServer.Set("setplatform", null);
+            }
+            finally
+            {
+                _runtimeServer.Set("busy", false);
+            }
+        }
+
+        public async Task SaveAndSyncSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail,
+            bool isProtobuild)
+        {
+            try
+            {
+                _runtimeServer.Set("busy", true);
+                _runtimeServer.Set("statusMode", "Processing");
+                _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
+
+                var existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                if (existing == null)
+                {
+                    return;
+                }
+
+                var protobuild = Path.Combine(modulePath, "Protobuild.exe");
+
+                dynamic dte = null;
+                try
+                {
+                    dte = existing.DTE;
+                }
+                catch (COMException ex)
+                {
+                    unchecked
+                    {
+                        if (ex.HResult == (int)0x8001010A)
+                        {
+                            _runtimeServer.Set("statusMode", "Error");
+                            _runtimeServer.Set("status",
+                                "Visual Studio is currently busy; can't save all projects right now!");
+                            return;
+                        }
+                    }
+
+                    throw;
+                }
+
+                if (dte.Solution.IsOpen)
+                {
+                    var oldName = new FileInfo(dte.Solution.FullName).Name;
+                    oldName = oldName.Substring(0, oldName.LastIndexOf('.'));
+                    var oldPlatform = oldName.Substring(oldName.LastIndexOf('.') + 1);
+
+                    _runtimeServer.Set("status", "Found Visual Studio, saving all files before solution close...");
+                    dte.ExecuteCommand("File.SaveAll");
+
+                    if (isProtobuild)
+                    {
+                        _runtimeServer.Set("status", "Synchronising for " + oldPlatform + " platform...");
+                        var syncProcess = Process.Start(new ProcessStartInfo(protobuild, "--sync " + oldPlatform)
+                        {
+                            WorkingDirectory = modulePath,
+                            UseShellExecute = false
+                        });
+                        if (syncProcess == null)
+                        {
+                            throw new InvalidOperationException("can't sync");
+                        }
+                        syncProcess.WaitForExit();
+                    }
+                }
+
+                _runtimeServer.Set("statusMode", "Okay");
+                _runtimeServer.Set("status", "Synchronised projects successfully.");
+            }
+            catch (Exception exx)
+            {
+                _runtimeServer.Set("statusMode", "Error");
+                _runtimeServer.Set("status", exx.ToString());
+            }
+            finally
+            {
+                _runtimeServer.Set("busy", false);
+            }
+        }
+
+        public async Task CloseGenerateAndLoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail,
+            bool isProtobuild)
+        {
+            try
+            {
+                _runtimeServer.Set("busy", true);
+                _runtimeServer.Set("statusMode", "Processing");
+                _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
+
+                Func<dynamic, Task> launchLogic = null;
+
+                var existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                if (existing == null)
+                {
+                    launchLogic = async dteRef =>
+                    {
+                        _runtimeServer.Set("status", "Starting Visual Studio...");
+                        Process.Start(
+                            @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe",
+                            Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln"));
+
+                        while (existing == null)
+                        {
+                            _runtimeServer.Set("status", "Waiting for Visual Studio to open...");
+
+                            await Task.Delay(1000);
+
+                            existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                        }
+                    };
+                }
+                else
+                {
+                    launchLogic = async dteRef =>
+                    {
+                        _runtimeServer.Set("status", "Opening solution for " + targetPlatform + "...");
+
+                        dteRef.Solution.Open(Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln"));
+                        dteRef.ActiveWindow.Activate();
+
+                        await Task.Yield();
+                    };
+                }
+
+                var protobuild = Path.Combine(modulePath, "Protobuild.exe");
+
+                dynamic dte = null;
+                if (existing != null)
+                {
+                    try
+                    {
+                        dte = existing.DTE;
+                    }
+                    catch (COMException ex)
+                    {
+                        unchecked
+                        {
+                            if (ex.HResult == (int)0x8001010A)
+                            {
+                                _runtimeServer.Set("statusMode", "Error");
+                                _runtimeServer.Set("status",
+                                    "Visual Studio is currently busy; can't switch platforms right now!");
+                                _runtimeServer.Set("setplatform", oldPlatformOnFail);
+                                _runtimeServer.Set("setplatform", null);
+                                return;
+                            }
+                        }
+
+                        throw;
+                    }
+
+                    if (dte.Solution.IsOpen)
+                    {
+                        _runtimeServer.Set("status", "Found Visual Studio, saving all files before solution close...");
+                        dte.ExecuteCommand("File.SaveAll");
+                        dte.Solution.Close(true);
+                    }
+                }
+
+                if (isProtobuild)
+                {
+                    _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
+                    var process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
+                    {
+                        WorkingDirectory = modulePath,
+                        UseShellExecute = false
+                    });
+                    if (process == null)
+                    {
+                        throw new InvalidOperationException("can't generate");
+                    }
+                    process.WaitForExit();
+                }
+
+                await launchLogic(dte);
+
+                _runtimeServer.Set("statusMode", "Okay");
+                _runtimeServer.Set("status", "Platforms switched successfully.");
+            }
+            catch (Exception exx)
+            {
+                _runtimeServer.Set("statusMode", "Error");
+                _runtimeServer.Set("status", exx.ToString());
+            }
+            finally
+            {
+                _runtimeServer.Set("busy", false);
             }
         }
 

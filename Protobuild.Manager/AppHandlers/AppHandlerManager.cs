@@ -33,7 +33,7 @@ namespace Protobuild.Manager
                 _appHandlers.Add("/finalize-project", _kernel.Get<FinalizeProjectAppHandler>());
                 _appHandlers.Add("/sync-projects", _kernel.Get<SyncProjectsAppHandler>());
                 _appHandlers.Add("/generate-projects", _kernel.Get<GenerateProjectsAppHandler>());
-                _appHandlers.Add("/package-module", _kernel.Get<CreatePackageAppHandler>());
+                _appHandlers.Add("/create-package", _kernel.Get<CreatePackageAppHandler>());
                 _appHandlers.Add("/automated-build", _kernel.Get<AutomatedBuildAppHandler>());
 
                 //this.m_AppHandlers.Add("/login", this.m_Kernel.Get<LoginAppHandler>());

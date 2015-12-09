@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows,MacOS">
+<Project Name="Protobuild.Manager" Path="Protobuild.Manager" Type="App" Platforms="Windows,MacOS,Linux">
   <Properties>
     <Property Name="IncludeMonoRuntimeOnMac" Value="True" />
     <Property Name="LangVersion" Value="5" />
@@ -47,6 +47,7 @@
     <Compile Include="Execution\WindowsExecution.cs" />
     <Compile Include="GameUpdater.cs" />
     <Compile Include="IDEControl\IIDEControl.cs" />
+    <Compile Include="IDEControl\MonoDevelopLinuxIDEControl.cs" />
     <Compile Include="IDEControl\VisualStudioIDEControl.cs" />
     <Compile Include="IDEControl\XamarinStudioMacIDEControl.cs" />
     <Compile Include="ILoadable.cs" />

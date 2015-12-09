@@ -18,6 +18,7 @@ namespace Protobuild.Manager
             {
                 GLib.ExceptionManager.UnhandledException += (e) => 
                 {
+                    Console.Error.WriteLine(e.ExceptionObject);
                     Debugger.Break();
                 };
 
@@ -81,6 +82,7 @@ namespace Protobuild.Manager
             kernel.BindCommon();
             kernel.BindAndKeepInstance<IUIManager, LinuxUIManager>();
             kernel.BindAndKeepInstance<IExecution, LinuxExecution>();
+            kernel.BindAndKeepInstance<IIDEControl, MonoDevelopLinuxIDEControl>();
 
             kernel.Get<IErrorLog>().Log("Started game launcher on Linux platform");
 

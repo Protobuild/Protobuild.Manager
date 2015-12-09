@@ -94,6 +94,11 @@ namespace Protobuild.Manager
                 var url = a.Request.Uri;
                 var uri = new Uri(url);
 
+                if (uri.Scheme != "app")
+                {
+                    return;
+                }
+
                 this.m_AppHandlerManager.Handle(uri.AbsolutePath, HttpUtility.ParseQueryString(uri.Query));
 
                 webView.StopLoading();

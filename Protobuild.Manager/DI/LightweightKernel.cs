@@ -78,9 +78,18 @@ namespace Protobuild.Manager
                 actual = original;
             }
 
+            if (actual.IsInterface || actual.IsAbstract)
+            {
+                throw new InvalidOperationException("Unable to resolve " + actual.FullName + " to a concrete implementation!");
+            }
+
 			ConstructorInfo constructor;
-			var constructors = actual.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToList();
-			if (constructors.Count == 1)
+            var constructors = actual.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToList();
+            if (constructors.Count == 0)
+            {
+                throw new InvalidOperationException("Tried to construct " + actual.FullName + ", but it has no constructors!");
+            }
+			else if (constructors.Count == 1)
 			{
 				constructor = constructors[0];
 			}

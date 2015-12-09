@@ -190,7 +190,7 @@ namespace Protobuild.Manager
                     oldName = oldName.Substring(0, oldName.LastIndexOf('.'));
                     var oldPlatform = oldName.Substring(oldName.LastIndexOf('.') + 1);
 
-                    _runtimeServer.Set("status", "Found Visual Studio, saving all files before solution close...");
+                    _runtimeServer.Set("status", "Found Visual Studio, saving all files before synchronisation...");
                     dte.ExecuteCommand("File.SaveAll");
 
                     if (isProtobuild)

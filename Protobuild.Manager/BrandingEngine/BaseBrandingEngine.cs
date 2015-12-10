@@ -66,5 +66,10 @@ namespace Protobuild.Manager
         {
             get { return GetXmlString("TemplateSource"); }
         }
+
+        public string TemplateIDECategory
+        {
+            get { return GetXmlString("TemplateIDECategory"); }
+        }
     }
 }

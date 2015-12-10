@@ -48,4 +48,9 @@
     * dir:<path to a folder on disk>
   -->
   <TemplateSource>builtin</TemplateSource>
+  
+  <!--
+  The name of the project template category to show in IDEs.
+  -->
+  <TemplateIDECategory>Cross-Platform</TemplateIDECategory>
 </Branding>

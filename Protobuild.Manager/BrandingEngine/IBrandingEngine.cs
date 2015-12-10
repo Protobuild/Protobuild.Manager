@@ -28,5 +28,7 @@
         /// The template source to draw from.
         /// </summary>
         string TemplateSource { get; }
+
+        string TemplateIDECategory { get; }
     }
 }

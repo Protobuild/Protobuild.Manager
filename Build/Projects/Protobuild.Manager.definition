@@ -55,6 +55,9 @@
     <Compile Include="IDEControl\MonoDevelopLinuxIDEControl.cs" />
     <Compile Include="IDEControl\VisualStudioIDEControl.cs" />
     <Compile Include="IDEControl\XamarinStudioMacIDEControl.cs" />
+    <Compile Include="IDEProjectTemplateSync\IIDEProjectTemplateSync.cs" />
+    <Compile Include="IDEProjectTemplateSync\NullProjectTemplateSync.cs" />
+    <Compile Include="IDEProjectTemplateSync\VisualStudioProjectTemplateSync.cs" />
     <Compile Include="ILoadable.cs" />
     <Compile Include="LinuxProgram.cs" />
     <Compile Include="MacOSProgram.cs" />

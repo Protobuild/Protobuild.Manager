@@ -14,6 +14,7 @@ namespace Protobuild.Manager
         private readonly RuntimeServer m_RuntimeServer;
 
         private readonly IUIManager m_UIManager;
+        private readonly IIDEProjectTemplateSync _ideProjectTemplateSync;
 
         private readonly IWorkflowManager m_WorkflowManager;
 
@@ -22,13 +23,15 @@ namespace Protobuild.Manager
             RuntimeServer runtimeServer,
             IWorkflowManager workflowManager,
             InitialWorkflow initialWorkflow,
-            IUIManager uiManager)
+            IUIManager uiManager,
+            IIDEProjectTemplateSync ideProjectTemplateSync)
         {
             _kernel = kernel;
             this.m_RuntimeServer = runtimeServer;
             this.m_WorkflowManager = workflowManager;
             this.m_InitialWorkflow = initialWorkflow;
             this.m_UIManager = uiManager;
+            _ideProjectTemplateSync = ideProjectTemplateSync;
         }
 
         public void Start(string[] args)
@@ -59,6 +62,8 @@ namespace Protobuild.Manager
             {
                 this.m_WorkflowManager.AppendWorkflow(this.m_InitialWorkflow);
             }
+
+            _ideProjectTemplateSync.Sync();
 
             this.m_WorkflowManager.Start();
             this.m_UIManager.Run();

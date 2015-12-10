@@ -73,7 +73,8 @@ namespace Protobuild.Manager
             return new ProjectNamingWorkflow(
                 this.m_Kernel.Get<IWorkflowManager>(),
                 this.m_Kernel.Get<IWorkflowFactory>(),
-                this.m_Kernel.Get<RuntimeServer>());
+                this.m_Kernel.Get<RuntimeServer>(),
+                this.m_Kernel.Get<ITemplateSource>());
         }
     }
 }

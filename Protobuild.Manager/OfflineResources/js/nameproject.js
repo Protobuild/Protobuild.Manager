@@ -38,6 +38,12 @@ function submitForm() {
 var variantOptions = {};
 
 function updateFormOptions(state) {
+    if (state.prefilledprojectname !== undefined && state.prefilleddestinationdirectory !== undefined) {
+        $("#name").val(state.prefilledprojectname).attr('readonly', 'readonly');
+        $("#path").val(state.prefilleddestinationdirectory).attr('readonly', 'readonly');
+        $("#selectPath").attr('disabled', 'disabled');
+    }
+
     if (state.templateProtobuildVariantsCount !== undefined) {
         var old = $("#projectFormat").val();
         $("#projectFormat").children(":not([data-template])").remove();

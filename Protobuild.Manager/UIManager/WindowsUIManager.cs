@@ -73,6 +73,11 @@ namespace Protobuild.Manager
                     a.Cancel = true;
                 });
 
+            webBrowser.Navigated += (sender, args) => ExecuteAndCatch(() =>
+            {
+                this.m_RuntimeServer.Flush();
+            });
+
             form.Show();
             form.FormClosing += (o, a) =>
             {

@@ -24,9 +24,11 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("statusMode", "Processing");
                 _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
 
+                var vspid = _runtimeServer.Get<int?>("visualstudiopid");
+
                 Func<dynamic, Task> launchLogic = null;
 
-                var existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                var existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
                 if (existing == null)
                 {
                     launchLogic = async dteRef =>
@@ -42,7 +44,7 @@ namespace Protobuild.Manager
 
                             await Task.Delay(1000);
 
-                            existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                            existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
                         }
                     };
                 }
@@ -155,7 +157,9 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("statusMode", "Processing");
                 _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
 
-                var existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                var vspid = _runtimeServer.Get<int?>("visualstudiopid");
+
+                var existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
                 if (existing == null)
                 {
                     return;
@@ -232,9 +236,11 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("statusMode", "Processing");
                 _runtimeServer.Set("status", "Searching for open Visual Studio instances...");
 
+                var vspid = _runtimeServer.Get<int?>("visualstudiopid");
+
                 Func<dynamic, Task> launchLogic = null;
 
-                var existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                var existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
                 if (existing == null)
                 {
                     launchLogic = async dteRef =>
@@ -250,7 +256,7 @@ namespace Protobuild.Manager
 
                             await Task.Delay(1000);
 
-                            existing = FindExistingVisualStudioInstance(modulePath, moduleName);
+                            existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
                         }
                     };
                 }
@@ -333,7 +339,7 @@ namespace Protobuild.Manager
             }
         }
 
-        private dynamic FindExistingVisualStudioInstance(string modulePath, string moduleName)
+        private dynamic FindExistingVisualStudioInstance(string modulePath, string moduleName, int? forcePid)
         {
             IRunningObjectTable rot;
             IEnumMoniker enumMoniker;
@@ -354,28 +360,41 @@ namespace Protobuild.Manager
 
                     try
                     {
-                        if (displayName.StartsWith("!VisualStudio.DTE"))
+                        if (forcePid != null)
                         {
-                            // See if this Visual Studio instance has no solution open.
-                            object obj;
-                            rot.GetObject(moniker[0], out obj);
-                            dynamic dte = obj;
-                            if (!dte.Solution.IsOpen)
+                            if (displayName.StartsWith("!VisualStudio.DTE") && displayName.EndsWith(":" + forcePid.Value))
                             {
-                                // Re-use an empty instance.
-                                return dte;
+                                // Always use this Visual Studio instance.
+                                object obj;
+                                rot.GetObject(moniker[0], out obj);
+                                return obj;
                             }
                         }
-
-                        if (
-                            displayName.ToLowerInvariant()
-                                .StartsWith(Path.Combine(modulePath, moduleName + ".").ToLowerInvariant()) &&
-                            displayName.ToLowerInvariant().EndsWith(".sln"))
+                        else
                         {
-                            // Found an open solution for this module.
-                            object obj;
-                            rot.GetObject(moniker[0], out obj);
-                            return obj;
+                            if (displayName.StartsWith("!VisualStudio.DTE"))
+                            {
+                                // See if this Visual Studio instance has no solution open.
+                                object obj;
+                                rot.GetObject(moniker[0], out obj);
+                                dynamic dte = obj;
+                                if (!dte.Solution.IsOpen)
+                                {
+                                    // Re-use an empty instance.
+                                    return dte;
+                                }
+                            }
+
+                            if (
+                                displayName.ToLowerInvariant()
+                                    .StartsWith(Path.Combine(modulePath, moduleName + ".").ToLowerInvariant()) &&
+                                displayName.ToLowerInvariant().EndsWith(".sln"))
+                            {
+                                // Found an open solution for this module.
+                                object obj;
+                                rot.GetObject(moniker[0], out obj);
+                                return obj;
+                            }
                         }
                     }
                     catch (COMException ex)

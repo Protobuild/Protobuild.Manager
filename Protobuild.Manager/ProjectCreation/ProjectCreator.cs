@@ -42,76 +42,106 @@ namespace Protobuild.Manager
         {
             _runtimeServer.Goto("create");
 
-            _projectDefaultPath.SetProjectDefaultPath(new DirectoryInfo(request.Path).Parent.FullName + Path.DirectorySeparatorChar);
-
-            var steps = new List<KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>>();
-            var isStandard = request.ProjectFormat.StartsWith("standard");
-            var projectFormatId = 
-                (request.ProjectFormat != "standard" && request.ProjectFormat != "protobuild") ?
-                (isStandard ? request.ProjectFormat.Substring(9) : request.ProjectFormat.Substring(11)) :
-                string.Empty;
-
-            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Create project directory", CreateProjectDirectory));
-            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Download Protobuild", DownloadProtobuild));
-            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Create project from template", InstantiateFromBaseTemplate));
-            
-            if (request.ProjectFormat != "standard" && request.ProjectFormat != "protobuild")
+            try
             {
-                var variant =
-                    (isStandard
-                        ? request.Template.AdditionalStandardProjectVariants
-                        : request.Template.AdditionalProtobuildVariants)[projectFormatId];
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Apply '" + variant.Name + "' project format overlay", (x, y) => ApplyOverlay(x, y, variant.OverlayPath)));
-            }
+                _projectDefaultPath.SetProjectDefaultPath(new DirectoryInfo(request.Path).Parent.FullName +
+                                                          Path.DirectorySeparatorChar);
 
-            foreach (var v in request.Template.OptionVariants)
-            {
-                var sv = (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(x => x.ID == request.Parameters[v.ID]);
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
-                    "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOverlay(x, y, sv.OverlayPath)));
-            }
-            
-            if (isStandard)
-            {
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Resolve packages", ResolvePackages));
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Generate projects", GeneratePlatforms));
-                steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Clean up", CleanUpForStandardProjects));
-            }
+                var steps = new List<KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>>();
+                var isStandard = request.ProjectFormat.StartsWith("standard");
+                var projectFormatId =
+                    (request.ProjectFormat != "standard" && request.ProjectFormat != "protobuild")
+                        ? (isStandard ? request.ProjectFormat.Substring(9) : request.ProjectFormat.Substring(11))
+                        : string.Empty;
 
-            steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Open project", OpenProject));
+                steps.Add(
+                    new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                        "Create project directory", CreateProjectDirectory));
+                steps.Add(
+                    new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                        "Download Protobuild", DownloadProtobuild));
+                steps.Add(
+                    new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                        "Create project from template", InstantiateFromBaseTemplate));
 
-            var i = 0;
-            foreach (var step in steps)
-            {
-                _runtimeServer.Set("stepName" + i, step.Key);
-                _runtimeServer.Set("stepState" + i, "Pending");
-                _runtimeServer.Set("stepMessage" + i, null);
-                i++;
-            }
-            _runtimeServer.Set("stepCount", i);
-
-            i = 0;
-            foreach (var step in steps)
-            {
-                _runtimeServer.Flush();
-                _runtimeServer.Set("stepState" + i, "Processing");
-                try
+                if (request.ProjectFormat != "standard" && request.ProjectFormat != "protobuild")
                 {
-                    var i1 = i;
-                    await step.Value(request, (a, b) =>
+                    var variant =
+                        (isStandard
+                            ? request.Template.AdditionalStandardProjectVariants
+                            : request.Template.AdditionalProtobuildVariants)[projectFormatId];
+                    steps.Add(
+                        new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                            "Apply '" + variant.Name + "' project format overlay",
+                            (x, y) => ApplyOverlay(x, y, variant.OverlayPath)));
+                }
+
+                foreach (var v in request.Template.OptionVariants)
+                {
+                    var sv =
+                        (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(
+                            x => x.ID == request.Parameters[v.ID]);
+                    steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                        "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOverlay(x, y, sv.OverlayPath)));
+                }
+
+                if (isStandard)
+                {
+                    steps.Add(
+                        new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                            "Resolve packages", ResolvePackages));
+                    steps.Add(
+                        new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                            "Generate projects", GeneratePlatforms));
+                    steps.Add(
+                        new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Clean up",
+                            CleanUpForStandardProjects));
+                }
+
+                steps.Add(
+                    new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Open project",
+                        OpenProject));
+
+                var i = 0;
+                foreach (var step in steps)
+                {
+                    _runtimeServer.Set("stepName" + i, step.Key);
+                    _runtimeServer.Set("stepState" + i, "Pending");
+                    _runtimeServer.Set("stepMessage" + i, null);
+                    i++;
+                }
+                _runtimeServer.Set("stepCount", i);
+
+                i = 0;
+                foreach (var step in steps)
+                {
+                    _runtimeServer.Flush();
+                    _runtimeServer.Set("stepState" + i, "Processing");
+                    try
                     {
-                        _runtimeServer.Set("stepName" + i1, a);
-                        _runtimeServer.Set("stepMessage" + i1, b);
-                    });
-                    _runtimeServer.Set("stepState" + i, "Passed");
-                }
-                catch (Exception ex)
-                {
-                    _runtimeServer.Set("stepState" + i, "Failed");
-                    _runtimeServer.Set("stepMessage" + i, ex.ToString());
-                }
+                        var i1 = i;
+                        await step.Value(request, (a, b) =>
+                        {
+                            _runtimeServer.Set("stepName" + i1, a);
+                            _runtimeServer.Set("stepMessage" + i1, b);
+                        });
+                        _runtimeServer.Set("stepState" + i, "Passed");
+                    }
+                    catch (Exception ex)
+                    {
+                        _runtimeServer.Set("stepState" + i, "Failed");
+                        _runtimeServer.Set("stepMessage" + i, ex.ToString());
+                    }
 
-                i++;
+                    i++;
+                }
+            }
+            catch (Exception ex)
+            {
+                _runtimeServer.Set("stepState0", "Error");
+                _runtimeServer.Set("stepName0", ex.Message);
+                _runtimeServer.Set("stepMessage0", ex.StackTrace);
+                _runtimeServer.Set("stepCount", 1);
             }
         }
 

@@ -55,7 +55,7 @@ namespace Protobuild.Manager
             kernel.Get<IErrorLog>().Log("Started game launcher on Windows platform");
 
             var startup = kernel.Get<IStartup>();
-            startup.Start();
+            startup.Start(args);
         }
     }
 }

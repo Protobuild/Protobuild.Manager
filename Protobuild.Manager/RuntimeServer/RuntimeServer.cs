@@ -27,8 +27,15 @@ namespace Protobuild.Manager
 
         private SemaphoreSlim m_InjectionMutex = new SemaphoreSlim(1, 1);
 
-        public string BaseUri { get; private set; }
+        private string _serverHost;
 
+        private string _initialPage;
+
+        public string BaseUri
+        {
+            get { return _serverHost + _initialPage; }
+        }
+        
         public RuntimeServer(LightweightKernel kernel, IErrorLog errorLog)
         {
             _kernel = kernel;
@@ -49,7 +56,7 @@ namespace Protobuild.Manager
                 {
                     listener.Start();
                     connected = true;
-                    this.BaseUri = "http://localhost:" + port + "/";
+                    _serverHost = "http://localhost:" + port + "/";
                     this.m_ActiveListener = listener;
                 }
                 catch (SocketException)
@@ -121,13 +128,25 @@ namespace Protobuild.Manager
         {
             lock (this.m_InjectorLock)
             {
-                return (T)this.m_InjectedValues[key];
+                if (this.m_InjectedValues.ContainsKey(key))
+                {
+                    return (T) this.m_InjectedValues[key];
+                }
+
+                return default(T);
             }
         }
 
         public void Goto(string path)
         {
-            this.m_RuntimeInjector("location.href = '/" + path + ".htm';");
+            if (this.m_RuntimeInjector == null)
+            {
+                _initialPage = path + ".htm";
+            }
+            else
+            {
+                this.m_RuntimeInjector("location.href = '/" + path + ".htm';");
+            }
         }
 
         private string GetInjectionScript(bool firstLoad, string specificKey = null)

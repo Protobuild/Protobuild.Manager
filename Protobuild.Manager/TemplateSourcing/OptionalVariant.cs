@@ -8,8 +8,8 @@ namespace Protobuild.Manager
 
         public string Name { get; set; }
 
-        public List<OptionalVariantOverlay> ProtobuildOptions { get; set; }
+        public List<VariantOverlay> ProtobuildOptions { get; set; }
 
-        public List<OptionalVariantOverlay> StandardOptions { get; set; }
+        public List<VariantOverlay> StandardOptions { get; set; }
     }
 }

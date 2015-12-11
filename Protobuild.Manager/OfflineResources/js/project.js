@@ -69,7 +69,7 @@ function stateChange(state) {
         $("#switchProtobuildPlatform").val(state.setplatform);
         oldPlatform = state.setplatform;
     }
-    if (state.supportedPlatformCount != undefined) {
+    if (state.supportedPlatformCount != undefined && state.isStandard !== undefined) {
         var select = $("#switchStandardPlatform");
         var oldValue = select.val();
         select.children().remove();
@@ -84,7 +84,7 @@ function stateChange(state) {
             }
             if (readied) {
                 window.setTimeout(function() {
-                    location.href = "app:///switch-platform?target=" + oldPlatform + "&old=" + oldPlatform;
+                    location.href = "app:///switch-platform?target=" + oldPlatform + "&old=" + oldPlatform + "&protobuild=" + (state.isStandard ? "false" : "true");
                 }, 100);
             }
         } else {
@@ -117,7 +117,7 @@ $(document).bind("statechange", function (event, state) {
 
 $(document).ready(function () {
     if (initedPlatformSwitch) {
-        location.href = "app:///switch-platform?target=" + oldPlatform + "&old=" + oldPlatform;
+        location.href = "app:///switch-platform?target=" + oldPlatform + "&old=" + oldPlatform + "&protobuild=" + (windowState.isStandard ? "false" : "true");
     }
     readied = true;
 })

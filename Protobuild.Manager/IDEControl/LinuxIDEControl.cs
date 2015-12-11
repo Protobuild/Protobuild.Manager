@@ -65,7 +65,7 @@ namespace Protobuild.Manager
                 try
                 {
                     _runtimeServer.Set("busy", true);
-                    _runtimeServer.Set("statusState", "Processing");
+                    _runtimeServer.Set("statusMode", "Processing");
                     _runtimeServer.Set("status", "Synchronising for " + targetPlatform + " platform...");
                     var process = Process.Start(new ProcessStartInfo(protobuild, "--sync " + targetPlatform)
                     {
@@ -103,7 +103,7 @@ namespace Protobuild.Manager
                 try
                 {
                     _runtimeServer.Set("busy", true);
-                    _runtimeServer.Set("statusState", "Processing");
+                    _runtimeServer.Set("statusMode", "Processing");
                     _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
                     var process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
                     {

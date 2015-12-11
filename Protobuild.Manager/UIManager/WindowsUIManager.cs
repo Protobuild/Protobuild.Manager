@@ -109,6 +109,27 @@ namespace Protobuild.Manager
             Application.Exit();
         }
 
+        public string SelectExistingProject()
+        {
+            var ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "Protobuild Module|Protobuild.exe";
+            ofd.CheckFileExists = true;
+            ofd.Multiselect = false;
+            ofd.AutoUpgradeEnabled = true;
+            ofd.CheckPathExists = true;
+            ofd.Title = "Select Protobuild Module";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                var fileInfo = new FileInfo(ofd.FileName);
+                if (!fileInfo.Exists || fileInfo.Name.ToLowerInvariant() != "Protobuild.exe".ToLowerInvariant())
+                {
+                    return null;
+                }
+                selectedPath = fileInfo.DirectoryName;
+            }
+            return selectedPath;
+        }
+
         private void ExecuteAndCatch(Action eventHandler)
         {
             if (Debugger.IsAttached)

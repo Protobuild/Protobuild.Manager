@@ -103,8 +103,8 @@
     <Compile Include="TemplateSourcing\ITemplateSource.cs" />
     <Compile Include="TemplateSourcing\OnDiskTemplateSource.cs" />
     <Compile Include="TemplateSourcing\OptionalVariant.cs" />
-    <Compile Include="TemplateSourcing\OptionalVariantOverlay.cs" />
     <Compile Include="TemplateSourcing\TemplateInfo.cs" />
+    <Compile Include="TemplateSourcing\VariantOverlay.cs" />
     <Compile Include="UIManager\IUIManager.cs" />
     <Compile Include="UIManager\LinuxUIManager.cs" />
     <Compile Include="UIManager\MacOSUIManager.cs" />

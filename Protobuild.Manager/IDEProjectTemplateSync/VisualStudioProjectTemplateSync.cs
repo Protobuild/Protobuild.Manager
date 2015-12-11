@@ -63,12 +63,14 @@ namespace Protobuild.Manager
             var assemblyPath = Assembly.GetEntryAssembly().Location;
             var workingDirectory = Environment.CurrentDirectory;
 
+#if PLATFORM_WINDOWS
             // Extract branding icon for Windows.
             using (
                 var writer = new FileStream(Path.Combine(path, "Template.ico"), FileMode.Create, FileAccess.Write))
             {
                 _brandingEngine.WindowsIcon.Save(writer);
             }
+#endif
 
             foreach (var template in _templateSource.GetTemplates())
             {

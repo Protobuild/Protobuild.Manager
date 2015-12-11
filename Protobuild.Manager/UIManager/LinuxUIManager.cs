@@ -4,6 +4,7 @@ using Gtk;
 using WebKit;
 using GLib;
 using System.Web;
+using System.IO;
 
 namespace Protobuild.Manager
 {
@@ -15,6 +16,8 @@ namespace Protobuild.Manager
 
         private readonly IBrandingEngine _brandingEngine;
 
+        private Window _window;
+
         internal LinuxUIManager(RuntimeServer server, IAppHandlerManager appHandlerManager, IBrandingEngine brandingEngine)
         {
             this.m_RuntimeServer = server;
@@ -25,10 +28,10 @@ namespace Protobuild.Manager
         public void Run()
         {
             Application.Init();
-            Window window = new Window(_brandingEngine.ProductName + " (Init...)");
-            window.Icon = _brandingEngine.LinuxIcon;
-            window.SetSizeRequest(720, 400);
-            window.Destroyed += delegate (object sender, EventArgs e)
+            _window = new Window(_brandingEngine.ProductName + " (Init...)");
+            _window.Icon = _brandingEngine.LinuxIcon;
+            _window.SetSizeRequest(720, 400);
+            _window.Destroyed += delegate (object sender, EventArgs e)
             {
                 Application.Quit();
             };
@@ -38,20 +41,20 @@ namespace Protobuild.Manager
             webView.Transparent = true;
             webView.BorderWidth = 0;
             scrollWindow.Add(webView);
-            window.Add(scrollWindow);
-            window.WindowPosition = WindowPosition.Center;
-            window.AllowGrow = false;
-            window.AllowShrink = false;
-            window.BorderWidth = 0;
-            window.ShowAll();
+            _window.Add(scrollWindow);
+            _window.WindowPosition = WindowPosition.Center;
+            _window.AllowGrow = false;
+            _window.AllowShrink = false;
+            _window.BorderWidth = 0;
+            _window.ShowAll();
 
             this.m_RuntimeServer.RegisterRuntimeInjector(x => 
                 Application.Invoke((oo, aa) => webView.ExecuteScript(x)));
 
-            webView.LoadCommitted += (o, a) => window.Title = _brandingEngine.ProductName;
-            webView.LoadFinished += (o, a) => window.Title = _brandingEngine.ProductName;
-            webView.LoadProgressChanged += (o, a) => window.Title = _brandingEngine.ProductName + " (" + a.Progress + "% Loaded)";
-            webView.LoadStarted += (o, a) => window.Title = _brandingEngine.ProductName + " (0% Loaded)";
+            webView.LoadCommitted += (o, a) => _window.Title = _brandingEngine.ProductName;
+            webView.LoadFinished += (o, a) => _window.Title = _brandingEngine.ProductName;
+            webView.LoadProgressChanged += (o, a) => _window.Title = _brandingEngine.ProductName + " (" + a.Progress + "% Loaded)";
+            webView.LoadStarted += (o, a) => _window.Title = _brandingEngine.ProductName + " (0% Loaded)";
 
             try
             {
@@ -110,6 +113,44 @@ namespace Protobuild.Manager
         public void Quit()
         {
             Application.Quit();
+        }
+
+        public string SelectExistingProject()
+        {
+            var title = "Select Protobuild Module";
+            var ofd = new Gtk.FileChooserDialog(
+                title,
+                _window,
+                FileChooserAction.SelectFolder,
+                "Cancel", ResponseType.Cancel,
+                "Open", ResponseType.Accept);
+            while (true)
+            {
+                if (ofd.Run() == (int)ResponseType.Accept)
+                {
+                    var fileInfo = new FileInfo(Path.Combine(ofd.Filename, "Protobuild.exe"));
+                    if (!fileInfo.Exists || fileInfo.Name.ToLowerInvariant() != "Protobuild.exe".ToLowerInvariant())
+                    {
+                        var md = new MessageDialog(ofd, DialogFlags.Modal | DialogFlags.DestroyWithParent, MessageType.Error, ButtonsType.Ok,
+                            "It doesn't look like that directory is a Protobuild module.  The directory " +
+                            "should contain Protobuild.exe to be opened with this tool.");
+                        md.Run();
+                        md.Destroy();
+                        continue;
+                    }
+                    else
+                    {
+                        var fname = ofd.Filename;
+                        ofd.Destroy();
+                        return fname;
+                    }
+                }
+                else
+                {
+                    ofd.Destroy();
+                    return null;
+                }
+            }
         }
     }
 }

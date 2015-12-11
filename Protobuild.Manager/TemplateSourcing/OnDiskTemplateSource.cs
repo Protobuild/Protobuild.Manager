@@ -15,18 +15,22 @@ namespace Protobuild.Manager
             _brandingEngine = brandingEngine;
         }
 
-        private Dictionary<string, BaseVariant> ProcessVariants(ArrayList list, string basePath)
+        private Dictionary<string, VariantOverlay> ProcessVariants(ArrayList list, string basePath)
         {
-            var dict = new Dictionary<string, BaseVariant>();
+            var dict = new Dictionary<string, VariantOverlay>();
             foreach (var item in list.OfType<Dictionary<string, object>>())
             {
                 var id = (string) item["ID"];
                 var name = (string)item["Name"];
-                var overlay = Path.Combine(basePath, (string)item["Overlay"]);
-                dict[id] = new BaseVariant
+                var overlayRelative = (string)item["Overlay"];
+                var overlay = overlayRelative != null ? Path.Combine(basePath, overlayRelative) : null;
+                dict[id] = new VariantOverlay
                 {
+                    ID = id,
                     Name = name,
-                    OverlayPath = overlay
+                    OverlayPath = overlay,
+                    EnableServices = ((ArrayList)item["EnableServices"]).Cast<string>().ToArray(),
+                    DisableServices = ((ArrayList)item["DisableServices"]).Cast<string>().ToArray(),
                 };
             }
             return dict;
@@ -34,7 +38,7 @@ namespace Protobuild.Manager
 
         public List<TemplateInfo> GetTemplates()
         {
-            var directory = new DirectoryInfo(_brandingEngine.TemplateSource.Substring(4));
+            var directory = new DirectoryInfo(_brandingEngine.TemplateSource.Substring(4).Replace('\\', Path.DirectorySeparatorChar));
             var templates = new List<TemplateInfo>();
 
             foreach (var info in directory.GetFiles("*.json"))
@@ -57,32 +61,8 @@ namespace Protobuild.Manager
                         var newVariant = new OptionalVariant();
                         newVariant.ID = (string) variant["ID"];
                         newVariant.Name = (string)variant["Name"];
-                        newVariant.ProtobuildOptions = new List<OptionalVariantOverlay>();
-                        newVariant.StandardOptions = new List<OptionalVariantOverlay>();
-
-                        foreach (
-                            var option in
-                                ((ArrayList)variant["ProtobuildOptions"]).OfType<Dictionary<string, object>>())
-                        {
-                            newVariant.ProtobuildOptions.Add(new OptionalVariantOverlay
-                            {
-                                ID = (string)option["ID"],
-                                Name = (string)option["Name"],
-                                OverlayPath = Path.Combine(directory.FullName, (string)option["Overlay"]),
-                            });
-                        }
-
-                        foreach (
-                            var option in
-                                ((ArrayList)variant["StandardOptions"]).OfType<Dictionary<string, object>>())
-                        {
-                            newVariant.StandardOptions.Add(new OptionalVariantOverlay
-                            {
-                                ID = (string)option["ID"],
-                                Name = (string)option["Name"],
-                                OverlayPath = Path.Combine(directory.FullName, (string)option["Overlay"]),
-                            });
-                        }
+                        newVariant.ProtobuildOptions = ProcessVariants((ArrayList)variant["ProtobuildOptions"], directory.FullName).Select(x => x.Value).ToList();
+                        newVariant.StandardOptions = ProcessVariants((ArrayList)variant["StandardOptions"], directory.FullName).Select(x => x.Value).ToList();
 
                         optionalVariants.Add(newVariant);
                     }

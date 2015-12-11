@@ -46,22 +46,29 @@ function updateFormOptions(state) {
 
     if (state.templateProtobuildVariantsCount !== undefined) {
         var old = $("#projectFormat").val();
-        $("#projectFormat").children(":not([data-template])").remove();
+        $("#projectFormat").children().remove();
+
+        var makeOption = function(k, v) {
+            $("#projectFormat").append($("<option></option>").attr('value', k).text(v));
+        }
+
+        makeOption("protobuild", "Protobuild");
 
         for (var i = 0; i < state.templateProtobuildVariantsCount; i++) {
-            tpl = window.addTemplate("variantitem", {});
-            tpl.attr("value", "protobuild-" + state["templateProtobuildVariantsID" + i]).text(state["templateProtobuildVariantsName" + i]);
+            makeOption("protobuild-" + state["templateProtobuildVariantsID" + i], state["templateProtobuildVariantsName" + i]);
         }
 
-        tpl = window.addTemplate("variantitem", {});
-        tpl.attr("value", "standard").text("Standard C# Projects");
+        makeOption("standard", "Standard C# Projects");
 
         for (var i = 0; i < state.templateStandardVariantsCount; i++) {
-            tpl = window.addTemplate("variantitem", {});
-            tpl.attr("value", "standard-" + state["templateStandardVariantsID" + i]).text(state["templateStandardVariantsName" + i]);
+            makeOption("standard-" + state["templateStandardVariantsID" + i], state["templateStandardVariantsName" + i]);
         }
 
-        $("#projectFormat").val(old);
+        if (old === null) {
+            $("#projectFormat").val("protobuild");
+        } else {
+            $("#projectFormat").val(old);
+        }
     }
 
     if (state.templateOptionalVariantsCount !== undefined) {
@@ -105,6 +112,9 @@ function updateFormOptions(state) {
 }
 
 function updateFormState() {
+    if ($("#projectFormat").val() === null) {
+        return;
+    }
     if ($("#projectFormat").val().substr(0, 10) == "protobuild") {
         $("#platforms").hide();
         $("#platformsNoSelect").show();
@@ -124,6 +134,11 @@ function updateOptionalVariants(type) {
             $.each(variantOptions[id][type], function (key, value) {
                 select.append($('<option>').attr('value', value.id).text(value.name));
             });
+            if (select.children().length == 0) {
+                select.parent().parent().hide();
+            } else {
+                select.parent().parent().show();
+            }
         }
     }
 }

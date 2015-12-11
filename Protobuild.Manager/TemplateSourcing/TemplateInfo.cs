@@ -10,17 +10,10 @@ namespace Protobuild.Manager
 
         public string TemplateURI { get; set; }
 
-        public Dictionary<string, BaseVariant> AdditionalStandardProjectVariants { get; set; }
+        public Dictionary<string, VariantOverlay> AdditionalStandardProjectVariants { get; set; }
 
-        public Dictionary<string, BaseVariant> AdditionalProtobuildVariants { get; set; } 
+        public Dictionary<string, VariantOverlay> AdditionalProtobuildVariants { get; set; } 
 
         public List<OptionalVariant> OptionVariants { get; set; }
-    }
-
-    public class BaseVariant
-    {
-        public string Name { get; set; }
-
-        public string OverlayPath { get; set; }
     }
 }

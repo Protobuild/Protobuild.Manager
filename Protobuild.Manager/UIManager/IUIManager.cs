@@ -7,6 +7,8 @@ namespace Protobuild.Manager
         void Run();
 
         void Quit();
+
+        string SelectExistingProject();
     }
 }
 

@@ -81,8 +81,11 @@ namespace Protobuild.Manager
                     var sv =
                         (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(
                             x => x.ID == request.Parameters[v.ID]);
-                    steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
-                        "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOverlay(x, y, sv.OverlayPath)));
+                    if (sv.OverlayPath != null)
+                    {
+                        steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                            "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOverlay(x, y, sv.OverlayPath)));
+                    }
                 }
 
                 if (isStandard)
@@ -96,6 +99,12 @@ namespace Protobuild.Manager
                     steps.Add(
                         new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>("Clean up",
                             CleanUpForStandardProjects));
+                }
+                else
+                {
+                    steps.Add(
+                        new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
+                            "Configure services", ConfigureServices));
                 }
 
                 steps.Add(
@@ -207,7 +216,7 @@ namespace Protobuild.Manager
 
         private async Task ResolvePackages(CreateProjectRequest arg, Action<string, string> update)
         {
-            // Generate for all selected platforms.
+            // Resolve packages for all selected platforms.
             var platforms =
                 arg.Parameters.Keys.OfType<string>().Where(x => x.StartsWith("platform_"))
                     .Select(x => x.Substring(9))
@@ -272,6 +281,24 @@ namespace Protobuild.Manager
 
         private async Task GeneratePlatforms(CreateProjectRequest arg, Action<string, string> update)
         {
+            // Calculate service invocation from arguments.
+            var servicesSpec = string.Empty;
+            var isStandard = arg.ProjectFormat.StartsWith("standard");
+            foreach (var v in arg.Template.OptionVariants)
+            {
+                var sv =
+                    (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(
+                        x => x.ID == arg.Parameters[v.ID]);
+                foreach (var enable in sv.EnableServices)
+                {
+                    servicesSpec += " --enable " + enable;
+                }
+                foreach (var enable in sv.DisableServices)
+                {
+                    servicesSpec += " --disable " + enable;
+                }
+            }
+
             // Generate for all selected platforms.
             var platforms =
                 arg.Parameters.Keys.OfType<string>().Where(x => x.StartsWith("platform_"))
@@ -279,7 +306,7 @@ namespace Protobuild.Manager
 					.Aggregate((a, b) => a + "," + b);
 			var generateProcess = _execution.ExecuteConsoleExecutable(
 				Path.Combine(arg.Path, "Protobuild.exe"), 
-				"--no-host-generate --no-resolve --generate " + platforms,
+				"--no-host-generate --no-resolve --generate " + platforms + servicesSpec,
 				si =>
 				{
 					si.WorkingDirectory = arg.Path;
@@ -333,6 +360,52 @@ namespace Protobuild.Manager
             }
 
             update("Generate projects", null);
+        }
+
+        private async Task ConfigureServices(CreateProjectRequest arg, Action<string, string> update)
+        {
+            // Calculate service invocation from arguments.
+            var enable = new List<string>();
+            var disable = new List<string>();
+            var isStandard = arg.ProjectFormat.StartsWith("standard");
+            foreach (var v in arg.Template.OptionVariants)
+            {
+                var sv =
+                    (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(
+                        x => x.ID == arg.Parameters[v.ID]);
+                enable = sv.EnableServices.ToList();
+                disable = sv.DisableServices.ToList();
+            }
+
+            using (var writer = new StreamWriter(Path.Combine(arg.Path, "Build", "Projects", "_Services.definition")))
+            {
+                writer.WriteLine(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<ExternalProject Name=""" + arg.Name + @"_Services"">
+  <!--
+
+  Normally services are selected from the command line by appending -enable
+  or -disable when generating projects, or you would add a dependency to the
+  service on your application project.
+
+  However, we don't have control over how the project is generated later when
+  using the project creator, and we don't know an appropriate project definition
+  to add a dependency to.  So instead we create an external project here that
+  depends on a service configure that then requires and conflicts with the
+  specified services to get the intended result.
+
+  -->
+  <Dependencies>
+    <Uses Name=""_ServiceConfiguration"" />
+  </Dependencies>
+  <Services>
+    <Service Name=""_ServiceConfiguration"">
+      <Conflicts>" + disable.DefaultIfEmpty(string.Empty).Aggregate((a, b) => a + "," + b) + @"</Conflicts>
+      <Requires>" + enable.DefaultIfEmpty(string.Empty).Aggregate((a, b) => a + "," + b) + @"</Requires>
+    </Service>
+  </Services>
+</ExternalProject>
+".Trim());
+            }
         }
 
         private async Task CleanUpForStandardProjects(CreateProjectRequest arg, Action<string, string> update)

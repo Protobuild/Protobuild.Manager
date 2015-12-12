@@ -10,10 +10,14 @@ namespace Protobuild.Manager
     internal class VisualStudioIDEControl : IIDEControl
     {
         private readonly RuntimeServer _runtimeServer;
+        private readonly IProcessLog _processLog;
+        private readonly IExecution _execution;
 
-        public VisualStudioIDEControl(RuntimeServer runtimeServer)
+        public VisualStudioIDEControl(RuntimeServer runtimeServer, IProcessLog processLog, IExecution execution)
         {
             _runtimeServer = runtimeServer;
+            _processLog = processLog;
+            _execution = execution;
         }
 
         public async Task LoadSolution(string modulePath, string moduleName, string targetPlatform, string oldPlatformOnFail, bool isProtobuild)
@@ -101,16 +105,17 @@ namespace Protobuild.Manager
                         if (isProtobuild)
                         {
                             _runtimeServer.Set("status", "Synchronising for " + oldPlatform + " platform...");
-                            var syncProcess = Process.Start(new ProcessStartInfo(protobuild, "--sync " + oldPlatform)
+                            var syncProcess = _execution.ExecuteConsoleExecutable(protobuild, "--sync " + oldPlatform, x =>
                             {
-                                WorkingDirectory = modulePath,
-                                UseShellExecute = false
-                            });
-                            if (syncProcess == null)
-                            {
-                                throw new InvalidOperationException("can't sync");
-                            }
-                            syncProcess.WaitForExit();
+                                x.WorkingDirectory = modulePath;
+                                x.UseShellExecute = false;
+                                x.CreateNoWindow = true;
+                                x.RedirectStandardOutput = true;
+                                x.RedirectStandardError = true;
+                            },
+                            _processLog.PrepareForAttachToProcess);
+                            _processLog.AttachToProcess(syncProcess);
+                            await syncProcess.WaitForExitAsync();
                         }
                     }
                 }
@@ -118,15 +123,16 @@ namespace Protobuild.Manager
                 if (isProtobuild)
                 {
                     _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
-                    var process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
+                    var process = _execution.ExecuteConsoleExecutable(protobuild, "--generate " + targetPlatform, x =>
                     {
-                        WorkingDirectory = modulePath,
-                        UseShellExecute = false
-                    });
-                    if (process == null)
-                    {
-                        throw new InvalidOperationException("can't generate");
-                    }
+                        x.WorkingDirectory = modulePath;
+                        x.UseShellExecute = false;
+                        x.CreateNoWindow = true;
+                        x.RedirectStandardOutput = true;
+                        x.RedirectStandardError = true;
+                    },
+                    _processLog.PrepareForAttachToProcess);
+                    _processLog.AttachToProcess(process);
                     process.WaitForExit();
                 }
 
@@ -200,16 +206,17 @@ namespace Protobuild.Manager
                     if (isProtobuild)
                     {
                         _runtimeServer.Set("status", "Synchronising for " + oldPlatform + " platform...");
-                        var syncProcess = Process.Start(new ProcessStartInfo(protobuild, "--sync " + oldPlatform)
+                        var syncProcess = _execution.ExecuteConsoleExecutable(protobuild, "--sync " + oldPlatform, x =>
                         {
-                            WorkingDirectory = modulePath,
-                            UseShellExecute = false
-                        });
-                        if (syncProcess == null)
-                        {
-                            throw new InvalidOperationException("can't sync");
-                        }
-                        syncProcess.WaitForExit();
+                            x.WorkingDirectory = modulePath;
+                            x.UseShellExecute = false;
+                            x.CreateNoWindow = true;
+                            x.RedirectStandardOutput = true;
+                            x.RedirectStandardError = true;
+                        },
+                        _processLog.PrepareForAttachToProcess);
+                        _processLog.AttachToProcess(syncProcess);
+                        await syncProcess.WaitForExitAsync();
                     }
                 }
 
@@ -311,15 +318,16 @@ namespace Protobuild.Manager
                 if (isProtobuild)
                 {
                     _runtimeServer.Set("status", "Generating for " + targetPlatform + " platform...");
-                    var process = Process.Start(new ProcessStartInfo(protobuild, "--generate " + targetPlatform)
+                    var process = _execution.ExecuteConsoleExecutable(protobuild, "--generate " + targetPlatform, x =>
                     {
-                        WorkingDirectory = modulePath,
-                        UseShellExecute = false
-                    });
-                    if (process == null)
-                    {
-                        throw new InvalidOperationException("can't generate");
-                    }
+                        x.WorkingDirectory = modulePath;
+                        x.UseShellExecute = false;
+                        x.CreateNoWindow = true;
+                        x.RedirectStandardOutput = true;
+                        x.RedirectStandardError = true;
+                    },
+                    _processLog.PrepareForAttachToProcess);
+                    _processLog.AttachToProcess(process);
                     process.WaitForExit();
                 }
 

@@ -31,6 +31,7 @@
     <Compile Include="AppHandlers\OptionAppHandler.cs" />
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
     <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
+    <Compile Include="AppHandlers\SetConsoleStateAppHandler.cs" />
     <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />
     <Compile Include="AppHandlers\SyncProjectsAppHandler.cs" />
     <Compile Include="BrandingEngine\BaseBrandingEngine.cs" />

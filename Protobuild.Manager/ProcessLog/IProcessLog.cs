@@ -6,7 +6,9 @@ namespace Protobuild.Manager
 {
 	public interface IProcessLog
 	{
-		void AttachToProcess(Process process);
+		void PrepareForAttachToProcess(Process process);
+
+	    void AttachToProcess(Process process);
 	}
 }
 

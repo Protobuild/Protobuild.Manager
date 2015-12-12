@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
+using System.Threading;
 
 namespace Protobuild.Manager
 {
@@ -11,39 +13,86 @@ namespace Protobuild.Manager
 
 		private int _lineCount;
 
+        private object _lineLock = new object();
+
 		public RuntimeServerProcessLog(RuntimeServer runtimeServer)
 		{
 			_runtimeServer = runtimeServer;
 			_lock = new object();
 		}
 
-		public void AttachToProcess(Process process)
+		public void PrepareForAttachToProcess(Process process)
 		{
 			process.OutputDataReceived += (sender, args) =>
 			{
 				var line = args.Data;
 
-				Console.WriteLine(args.Data);
+			    if (string.IsNullOrWhiteSpace(line))
+			    {
+			        return;
+			    }
 
-				_runtimeServer.Set("processLogLine" + _lineCount + "Text", line);
-				_runtimeServer.Set("processLogLine" + _lineCount + "Color", "#000");
-				_lineCount++;
-				_runtimeServer.Set("processLogLineCount", _lineCount);
+			    lock (_lineLock)
+			    {
+			        _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.Trim());
+			        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FFF");
+			        _lineCount++;
+			        _runtimeServer.Set("processLogLineCount", _lineCount);
+			    }
 			};
 			process.ErrorDataReceived += (sender, args) =>
 			{
 				var line = args.Data;
 
-				Console.Error.WriteLine(args.Data);
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    return;
+                }
 
-				_runtimeServer.Set("processLogLine" + _lineCount + "Text", line);
-				_runtimeServer.Set("processLogLine" + _lineCount + "Color", "#000");
-				_lineCount++;
-				_runtimeServer.Set("processLogLineCount", _lineCount);
+			    lock (_lineLock)
+			    {
+			        _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.Trim());
+			        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FCC");
+			        _lineCount++;
+			        _runtimeServer.Set("processLogLineCount", _lineCount);
+			    }
 			};
-			process.BeginOutputReadLine();
-			process.BeginErrorReadLine();
-		}
+		    process.Exited += (sender, args) =>
+            {
+                lock (_lineLock)
+                {
+                    _runtimeServer.Set("processLogLine" + _lineCount + "Text",
+                        "[exit] [" + process.Id + "] " + process.StartInfo.FileName + " " + process.StartInfo.Arguments +
+                        " exited with exit code " + process.ExitCode);
+                    if (process.ExitCode == 0)
+                    {
+                        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#0F0");
+                    }
+                    else
+                    {
+                        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#F0");
+                    }
+                    _lineCount++;
+                    _runtimeServer.Set("processLogLineCount", _lineCount);
+                }
+            };
+		    process.EnableRaisingEvents = true;
+        }
+
+	    public void AttachToProcess(Process process)
+        {
+	        lock (_lineLock)
+	        {
+	            _runtimeServer.Set("processLogLine" + _lineCount + "Text",
+	                "[start] [" + process.Id + "] " + process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+	            _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FF0");
+	            _lineCount++;
+	            _runtimeServer.Set("processLogLineCount", _lineCount);
+	        }
+
+	        process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+        }
 	}
 }
 

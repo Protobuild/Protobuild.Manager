@@ -178,7 +178,8 @@ namespace Protobuild.Manager
 					si.CreateNoWindow = true;
 					si.RedirectStandardOutput = true;
 					si.RedirectStandardError = true;
-				});
+				},
+                _processLog.PrepareForAttachToProcess);
             if (startProcess == null)
             {
                 throw new InvalidOperationException("can't create");
@@ -231,7 +232,8 @@ namespace Protobuild.Manager
 					si.CreateNoWindow = true;
 					si.RedirectStandardOutput = true;
 					si.RedirectStandardError = true;
-				});
+				},
+                _processLog.PrepareForAttachToProcess);
             if (generateProcess == null)
             {
                 throw new InvalidOperationException("can't generate");
@@ -314,7 +316,8 @@ namespace Protobuild.Manager
 					si.CreateNoWindow = true;
 					si.RedirectStandardOutput = true;
 					si.RedirectStandardError = true;
-				});
+				},
+                _processLog.PrepareForAttachToProcess);
             if (generateProcess == null)
             {
                 throw new InvalidOperationException("can't generate");
@@ -377,9 +380,29 @@ namespace Protobuild.Manager
                 disable = sv.DisableServices.ToList();
             }
 
+            var conflicts = string.Empty;
+            var requires = string.Empty;
+
+            if (enable.Count > 0)
+            {
+                requires = "<Requires>" + enable.DefaultIfEmpty(string.Empty).Aggregate((a, b) => a + "," + b) +
+                           @"</Requires>";
+            }
+
+            if (disable.Count > 0)
+            {
+                conflicts = "<Conflicts>" + disable.DefaultIfEmpty(string.Empty).Aggregate((a, b) => a + "," + b) +
+                           @"</Conflicts>";
+            }
+
+            if (requires == string.Empty && conflicts == string.Empty)
+            {
+                return;
+            }
+
             using (var writer = new StreamWriter(Path.Combine(arg.Path, "Build", "Projects", "_Services.definition")))
             {
-                writer.WriteLine(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                await writer.WriteLineAsync(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <ExternalProject Name=""" + arg.Name + @"_Services"">
   <!--
 
@@ -399,8 +422,7 @@ namespace Protobuild.Manager
   </Dependencies>
   <Services>
     <Service Name=""_ServiceConfiguration"">
-      <Conflicts>" + disable.DefaultIfEmpty(string.Empty).Aggregate((a, b) => a + "," + b) + @"</Conflicts>
-      <Requires>" + enable.DefaultIfEmpty(string.Empty).Aggregate((a, b) => a + "," + b) + @"</Requires>
+      " + conflicts + requires + @"
     </Service>
   </Services>
 </ExternalProject>

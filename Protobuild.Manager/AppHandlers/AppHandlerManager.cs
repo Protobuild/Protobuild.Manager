@@ -35,13 +35,8 @@ namespace Protobuild.Manager
                 _appHandlers.Add("/generate-projects", _kernel.Get<GenerateProjectsAppHandler>());
                 _appHandlers.Add("/create-package", _kernel.Get<CreatePackageAppHandler>());
                 _appHandlers.Add("/automated-build", _kernel.Get<AutomatedBuildAppHandler>());
+                _appHandlers.Add("/set-console-state", _kernel.Get<SetConsoleStateAppHandler>());
 
-                //this.m_AppHandlers.Add("/login", this.m_Kernel.Get<LoginAppHandler>());
-                //this.m_AppHandlers.Add("/register", this.m_Kernel.Get<RegisterAppHandler>());
-                //this.m_AppHandlers.Add("/clearcache", this.m_Kernel.Get<ClearCacheAppHandler>());
-                //this.m_AppHandlers.Add("/channel", this.m_Kernel.Get<ChannelAppHandler>());
-                //this.m_AppHandlers.Add("/option", this.m_Kernel.Get<OptionAppHandler>());
-                //this.m_AppHandlers.Add("/enablefullcrashdumps", this.m_Kernel.Get<EnableFullCrashDumpsAppHandler>());
                 this._appHandlersInit = true;
             }
 

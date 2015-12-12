@@ -45,7 +45,8 @@ namespace Protobuild.Manager
 							x.UseShellExecute = false;
 							x.RedirectStandardOutput = true;
 							x.RedirectStandardError = true;
-						});
+						},
+                        _processLog.PrepareForAttachToProcess);
 					_processLog.AttachToProcess(process);
 	                await process.WaitForExitAsync();
 					if (process.ExitCode != 0)
@@ -63,7 +64,8 @@ namespace Protobuild.Manager
 							x.UseShellExecute = false;
 							x.RedirectStandardOutput = true;
 							x.RedirectStandardError = true;
-						});
+						},
+                        _processLog.PrepareForAttachToProcess);
 					_processLog.AttachToProcess(process);
 					await process.WaitForExitAsync();
 					if (process.ExitCode != 0)

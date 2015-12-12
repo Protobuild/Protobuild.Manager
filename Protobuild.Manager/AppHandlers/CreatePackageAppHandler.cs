@@ -10,11 +10,15 @@ namespace Protobuild.Manager
     {
         private readonly IIDEControl _ideControl;
         private readonly RuntimeServer _runtimeServer;
+        private readonly IExecution _execution;
+        private readonly IProcessLog _processLog;
 
-        public CreatePackageAppHandler(IIDEControl ideControl, RuntimeServer runtimeServer)
+        public CreatePackageAppHandler(IIDEControl ideControl, RuntimeServer runtimeServer, IExecution execution, IProcessLog processLog)
         {
             _ideControl = ideControl;
             _runtimeServer = runtimeServer;
+            _execution = execution;
+            _processLog = processLog;
         }
 
         public void Handle(NameValueCollection parameters)
@@ -34,15 +38,20 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("busy", true);
                 _runtimeServer.Set("statusMode", "Processing");
                 _runtimeServer.Set("status", "Create package for " + targetPlatform + " platform...");
-                var process = Process.Start(new ProcessStartInfo(protobuild, "--pack . " + targetPlatform + ".tar.lzma " + targetPlatform)
+                var process = _execution.ExecuteConsoleExecutable(protobuild, "--pack . " + targetPlatform + ".tar.lzma " + targetPlatform, s =>
                 {
-                    WorkingDirectory = modulePath,
-                    UseShellExecute = false
-                });
+                    s.WorkingDirectory = modulePath;
+                    s.UseShellExecute = false;
+                    s.CreateNoWindow = true;
+                    s.RedirectStandardOutput = true;
+                    s.RedirectStandardError = true;
+                },
+                _processLog.PrepareForAttachToProcess);
                 if (process == null)
                 {
                     throw new InvalidOperationException("can't spawn Protobuild");
                 }
+                _processLog.AttachToProcess(process);
                 await process.WaitForExitAsync();
 
                 _runtimeServer.Set("statusMode", "Okay");

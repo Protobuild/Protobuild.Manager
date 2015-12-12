@@ -31,6 +31,8 @@ namespace Protobuild.Manager
 
         private string _initialPage;
 
+        private bool _needsFullFlush;
+
         public string BaseUri
         {
             get { return _serverHost + _initialPage; }
@@ -83,20 +85,21 @@ namespace Protobuild.Manager
             this.m_InjectionMutex.Release();
         }
 
-        public void Set(string key, object value)
+        public void Set(string key, object value, bool noFlush = false)
         {
             lock (this.m_InjectorLock)
             {
                 this.m_InjectedValues[key] = value;
             }
 
-            if (this.m_RuntimeInjector != null)
+            if (this.m_RuntimeInjector != null && !noFlush)
             {
                 if (this.m_InjectionMutex.Wait(500))
                 {
                     try
                     {
-                        this.m_RuntimeInjector(this.GetInjectionScript(false, key));
+                        this.m_RuntimeInjector(this.GetInjectionScript(false, _needsFullFlush ? null : key));
+                        _needsFullFlush = false;
                     }
                     catch (ArgumentOutOfRangeException)
                     {
@@ -106,6 +109,10 @@ namespace Protobuild.Manager
                     {
                         this.m_InjectionMutex.Release();
                     }
+                }
+                else
+                {
+                    _needsFullFlush = true;
                 }
             }
         }
@@ -119,6 +126,7 @@ namespace Protobuild.Manager
                     try
                     {
                         this.m_RuntimeInjector(this.GetInjectionScript(false));
+                        _needsFullFlush = false;
                     }
                     finally
                     {
@@ -151,6 +159,7 @@ namespace Protobuild.Manager
             {
                 this.m_RuntimeInjector("location.href = '/" + path + ".htm';");
             }
+            _needsFullFlush = true;
         }
 
         private string GetInjectionScript(bool firstLoad, string specificKey = null)

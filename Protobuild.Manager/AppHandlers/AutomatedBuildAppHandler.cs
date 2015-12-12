@@ -9,10 +9,14 @@ namespace Protobuild.Manager
     public class AutomatedBuildAppHandler : IAppHandler
     {
         private readonly RuntimeServer _runtimeServer;
+        private readonly IExecution _execution;
+        private readonly IProcessLog _processLog;
 
-        public AutomatedBuildAppHandler(RuntimeServer runtimeServer)
+        public AutomatedBuildAppHandler(RuntimeServer runtimeServer, IExecution execution, IProcessLog processLog)
         {
             _runtimeServer = runtimeServer;
+            _execution = execution;
+            _processLog = processLog;
         }
 
         public void Handle(NameValueCollection parameters)
@@ -32,15 +36,20 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("busy", true);
                 _runtimeServer.Set("statusMode", "Processing");
                 _runtimeServer.Set("status", "Performing automated build...");
-                var process = Process.Start(new ProcessStartInfo(protobuild, "--automated-build")
+                var process = _execution.ExecuteConsoleExecutable(protobuild, "--automated-build", s=>
                 {
-                    WorkingDirectory = modulePath,
-                    UseShellExecute = false
-                });
+                    s.WorkingDirectory = modulePath;
+                    s.UseShellExecute = false;
+                    s.CreateNoWindow = true;
+                    s.RedirectStandardError = true;
+                    s.RedirectStandardOutput = true;
+                },
+                _processLog.PrepareForAttachToProcess);
                 if (process == null)
                 {
                     throw new InvalidOperationException("can't spawn Protobuild");
                 }
+                _processLog.AttachToProcess(process);
                 await process.WaitForExitAsync();
 
                 _runtimeServer.Set("statusMode", "Okay");

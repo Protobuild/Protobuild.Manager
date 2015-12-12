@@ -63,6 +63,10 @@ namespace Protobuild.Manager
                 {
                     port++;
                 }
+                catch (HttpListenerException)
+                {
+                    port++;
+                }
             }
 
             Task.Run((Func<Task>)Run);

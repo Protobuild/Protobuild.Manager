@@ -1,4 +1,6 @@
-﻿#if PLATFORM_WINDOWS
+﻿using System.IO;
+
+#if PLATFORM_WINDOWS
 namespace Protobuild.Manager
 {
     using System;
@@ -125,9 +127,44 @@ namespace Protobuild.Manager
                 {
                     return null;
                 }
-                selectedPath = fileInfo.DirectoryName;
+                return fileInfo.DirectoryName;
             }
-            return selectedPath;
+            return null;
+        }
+
+        public bool AskToRepairCorruptProtobuild()
+        {
+            return MessageBox.Show(
+                "The version of Protobuild.exe in this module could not be loaded " +
+                "and may be corrupt.  Do you want to download the latest version " +
+                "of Protobuild to repair it (Yes), or fallback to the solutions that " +
+                "have already been generated (No)?",
+                "Unable to load Protobuild",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Error) == DialogResult.Yes;
+        }
+
+        public void FailedToRepairCorruptProtobuild()
+        {
+            MessageBox.Show(
+                "This program was unable to repair Protobuild and will now fallback " +
+                "to using the existing solutions.",
+                "Failed to repair Protobuild",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+        }
+
+        public void UnableToLoadModule()
+        {
+            MessageBox.Show(
+                "This program was unable to load the module or project definition " +
+                "information.  Check that the Build/Module.xml and project " +
+                "definition files are all valid XML and that they contain no " +
+                "errors.  This program will now fallback to using the existing " +
+                "solutions.",
+                "Unable to load module",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
 
         private void ExecuteAndCatch(Action eventHandler)

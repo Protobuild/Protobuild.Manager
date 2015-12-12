@@ -53,6 +53,7 @@ namespace Protobuild.Manager
         {
             base.AwakeFromNib();
 
+			MacOSUIManager.MainWindow = this.Window;
             this.Window.BackgroundColor = NSColor.Black;
 			this.Window.Title = _brandingEngine.ProductName;
 

@@ -9,6 +9,12 @@ namespace Protobuild.Manager
         void Quit();
 
         string SelectExistingProject();
+
+		bool AskToRepairCorruptProtobuild();
+
+		void FailedToRepairCorruptProtobuild();
+
+		void UnableToLoadModule();
     }
 }
 

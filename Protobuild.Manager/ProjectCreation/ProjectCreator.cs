@@ -177,6 +177,7 @@ namespace Protobuild.Manager
 					si.UseShellExecute = false;
 					si.CreateNoWindow = true;
 					si.RedirectStandardOutput = true;
+					si.RedirectStandardError = true;
 				});
             if (startProcess == null)
             {
@@ -194,7 +195,6 @@ namespace Protobuild.Manager
 				update("Create project from template", line);
 			};
 			_processLog.AttachToProcess(startProcess);
-			startProcess.BeginOutputReadLine();
 			startProcess.EnableRaisingEvents = true;
 
 			await startProcess.WaitForExitAsync();
@@ -230,6 +230,7 @@ namespace Protobuild.Manager
 					si.UseShellExecute = false;
 					si.CreateNoWindow = true;
 					si.RedirectStandardOutput = true;
+					si.RedirectStandardError = true;
 				});
             if (generateProcess == null)
             {
@@ -265,7 +266,6 @@ namespace Protobuild.Manager
                 }
 			};
 			_processLog.AttachToProcess(generateProcess);
-            generateProcess.BeginOutputReadLine();
             generateProcess.EnableRaisingEvents = true;
 
             await generateProcess.WaitForExitAsync();
@@ -313,6 +313,7 @@ namespace Protobuild.Manager
 					si.UseShellExecute = false;
 					si.CreateNoWindow = true;
 					si.RedirectStandardOutput = true;
+					si.RedirectStandardError = true;
 				});
             if (generateProcess == null)
             {
@@ -348,7 +349,6 @@ namespace Protobuild.Manager
                 }
 			};
 			_processLog.AttachToProcess(generateProcess);
-            generateProcess.BeginOutputReadLine();
             generateProcess.EnableRaisingEvents = true;
 
             await generateProcess.WaitForExitAsync();

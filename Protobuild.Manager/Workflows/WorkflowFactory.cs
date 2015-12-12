@@ -51,7 +51,8 @@ namespace Protobuild.Manager
             return new ProjectOpenWorkflow(
                 this.m_Kernel.Get<RuntimeServer>(),
                 this.m_Kernel.Get<IProtobuildHostingEngine>(),
-                this.m_Kernel.Get<IRecentProjectsManager>(),
+				this.m_Kernel.Get<IRecentProjectsManager>(),
+				this.m_Kernel.Get<IUIManager>(),
                 modulePath);
         }
 

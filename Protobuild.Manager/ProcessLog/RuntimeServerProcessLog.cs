@@ -23,11 +23,26 @@ namespace Protobuild.Manager
 			{
 				var line = args.Data;
 
+				Console.WriteLine(args.Data);
+
 				_runtimeServer.Set("processLogLine" + _lineCount + "Text", line);
 				_runtimeServer.Set("processLogLine" + _lineCount + "Color", "#000");
 				_lineCount++;
 				_runtimeServer.Set("processLogLineCount", _lineCount);
 			};
+			process.ErrorDataReceived += (sender, args) =>
+			{
+				var line = args.Data;
+
+				Console.Error.WriteLine(args.Data);
+
+				_runtimeServer.Set("processLogLine" + _lineCount + "Text", line);
+				_runtimeServer.Set("processLogLine" + _lineCount + "Color", "#000");
+				_lineCount++;
+				_runtimeServer.Set("processLogLineCount", _lineCount);
+			};
+			process.BeginOutputReadLine();
+			process.BeginErrorReadLine();
 		}
 	}
 }

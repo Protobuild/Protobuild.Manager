@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Reflection;
 
 namespace Protobuild.Manager
 {
@@ -14,8 +16,12 @@ namespace Protobuild.Manager
         private readonly string _path;
         private readonly IProtobuildHostingEngine _protobuildHostingEngine;
 
-        public ProjectOpenWorkflow(RuntimeServer runtimeServer, IProtobuildHostingEngine protobuildHostingEngine,
-            IRecentProjectsManager recentProjectsManager, string path)
+        public ProjectOpenWorkflow(
+			RuntimeServer runtimeServer, 
+			IProtobuildHostingEngine protobuildHostingEngine,
+            IRecentProjectsManager recentProjectsManager, 
+			IUIManager uiManager,
+			string path)
         {
             _runtimeServer = runtimeServer;
             _recentProjectsManager = recentProjectsManager;
@@ -29,7 +35,35 @@ namespace Protobuild.Manager
 				}
 				catch (BadImageFormatException)
 				{
-					// TODO: Repair Protobuild automatically here
+					if (uiManager.AskToRepairCorruptProtobuild())
+					{
+						var client = new WebClient();
+						File.Delete(Path.Combine(path, "Protobuild.exe"));
+						client.DownloadFile("http://protobuild.org/get", Path.Combine(path, "Protobuild.exe"));
+
+						try
+						{
+							ModuleHost = protobuildHostingEngine.LoadModule(path);
+						}
+						catch (BadImageFormatException)
+						{
+							uiManager.FailedToRepairCorruptProtobuild();
+							IsStandardProject = true;
+						}
+						catch (TargetInvocationException)
+						{
+							uiManager.UnableToLoadModule();
+							IsStandardProject = true;
+						}
+					}
+					else
+					{
+						IsStandardProject = true;
+					}
+				}
+				catch (TargetInvocationException)
+				{
+					uiManager.UnableToLoadModule();
 					IsStandardProject = true;
 				}
             }

@@ -34,7 +34,7 @@ namespace Protobuild.Manager
 
 			    lock (_lineLock)
 			    {
-			        _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.Trim());
+                    _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.TrimEnd());
 			        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FFF");
 			        _lineCount++;
 			        _runtimeServer.Set("processLogLineCount", _lineCount);
@@ -51,7 +51,7 @@ namespace Protobuild.Manager
 
 			    lock (_lineLock)
 			    {
-			        _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.Trim());
+                    _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.TrimEnd());
 			        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FCC");
 			        _lineCount++;
 			        _runtimeServer.Set("processLogLineCount", _lineCount);

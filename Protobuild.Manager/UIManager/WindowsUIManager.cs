@@ -167,6 +167,38 @@ namespace Protobuild.Manager
                 MessageBoxIcon.Error);
         }
 
+        public string BrowseForProjectDirectory()
+        {
+            while (true)
+            {
+                string existingPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                var odd = new System.Windows.Forms.FolderBrowserDialog();
+                odd.Description = "Choose a directory to create the project in";
+                odd.SelectedPath = existingPath;
+                if (odd.ShowDialog() == DialogResult.OK)
+                {
+                    var directoryInfo = new DirectoryInfo(odd.SelectedPath);
+                    if (directoryInfo.GetFiles().Length > 0)
+                    {
+                        if (MessageBox.Show("It doesn't look like the selected directory is empty.  You " +
+                                            "should ideally create new projects in empty directories.  " +
+                                            "Use it anyway?", "Directory Not Empty", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
+                            DialogResult.Yes)
+                        {
+                            return odd.SelectedPath;
+                        }
+
+                        existingPath = odd.SelectedPath;
+                        continue;
+                    }
+
+                    return odd.SelectedPath;
+                }
+
+                return null;
+            }
+        }
+
         private void ExecuteAndCatch(Action eventHandler)
         {
             if (Debugger.IsAttached)

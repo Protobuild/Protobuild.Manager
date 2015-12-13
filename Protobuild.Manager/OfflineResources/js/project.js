@@ -1,4 +1,4 @@
-﻿var oldPlatform = "Windows";
+﻿var oldPlatform = null;
 var windowState = null;
 var initedPlatformSwitch = false;
 var readied = false;
@@ -24,6 +24,10 @@ $(document).ready(function () {
 });
 
 function stateChange(state) {
+    if (oldPlatform == null && state.hostPlatform != undefined) {
+        oldPlatform = state.hostPlatform;
+        $("#switchProtobuildPlatform").val(oldPlatform);
+    }
     if (state.disableStateUpdate) {
         return;
     }

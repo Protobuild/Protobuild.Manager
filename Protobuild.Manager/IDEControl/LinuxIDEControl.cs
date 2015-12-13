@@ -74,9 +74,10 @@ namespace Protobuild.Manager
 					}
             	}
 
-				await OpenIDE(modulePath, moduleName, targetPlatform);
+				OpenIDE(modulePath, moduleName, targetPlatform);
 
-				_runtimeServer.Set("statusMode", "Okay");
+                _runtimeServer.Set("statusMode", "Okay");
+                _runtimeServer.Set("status", "Projects generated for " + targetPlatform + " successfully.");
 			}
 			catch (Exception ex)
 			{

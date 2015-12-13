@@ -128,6 +128,22 @@ namespace Protobuild.Manager
                 _runtimeServer.Get<string>("loadedModuleName"),
                 _runtimeServer.Get<string>("loadedModulePath"));
 
+            if (Path.DirectorySeparatorChar == '/')
+            {
+                if (Directory.Exists("/Library"))
+                {
+                    _runtimeServer.Set("hostPlatform", "MacOS");
+                }
+                else
+                {
+                    _runtimeServer.Set("hostPlatform", "Linux");
+                }
+            }
+            else
+            {
+                _runtimeServer.Set("hostPlatform", "Windows");
+            }
+
             _runtimeServer.Goto("project");
         }
     }

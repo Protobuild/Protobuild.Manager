@@ -152,6 +152,54 @@ namespace Protobuild.Manager
                 }
             }
         }
+
+        public bool AskToRepairCorruptProtobuild()
+        {
+            var dialog = 
+                new MessageDialog(
+                    _window,
+                    DialogFlags.DestroyWithParent | DialogFlags.Modal,
+                    MessageType.Question,
+                    ButtonsType.YesNo,
+                    "The version of Protobuild.exe in this module could not be loaded " +
+                    "and may be corrupt.  Do you want to download the latest version " +
+                    "of Protobuild to repair it (Yes), or fallback to the solutions that " +
+                    "have already been generated (No)?",
+                    "Unable to load Protobuild");
+            var result = dialog.Run() == (int)ResponseType.Yes;
+            dialog.Destroy();
+            return result;
+        }
+
+        public void FailedToRepairCorruptProtobuild()
+        {
+            var dialog = new MessageDialog(
+                _window,
+                DialogFlags.DestroyWithParent | DialogFlags.Modal,
+                MessageType.Error,
+                ButtonsType.Ok,
+                "This program was unable to repair Protobuild and will now fallback " +
+                "to using the existing solutions.",
+                "Failed to repair Protobuild");
+            dialog.Run();
+            dialog.Destroy();
+        }
+
+        public void UnableToLoadModule()
+        {
+            var dialog = new MessageDialog(
+                _window,
+                DialogFlags.DestroyWithParent | DialogFlags.Modal,
+                MessageType.Error,
+                ButtonsType.Ok,
+                "This program was unable to load the module or project definition " +
+                "information.  Check that the Build/Module.xml and project " +
+                "definition files are all valid XML and that they contain no " +
+                "errors.  This program will now fallback to using the existing " +
+                "solutions.");
+            dialog.Run();
+            dialog.Destroy();
+        }
     }
 }
 #endif

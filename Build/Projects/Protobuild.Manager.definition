@@ -30,6 +30,7 @@
     <Compile Include="AppHandlers\OpenRecentAppHandler.cs" />
     <Compile Include="AppHandlers\OptionAppHandler.cs" />
     <Compile Include="AppHandlers\RegisterAppHandler.cs" />
+    <Compile Include="AppHandlers\SelectProjectDirAppHandler.cs" />
     <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
     <Compile Include="AppHandlers\SetConsoleStateAppHandler.cs" />
     <Compile Include="AppHandlers\SwitchPlatformAppHandler.cs" />

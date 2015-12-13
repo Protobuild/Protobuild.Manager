@@ -36,6 +36,7 @@ namespace Protobuild.Manager
                 _appHandlers.Add("/create-package", _kernel.Get<CreatePackageAppHandler>());
                 _appHandlers.Add("/automated-build", _kernel.Get<AutomatedBuildAppHandler>());
                 _appHandlers.Add("/set-console-state", _kernel.Get<SetConsoleStateAppHandler>());
+                _appHandlers.Add("/select-project-dir", _kernel.Get<SelectProjectDirAppHandler>());
 
                 this._appHandlersInit = true;
             }

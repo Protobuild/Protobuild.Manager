@@ -200,6 +200,52 @@ namespace Protobuild.Manager
             dialog.Run();
             dialog.Destroy();
         }
+
+        public string BrowseForProjectDirectory()
+        {
+            var title = "Select Project Directory";
+            var ofd = new Gtk.FileChooserDialog(
+                title,
+                _window,
+                FileChooserAction.SelectFolder,
+                "Cancel", ResponseType.Cancel,
+                "Open", ResponseType.Accept);
+            while (true)
+            {
+                if (ofd.Run() == (int)ResponseType.Accept)
+                {
+                    if (new DirectoryInfo(ofd.Filename).GetFiles().Length > 0)
+                    {
+                        var md = new MessageDialog(ofd, DialogFlags.Modal | DialogFlags.DestroyWithParent, MessageType.Warning, ButtonsType.YesNo,
+                            "It doesn't look like the selected directory is empty.  You " +
+                            "should ideally create new projects in empty directories.  " +
+                            "Use it anyway?");
+                        var result = md.Run() == (int)ResponseType.Yes;
+                        md.Destroy();
+
+                        if (result)
+                        {
+                            var fname = ofd.Filename;
+                            ofd.Destroy();
+                            return fname;
+                        }
+
+                        continue;
+                    }
+                    else
+                    {
+                        var fname = ofd.Filename;
+                        ofd.Destroy();
+                        return fname;
+                    }
+                }
+                else
+                {
+                    ofd.Destroy();
+                    return null;
+                }
+            }
+        }
     }
 }
 #endif

@@ -15,6 +15,8 @@ namespace Protobuild.Manager
 		void FailedToRepairCorruptProtobuild();
 
 		void UnableToLoadModule();
+
+        string BrowseForProjectDirectory();
     }
 }
 

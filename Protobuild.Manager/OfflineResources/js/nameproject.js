@@ -38,6 +38,11 @@ function submitForm() {
 var variantOptions = {};
 
 function updateFormOptions(state) {
+    if (state.selectedProjectDir !== undefined && state.selectedProjectDir !== null) {
+        $("#path").val(state.selectedProjectDir);
+        pathModifiedByUser = true;
+    }
+
     if (state.prefilledprojectname !== undefined && state.prefilleddestinationdirectory !== undefined) {
         $("#name").val(state.prefilledprojectname).attr('readonly', 'readonly');
         $("#path").val(state.prefilleddestinationdirectory).attr('readonly', 'readonly');

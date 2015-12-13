@@ -120,6 +120,58 @@ namespace Protobuild.Manager
 			alert.AddButton("Okay");
 			alert.RunSheetModal(MainWindow);
 		}
+
+		public string BrowseForProjectDirectory ()
+		{
+			var dlg = NSOpenPanel.OpenPanel;
+			dlg.CanChooseFiles = false;
+			dlg.CanChooseDirectories = true;
+
+			while (true)
+			{
+				if (dlg.RunModal() == 1)
+				{
+					var url = dlg.Urls[0];
+
+					if (url != null)
+					{
+						var path = url.Path;
+
+						if (new DirectoryInfo(path).GetFiles().Length > 0)
+						{
+							var alert = new NSAlert
+							{
+								AlertStyle = NSAlertStyle.Warning,
+								InformativeText = 
+									"It doesn't look like the selected directory is empty.  You " +
+									"should ideally create new projects in empty directories.  " +
+									"Use it anyway?",
+								MessageText = "Directory Not Empty",
+							};
+							alert.AddButton("No");
+							alert.AddButton("Yes");
+							if (alert.RunModal() == 1001)
+							{
+								return path;
+							}
+							continue;
+						}
+						else
+						{
+							return path;
+						}
+					}
+					else
+					{
+						return null;
+					}
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
 	}
 }
 #endif

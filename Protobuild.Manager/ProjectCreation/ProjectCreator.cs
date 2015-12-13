@@ -79,9 +79,9 @@ namespace Protobuild.Manager
                 foreach (var v in request.Template.OptionVariants)
                 {
                     var sv =
-                        (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(
+                        (isStandard ? v.StandardOptions : v.ProtobuildOptions).FirstOrDefault(
                             x => x.ID == request.Parameters[v.ID]);
-                    if (sv.OverlayPath != null)
+                    if (sv != null && sv.OverlayPath != null)
                     {
                         steps.Add(new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
                             "Apply '" + v.Name + ": " + sv.Name + "' overlay", (x, y) => ApplyOverlay(x, y, sv.OverlayPath)));

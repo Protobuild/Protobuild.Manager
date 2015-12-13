@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace Protobuild.Manager
 {
@@ -19,10 +20,12 @@ namespace Protobuild.Manager
         private readonly IProjectOverlay _projectOverlay;
 		private readonly IExecution _execution;
 		private readonly IProcessLog _processLog;
+        private readonly IConfigManager _configManager;
 
         public ProjectCreator(RuntimeServer runtimeServer, IWorkflowManager workflowManager,
             IWorkflowFactory workflowFactory, IProjectDefaultPath projectDefaultPath,
-			IProjectOverlay projectOverlay, IExecution execution, IProcessLog processLog)
+			IProjectOverlay projectOverlay, IExecution execution, IProcessLog processLog,
+            IConfigManager configManager)
         {
             _runtimeServer = runtimeServer;
             _workflowManager = workflowManager;
@@ -31,7 +34,8 @@ namespace Protobuild.Manager
             _projectOverlay = projectOverlay;
 			_execution = execution;
 			_processLog = processLog;
-		}
+            _configManager = configManager;
+        }
 
         public void CreateProject(CreateProjectRequest request)
         {
@@ -59,7 +63,7 @@ namespace Protobuild.Manager
                         "Create project directory", CreateProjectDirectory));
                 steps.Add(
                     new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
-                        "Download Protobuild", DownloadProtobuild));
+                        "Copy Protobuild", CopyProtobuild));
                 steps.Add(
                     new KeyValuePair<string, Func<CreateProjectRequest, Action<string, string>, Task>>(
                         "Create project from template", InstantiateFromBaseTemplate));
@@ -160,10 +164,62 @@ namespace Protobuild.Manager
             await Task.Yield();
         }
 
-        private async Task DownloadProtobuild(CreateProjectRequest arg, Action<string, string> update)
+        private async Task CopyProtobuild(CreateProjectRequest arg, Action<string, string> update)
         {
             var client = new WebClient();
-            await client.DownloadFileTaskAsync("http://protobuild.org/get", Path.Combine(arg.Path, "Protobuild.exe"));
+            client.Headers.Add("User-Agent", "Protobuild Manager/1.0.0");
+
+            var downloadNewVersion = false;
+            string targetHash = null;
+            var cachedPath = Path.Combine(_configManager.GetBasePath(), "Protobuild.exe");
+            var cachedHashPath = Path.Combine(_configManager.GetBasePath(), "Protobuild.exe.hash");
+            if (!File.Exists(cachedPath))
+            {
+                downloadNewVersion = true;
+            }
+            else
+            {
+                try
+                {
+                    string cachedHash;
+                    using (var reader = new StreamReader(cachedHashPath))
+                    {
+                        cachedHash = reader.ReadToEnd().Trim();
+                    }
+
+                    update("Copy Protobuild", "Checking for new versions...");
+
+                    // Try to check with GitHub to see if the master branches points somewhere else.
+                    var branchJson = await client.DownloadStringTaskAsync("https://api.github.com/repos/hach-que/Protobuild/branches/master");
+                    var serializer = new JavaScriptSerializer();
+                    var branchInfo = serializer.Deserialize<Dictionary<string, object>>(branchJson);
+                    var commitInfo = (Dictionary<string, object>) branchInfo["commit"];
+                    targetHash = (string) commitInfo["sha"];
+
+                    if (cachedHash != targetHash)
+                    {
+                        downloadNewVersion = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Don't update, use the existing version.
+                }
+            }
+
+            if (downloadNewVersion)
+            {
+                update("Copy Protobuild", "Downloading new version...");
+                await client.DownloadFileTaskAsync("http://protobuild.org/get", cachedPath);
+
+                using (var writer = new StreamWriter(cachedHashPath))
+                {
+                    writer.Write(targetHash);
+                }
+            }
+
+            update("Copy Protobuild", null);
+            File.Copy(cachedPath, Path.Combine(arg.Path, "Protobuild.exe"));
         }
 
         private async Task InstantiateFromBaseTemplate(CreateProjectRequest arg, Action<string, string> update)

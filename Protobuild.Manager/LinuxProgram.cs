@@ -5,6 +5,7 @@ using System.Web;
 using GLib;
 using Gtk;
 using WebKit;
+using System.IO;
 
 namespace Protobuild.Manager
 {
@@ -26,12 +27,12 @@ namespace Protobuild.Manager
             }
             else
             {
-                //AppDomain.CurrentDomain.UnhandledException +=
-                //    (sender, e) => CrashReporter.Record((Exception)e.ExceptionObject);
+                AppDomain.CurrentDomain.UnhandledException +=
+                    (sender, e) => Console.Error.WriteLine((Exception)e.ExceptionObject);
 
                 GLib.ExceptionManager.UnhandledException += (e) => 
                 {
-                    //CrashReporter.Record((Exception)e.ExceptionObject);
+                    Console.Error.WriteLine((Exception)e.ExceptionObject);
                     e.ExitApplication = true;
                 };
 
@@ -43,16 +44,47 @@ namespace Protobuild.Manager
                 {
                     if (e.Message.Contains("webkit-sharp"))
                     {
-                        ShowRequiredLibrary("webkit-sharp");
+                        // Try and extract webkit-sharp next to the assembly.
+                        try
+                        {
+                            var assembly = typeof(Program).Assembly.GetManifestResourceStream("webkit-sharp.dll");
+                            var assemblyConfig = typeof(Program).Assembly.GetManifestResourceStream("webkit-sharp.dll.config");
+
+                            using (var writer = new FileStream(Path.Combine(new FileInfo(typeof(Program).Assembly.Location).DirectoryName, "webkit-sharp.dll"), FileMode.Create, FileAccess.Write))
+                            {
+                                assembly.CopyTo(writer);
+                            }
+                            using (var writer = new FileStream(Path.Combine(new FileInfo(typeof(Program).Assembly.Location).DirectoryName, "webkit-sharp.dll.config"), FileMode.Create, FileAccess.Write))
+                            {
+                                assemblyConfig.CopyTo(writer);
+                            }
+
+                            // We have to relaunch the executable to pick up the new libraries next to us.
+                            var process = System.Diagnostics.Process.Start("mono", "\"" + typeof(Program).Assembly.Location + "\" " + string.Join(" ", args));
+                            process.WaitForExit();
+
+                            if (process.ExitCode == 1)
+                            {
+                                File.Delete(Path.Combine(new FileInfo(typeof(Program).Assembly.Location).DirectoryName, "webkit-sharp.dll"));
+                                File.Delete(Path.Combine(new FileInfo(typeof(Program).Assembly.Location).DirectoryName, "webkit-sharp.dll.config"));
+                                ShowRequiredLibrary("webkit-sharp");
+                            }
+
+                            Environment.Exit(process.ExitCode);
+                        }
+                        catch
+                        {
+                            ShowRequiredLibrary("webkit-sharp");
+                        }
                     }
                     else
                     {
-                        //CrashReporter.Record(e);
+                        Console.Error.WriteLine(e);
                     }
                 }
                 catch (Exception e)
                 {
-                    //CrashReporter.Record(e);
+                    Console.Error.WriteLine(e);
                 }
             }
         }

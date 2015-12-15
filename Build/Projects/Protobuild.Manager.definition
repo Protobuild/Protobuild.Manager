@@ -230,6 +230,16 @@
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\Libraries\webkit-sharp.dll">
+      <Link>webkit-sharp.dll</Link>
+      <LogicalName>webkit-sharp.dll</LogicalName>
+      <Platforms>Linux</Platforms>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Libraries\webkit-sharp.dll.config">
+      <Link>webkit-sharp.dll.config</Link>
+      <LogicalName>webkit-sharp.dll.config</LogicalName>
+      <Platforms>Linux</Platforms>
+    </EmbeddedResource>
     <InterfaceDefinition Include="MainMenu.xib">
       <Platforms>MacOS</Platforms>
     </InterfaceDefinition>

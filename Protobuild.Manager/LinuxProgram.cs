@@ -83,12 +83,12 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IUIManager, LinuxUIManager>();
             kernel.BindAndKeepInstance<IExecution, LinuxExecution>();
             kernel.BindAndKeepInstance<IIDEControl, MonoDevelopLinuxIDEControl>();
-            kernel.BindAndKeepInstance<IIDEProjectTemplateSync, NullProjectTemplateSync>();
+            kernel.BindAndKeepInstance<IIDEProjectTemplateSync, MonoDevelopProjectTemplateSync>();
 
             kernel.Get<IErrorLog>().Log("Started game launcher on Linux platform");
 
             var startup = kernel.Get<IStartup>();
-            startup.Start();
+            startup.Start(args);
         }
     }
 }

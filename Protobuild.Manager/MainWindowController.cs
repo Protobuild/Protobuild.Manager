@@ -15,7 +15,11 @@ using System.Web;
 
 namespace Protobuild.Manager
 {
+#if PLATFORM_MACOS_LEGACY
+	public partial class MainWindowController : NSWindowController
+#else
 	public partial class MainWindowController : NSWindowController, IWebUIDelegate
+#endif
     {
 		private IBrandingEngine _brandingEngine;
 
@@ -76,7 +80,12 @@ namespace Protobuild.Manager
 			this.WebViewOutlet.CommitedLoad += (o, a) => this.Window.Title = _brandingEngine.ProductName;
 			this.WebViewOutlet.FinishedLoad += (o, a) => this.Window.Title = _brandingEngine.ProductName;
 
+#if !PLATFORM_MACOS_LEGACY
+      // Technically this can be supported under the classic API, but as I don't
+      // have access to the old MonoMac APIs, I haven't wired it up (especially
+      // since it's only for debugging).
 			this.WebViewOutlet.UIDelegate = this; 
+#endif
 
 			this.WebViewOutlet.MainFrame.LoadRequest(new NSUrlRequest(new NSUrl(_runtimeServer.BaseUri)));
 

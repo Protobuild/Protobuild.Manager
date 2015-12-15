@@ -6,8 +6,10 @@
 //
 #if PLATFORM_MACOS_LEGACY
 using MonoMac.Foundation;
+using MonoMac.WebKit;
 #else
 using Foundation;
+using WebKit;
 #endif
 using System.CodeDom.Compiler;
 
@@ -17,7 +19,7 @@ namespace Protobuild.Manager
 	partial class MainWindowController
 	{
 		[Outlet]
-		WebKit.WebView WebViewOutlet { get; set; }
+		WebView WebViewOutlet { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

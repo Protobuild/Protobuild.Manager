@@ -68,10 +68,10 @@ namespace Protobuild.Manager
 			this.Window.Title = _brandingEngine.ProductName;
 
 #if PLATFORM_MACOS_LEGACY
-			this.Window.MaxSize = new System.Drawing.PointF(720, 400);
-			this.Window.MinSize = new System.Drawing.PointF(720, 400);
-			this.Window.ContentMaxSize = new System.Drawing.PointF(720, 400);
-			this.Window.SetContentSize(new System.Drawing.PointF(720, 400));
+			this.Window.MaxSize = new System.Drawing.SizeF(720, 400);
+			this.Window.MinSize = new System.Drawing.SizeF(720, 400);
+			this.Window.ContentMaxSize = new System.Drawing.SizeF(720, 400);
+			this.Window.SetContentSize(new System.Drawing.SizeF(720, 400));
 #else
 			this.Window.MaxSize = new CoreGraphics.CGSize(720, 400);
 			this.Window.MinSize = new CoreGraphics.CGSize(720, 400);

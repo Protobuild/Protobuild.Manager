@@ -1,6 +1,10 @@
 ﻿#if PLATFORM_MACOS
 using System;
+#if PLATFORM_MACOS_LEGACY
+using MonoMac.AppKit;
+#else
 using AppKit;
+#endif
 using System.IO;
 
 namespace Protobuild.Manager

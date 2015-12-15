@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if PLATFORM_MACOS_LEGACY
+using MonoMac.Foundation;
+using MonoMac.AppKit;
+using MonoMac.WebKit;
+#else
 using Foundation;
 using AppKit;
-using System.Threading;
 using WebKit;
+#endif
+using System.Threading;
 using System.Web;
 
 namespace Protobuild.Manager

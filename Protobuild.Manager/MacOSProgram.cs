@@ -3,7 +3,11 @@ namespace Protobuild.Manager
 {
     using System;
     using System.Diagnostics;
+#if PLATFORM_MACOS_LEGACY
+    using MonoMac.AppKit;
+#else
     using AppKit;
+#endif
 
     public static class Program
     {

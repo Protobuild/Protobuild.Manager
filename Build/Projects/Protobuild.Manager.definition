@@ -58,6 +58,7 @@
     <Compile Include="IDEControl\VisualStudioIDEControl.cs" />
     <Compile Include="IDEControl\XamarinStudioMacIDEControl.cs" />
     <Compile Include="IDEProjectTemplateSync\IIDEProjectTemplateSync.cs" />
+    <Compile Include="IDEProjectTemplateSync\MonoDevelopProjectTemplateSync.cs" />
     <Compile Include="IDEProjectTemplateSync\NullProjectTemplateSync.cs" />
     <Compile Include="IDEProjectTemplateSync\VisualStudioProjectTemplateSync.cs" />
     <Compile Include="ILoadable.cs" />

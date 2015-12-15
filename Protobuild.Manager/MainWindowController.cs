@@ -67,10 +67,17 @@ namespace Protobuild.Manager
             this.Window.BackgroundColor = NSColor.Black;
 			this.Window.Title = _brandingEngine.ProductName;
 
+#if PLATFORM_MACOS_LEGACY
+			this.Window.MaxSize = new System.Drawing.PointF(720, 400);
+			this.Window.MinSize = new System.Drawing.PointF(720, 400);
+			this.Window.ContentMaxSize = new System.Drawing.PointF(720, 400);
+			this.Window.SetContentSize(new System.Drawing.PointF(720, 400));
+#else
 			this.Window.MaxSize = new CoreGraphics.CGSize(720, 400);
 			this.Window.MinSize = new CoreGraphics.CGSize(720, 400);
 			this.Window.ContentMaxSize = new CoreGraphics.CGSize(720, 400);
 			this.Window.SetContentSize(new CoreGraphics.CGSize(720, 400));
+#endif
 
 			this.WebViewOutlet.DrawsBackground = true;
 

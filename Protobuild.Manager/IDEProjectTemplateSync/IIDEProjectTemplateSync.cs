@@ -1,7 +1,9 @@
-﻿namespace Protobuild.Manager
+﻿using System.Threading.Tasks;
+
+namespace Protobuild.Manager
 {
     public interface IIDEProjectTemplateSync
     {
-        void Sync();
+        Task Sync();
     }
 }

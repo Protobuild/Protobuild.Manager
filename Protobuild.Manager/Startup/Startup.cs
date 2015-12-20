@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Protobuild.Manager
@@ -41,6 +42,19 @@ namespace Protobuild.Manager
                 args = new string[0];
             }
 
+            if (args.Length == 1)
+            {
+                switch (args[0])
+                {
+                    case "--silent-setup":
+                        // Synchronise project templates in foreground.
+                        _ideProjectTemplateSync.Sync().Wait();
+
+                        // Return here without firing up a UI.
+                        return;
+                }
+            }
+
             this.m_RuntimeServer.Start();
 
             if (args.Length == 2)
@@ -62,8 +76,9 @@ namespace Protobuild.Manager
             {
                 this.m_WorkflowManager.AppendWorkflow(this.m_InitialWorkflow);
             }
-
-            _ideProjectTemplateSync.Sync();
+            
+            // Synchronise project templates in background.
+            Task.Run(async () => { await _ideProjectTemplateSync.Sync(); });
 
             this.m_WorkflowManager.Start();
             this.m_UIManager.Run();

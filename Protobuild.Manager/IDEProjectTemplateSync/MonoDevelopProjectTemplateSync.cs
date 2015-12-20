@@ -18,12 +18,7 @@ namespace Protobuild.Manager
             _brandingEngine = brandingEngine;
         }
 
-        public void Sync()
-        {
-            Task.Run(async () => await SyncInternal());
-        }
-
-        private async Task SyncInternal()
+        public async Task Sync()
         {
             var templateDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".xamarin-templates");
             var trimmedStorageId = _brandingEngine.ProductStorageID.TrimStart('.');

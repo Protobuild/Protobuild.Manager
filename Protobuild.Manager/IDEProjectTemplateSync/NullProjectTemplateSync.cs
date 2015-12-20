@@ -1,9 +1,12 @@
-﻿namespace Protobuild.Manager
+﻿using System.Threading.Tasks;
+
+namespace Protobuild.Manager
 {
     internal class NullProjectTemplateSync : IIDEProjectTemplateSync
     {
-        public void Sync()
+        public async Task Sync()
         {
+            await Task.Yield();
         }
     }
 }

@@ -19,12 +19,7 @@ namespace Protobuild.Manager
             _brandingEngine = brandingEngine;
         }
 
-        public void Sync()
-        {
-            Task.Run(async () => await SyncInternal());
-        }
-
-        private async Task SyncInternal()
+        public async Task Sync()
         {
             var vsVersions = new[] {"2015"};
 

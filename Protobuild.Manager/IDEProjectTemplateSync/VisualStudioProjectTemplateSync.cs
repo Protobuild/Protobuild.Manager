@@ -96,7 +96,7 @@ namespace Protobuild.Manager
                     "    </CustomParameters>" +
                     "  </TemplateContent>" +
                     "  <WizardExtension>" +
-                    "    <Assembly>Protobuild.IDE.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=418e79cef58c6857</Assembly>" +
+                    "    <Assembly>Protobuild.IDE.VisualStudio.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=418e79cef58c6857</Assembly>" +
                     "    <FullClassName>Protobuild.IDE.VisualStudio.CrossPlatformProjectWizard</FullClassName>" +
                     "  </WizardExtension>" +
                     "</VSTemplate>";

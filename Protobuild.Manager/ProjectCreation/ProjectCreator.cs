@@ -219,7 +219,19 @@ namespace Protobuild.Manager
             }
 
             update("Copy Protobuild", null);
-            File.Copy(cachedPath, Path.Combine(arg.Path, "Protobuild.exe"));
+            try
+            {
+                File.Copy(cachedPath, Path.Combine(arg.Path, "Protobuild.exe"), true);
+            }
+            catch
+            {
+                if (!File.Exists(Path.Combine(arg.Path, "Protobuild.exe")))
+                {
+                    // If the file doesn't exist, then throw the exception, otherwise just use
+                    // the version that is there.
+                    throw;
+                }
+            }
         }
 
         private async Task InstantiateFromBaseTemplate(CreateProjectRequest arg, Action<string, string> update)

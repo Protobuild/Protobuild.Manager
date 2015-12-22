@@ -16,6 +16,7 @@ namespace Protobuild.Manager
 
         private readonly IUIManager m_UIManager;
         private readonly IIDEProjectTemplateSync _ideProjectTemplateSync;
+        private readonly IIDEAddinInstall _ideAddinInstall;
 
         private readonly IWorkflowManager m_WorkflowManager;
 
@@ -25,7 +26,8 @@ namespace Protobuild.Manager
             IWorkflowManager workflowManager,
             InitialWorkflow initialWorkflow,
             IUIManager uiManager,
-            IIDEProjectTemplateSync ideProjectTemplateSync)
+            IIDEProjectTemplateSync ideProjectTemplateSync,
+            IIDEAddinInstall ideAddinInstall)
         {
             _kernel = kernel;
             this.m_RuntimeServer = runtimeServer;
@@ -33,6 +35,7 @@ namespace Protobuild.Manager
             this.m_InitialWorkflow = initialWorkflow;
             this.m_UIManager = uiManager;
             _ideProjectTemplateSync = ideProjectTemplateSync;
+            _ideAddinInstall = ideAddinInstall;
         }
 
         public void Start(string[] args)
@@ -49,6 +52,9 @@ namespace Protobuild.Manager
                     case "--silent-setup":
                         // Synchronise project templates in foreground.
                         _ideProjectTemplateSync.Sync().Wait();
+
+                        // Forcibly install the IDE add-in and wait.
+                        _ideAddinInstall.InstallIfNeeded(true).Wait();
 
                         // Return here without firing up a UI.
                         return;
@@ -77,8 +83,11 @@ namespace Protobuild.Manager
                 this.m_WorkflowManager.AppendWorkflow(this.m_InitialWorkflow);
             }
             
-            // Synchronise project templates in background.
-            Task.Run(async () => { await _ideProjectTemplateSync.Sync(); });
+            // Synchronise project templates and IDE add-in in background.
+            Task.Run(async () => { 
+                await _ideProjectTemplateSync.Sync();
+                await _ideAddinInstall.InstallIfNeeded(false);
+            });
 
             this.m_WorkflowManager.Start();
             this.m_UIManager.Run();

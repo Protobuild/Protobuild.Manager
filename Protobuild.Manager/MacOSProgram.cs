@@ -48,6 +48,7 @@ namespace Protobuild.Manager
 			kernel.BindAndKeepInstance<IExecution, MacOSExecution>();
 			kernel.BindAndKeepInstance<IIDEControl, XamarinStudioMacIDEControl>();
             kernel.BindAndKeepInstance<IIDEProjectTemplateSync, NullProjectTemplateSync>();
+            kernel.BindAndKeepInstance<IIDEAddinInstall, NullIDEAddinInstall>();
 
 			kernel.Get<IErrorLog>().Log("Started game launcher on Mac platform");
 

@@ -52,6 +52,11 @@
     <Compile Include="Execution\MacOSExecution.cs" />
     <Compile Include="Execution\WindowsExecution.cs" />
     <Compile Include="GameUpdater.cs" />
+    <Compile Include="IDEAddinInstall\AddinPackageDownload.cs" />
+    <Compile Include="IDEAddinInstall\IAddinPackageDownload.cs" />
+    <Compile Include="IDEAddinInstall\IIDEAddinInstall.cs" />
+    <Compile Include="IDEAddinInstall\LinuxMonoDevelopAddinInstall.cs" />
+    <Compile Include="IDEAddinInstall\NullIDEAddinInstall.cs" />
     <Compile Include="IDEControl\IIDEControl.cs" />
     <Compile Include="IDEControl\LinuxIDEControl.cs" />
     <Compile Include="IDEControl\MonoDevelopLinuxIDEControl.cs" />
@@ -97,6 +102,8 @@
     <Compile Include="ProtobuildHost\IProtobuildHostingEngine.cs" />
     <Compile Include="ProtobuildHost\ModuleHost.cs" />
     <Compile Include="ProtobuildHost\ProtobuildHostingEngine.cs" />
+    <Compile Include="ProtobuildProvider\IProtobuildProvider.cs" />
+    <Compile Include="ProtobuildProvider\ProtobuildProvider.cs" />
     <Compile Include="RecentProjects\IRecentProjectsManager.cs" />
     <Compile Include="RecentProjects\RecentProjectsManager.cs" />
     <Compile Include="RuntimeServer\RuntimeServer.cs" />
@@ -135,6 +142,16 @@
     <EmbeddedResource Include="..\Images\Protobuild.Icon.ico">
       <Link>Protobuild.Icon.ico</Link>
       <LogicalName>Protobuild.Icon.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Libraries\webkit-sharp.dll">
+      <Link>webkit-sharp.dll</Link>
+      <LogicalName>webkit-sharp.dll</LogicalName>
+      <Platforms>Linux</Platforms>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Libraries\webkit-sharp.dll.config">
+      <Link>webkit-sharp.dll.config</Link>
+      <LogicalName>webkit-sharp.dll.config</LogicalName>
+      <Platforms>Linux</Platforms>
     </EmbeddedResource>
     <EmbeddedResource Include="Branding.xml">
       <LogicalName>Branding.xml</LogicalName>
@@ -229,16 +246,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OfflineResources\tpl.head.htm">
       <LogicalName>tpl.head.htm</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Libraries\webkit-sharp.dll">
-      <Link>webkit-sharp.dll</Link>
-      <LogicalName>webkit-sharp.dll</LogicalName>
-      <Platforms>Linux</Platforms>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Libraries\webkit-sharp.dll.config">
-      <Link>webkit-sharp.dll.config</Link>
-      <LogicalName>webkit-sharp.dll.config</LogicalName>
-      <Platforms>Linux</Platforms>
     </EmbeddedResource>
     <InterfaceDefinition Include="MainMenu.xib">
       <Platforms>MacOS</Platforms>

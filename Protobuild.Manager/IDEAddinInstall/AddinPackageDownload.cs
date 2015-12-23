@@ -8,25 +8,30 @@ namespace Protobuild.Manager
     {
         private readonly IProtobuildProvider _protobuildProvider;
         private readonly IExecution _execution;
+        private readonly IProcessLog _processLog;
 
         public AddinPackageDownload(
             IProtobuildProvider protobuildProvider,
-            IExecution execution)
+            IExecution execution,
+            IProcessLog processLog)
         {
             _protobuildProvider = protobuildProvider;
             _execution = execution;
+            _processLog = processLog;
         }
 
         public async Task<string> GetPackageRoot(string packageUrl)
         {
             var protobuildPath = await _protobuildProvider.GetProtobuild(x => {});
 
+            _processLog.WriteInfo("Installing package from " + packageUrl + "...");
             var process = _execution.ExecuteConsoleExecutable(
                 protobuildPath,
                 "--install " + packageUrl,
                 x =>
                 {
                     x.UseShellExecute = false;
+                    x.CreateNoWindow = true;
                     x.RedirectStandardOutput = true;
                 });
             var output = await process.StandardOutput.ReadToEndAsync();
@@ -34,17 +39,21 @@ namespace Protobuild.Manager
 
             if (process.ExitCode != 0)
             {
-                throw new InvalidOperationException("Non-zero exit code from Protobuild.exe --install");
+                _processLog.WriteError("Non-zero exit code from Protobuild.exe --install");
+                return null;
             }
 
             var regex = new Regex("^Creating and emptying (?<path>.*)$", RegexOptions.Multiline);
             var match = regex.Match(output);
             if (match.Success)
             {
-                return match.Groups["path"].Value;
+                _processLog.WriteInfo("Package installation complete.");
+
+                return match.Groups["path"].Value.Trim();
             }
 
-            throw new InvalidOperationException("Unable to parse result of installing package");
+            _processLog.WriteError("Unable to parse result of installing package");
+            return null;
         }
     }
 }

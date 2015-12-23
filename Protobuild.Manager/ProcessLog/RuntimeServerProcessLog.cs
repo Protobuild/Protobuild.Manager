@@ -70,7 +70,7 @@ namespace Protobuild.Manager
                     }
                     else
                     {
-                        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#F0");
+                        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#F00");
                     }
                     _lineCount++;
                     _runtimeServer.Set("processLogLineCount", _lineCount);
@@ -92,6 +92,28 @@ namespace Protobuild.Manager
 
 	        process.BeginOutputReadLine();
             process.BeginErrorReadLine();
+        }
+
+	    public void WriteInfo(string message)
+        {
+            lock (_lineLock)
+            {
+                _runtimeServer.Set("processLogLine" + _lineCount + "Text", "[info] " + message);
+                _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#0FF");
+                _lineCount++;
+                _runtimeServer.Set("processLogLineCount", _lineCount);
+            }
+        }
+
+	    public void WriteError(string message)
+        {
+            lock (_lineLock)
+            {
+                _runtimeServer.Set("processLogLine" + _lineCount + "Text", "[error] " + message);
+                _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#F00");
+                _lineCount++;
+                _runtimeServer.Set("processLogLineCount", _lineCount);
+            }
         }
 	}
 }

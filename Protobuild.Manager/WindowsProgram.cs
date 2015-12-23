@@ -50,7 +50,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IExecution, WindowsExecution>();
             kernel.BindAndKeepInstance<IIDEControl, VisualStudioIDEControl>();
             kernel.BindAndKeepInstance<IIDEProjectTemplateSync, VisualStudioProjectTemplateSync>();
-            kernel.BindAndKeepInstance<IIDEAddinInstall, NullIDEAddinInstall>();
+            kernel.BindAndKeepInstance<IIDEAddinInstall, VisualStudioAddinInstall>();
 
             kernel.Bind<IPrerequisiteCheck, DirectXPrerequisiteCheck>();
 

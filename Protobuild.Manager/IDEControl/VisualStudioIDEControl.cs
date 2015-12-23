@@ -253,17 +253,37 @@ namespace Protobuild.Manager
                     launchLogic = async dteRef =>
                     {
                         _runtimeServer.Set("status", "Starting Visual Studio...");
-                        Process.Start(
-                            @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe",
-                            Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln"));
 
-                        while (existing == null)
+                        var versions = new[] { "14.0", "12.0", "11.0", "10.0" };
+                        var started = false;
+                        foreach (var version in versions)
                         {
-                            _runtimeServer.Set("status", "Waiting for Visual Studio to open...");
+                            var idePath = @"C:\Program Files (x86)\Microsoft Visual Studio " + version +
+                                       @"\Common7\IDE\devenv.exe";
+                            if (File.Exists(idePath))
+                            {
+                                Process.Start(
+                                    idePath,
+                                    "\"" + Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln") + "\"");
+                                started = true;
+                                break;
+                            }
+                        }
 
-                            await Task.Delay(1000);
+                        if (!started)
+                        {
+                            _runtimeServer.Set("status", "Unable to find installed version of Visual Studio to start!");
+                        }
+                        else
+                        {
+                            while (existing == null)
+                            {
+                                _runtimeServer.Set("status", "Waiting for Visual Studio to open...");
 
-                            existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
+                                await Task.Delay(1000);
+
+                                existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
+                            }
                         }
                     };
                 }
@@ -370,7 +390,7 @@ namespace Protobuild.Manager
                     {
                         if (forcePid != null)
                         {
-                            if (displayName.StartsWith("!VisualStudio.DTE") && displayName.EndsWith(":" + forcePid.Value))
+                            if ((displayName.StartsWith("!VisualStudio.DTE") || displayName.Contains("Express.DTE")) && displayName.EndsWith(":" + forcePid.Value))
                             {
                                 // Always use this Visual Studio instance.
                                 object obj;
@@ -380,7 +400,7 @@ namespace Protobuild.Manager
                         }
                         else
                         {
-                            if (displayName.StartsWith("!VisualStudio.DTE"))
+                            if (displayName.StartsWith("!VisualStudio.DTE") || displayName.Contains("Express.DTE"))
                             {
                                 // See if this Visual Studio instance has no solution open.
                                 object obj;

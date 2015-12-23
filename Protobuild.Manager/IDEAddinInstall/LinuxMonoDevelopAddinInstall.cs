@@ -56,6 +56,10 @@ namespace Protobuild.Manager
             {
                 var addinPath = await _addinPackageDownload.GetPackageRoot(
                     "http://protobuild.org/hach-que/Protobuild.IDE.MonoDevelop@monodevelop-5");
+                if (addinPath == null)
+                {
+                    throw new Exception("Protobuild can't be found!");
+                }
                 mpackPath = Path.Combine(addinPath, "Protobuild.MonoDevelop.mpack");
             }
             catch

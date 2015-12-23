@@ -9,6 +9,10 @@ namespace Protobuild.Manager
 		void PrepareForAttachToProcess(Process process);
 
 	    void AttachToProcess(Process process);
+
+	    void WriteInfo(string message);
+
+	    void WriteError(string message);
 	}
 }
 

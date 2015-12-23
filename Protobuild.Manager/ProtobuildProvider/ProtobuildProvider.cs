@@ -10,14 +10,20 @@ namespace Protobuild.Manager
     public class ProtobuildProvider : IProtobuildProvider
     {
         private readonly IConfigManager _configManager;
+        private readonly IProcessLog _processLog;
 
-        public ProtobuildProvider(IConfigManager configManager)
+        public ProtobuildProvider(
+            IConfigManager configManager,
+            IProcessLog processLog)
         {
             _configManager = configManager;
+            _processLog = processLog;
         }
 
         public async Task<string> GetProtobuild(Action<string> updateStatus)
         {
+            _processLog.WriteInfo("Obtaining a copy of Protobuild...");
+
             var client = new WebClient();
             client.Headers.Add("User-Agent", "Protobuild Manager/1.0.0");
 
@@ -39,6 +45,7 @@ namespace Protobuild.Manager
                         cachedHash = reader.ReadToEnd().Trim();
                     }
 
+                    _processLog.WriteInfo("Checking to see if the cached version of Protobuild is up-to-date...");
                     updateStatus("Checking for new versions...");
 
                     // Try to check with GitHub to see if the master branches points somewhere else.
@@ -61,13 +68,20 @@ namespace Protobuild.Manager
 
             if (downloadNewVersion)
             {
-                updateStatus("Downloading new version...");
+                _processLog.WriteInfo("Downloading latest version...");
+                updateStatus("Downloading latest version...");
                 await client.DownloadFileTaskAsync("http://protobuild.org/get", cachedPath);
+
+                _processLog.WriteInfo("Download complete.");
 
                 using (var writer = new StreamWriter(cachedHashPath))
                 {
                     writer.Write(targetHash);
                 }
+            }
+            else
+            {
+                _processLog.WriteInfo("Using version of Protobuild that is in the cache.");
             }
 
             return cachedPath;

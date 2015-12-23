@@ -182,7 +182,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IIDEProjectTemplateSync, MonoDevelopProjectTemplateSync>();
             kernel.BindAndKeepInstance<IIDEAddinInstall, LinuxMonoDevelopAddinInstall>();
 
-            kernel.Get<IErrorLog>().Log("Started game launcher on Linux platform");
+            kernel.Get<IErrorLog>().Log("Started Protobuild Manager on Linux platform");
 
             var startup = kernel.Get<IStartup>();
             startup.Start(args);

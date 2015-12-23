@@ -50,7 +50,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IIDEProjectTemplateSync, NullProjectTemplateSync>();
             kernel.BindAndKeepInstance<IIDEAddinInstall, NullIDEAddinInstall>();
 
-			kernel.Get<IErrorLog>().Log("Started game launcher on Mac platform");
+			kernel.Get<IErrorLog>().Log("Started Protobuild Manager on Mac platform");
 
 			var startup = kernel.Get<IStartup>();
 			startup.Start();

@@ -30,5 +30,11 @@
         string TemplateSource { get; }
 
         string TemplateIDECategory { get; }
+
+        string VisualStudioAddinPackage { get; }
+
+        string MonoDevelopAddinPackage { get; }
+
+        ProtobuildUpdatePolicy ProtobuildUpdatePolicy { get; }
     }
 }

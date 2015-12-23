@@ -52,9 +52,7 @@ namespace Protobuild.Manager
             kernel.BindAndKeepInstance<IIDEProjectTemplateSync, VisualStudioProjectTemplateSync>();
             kernel.BindAndKeepInstance<IIDEAddinInstall, VisualStudioAddinInstall>();
 
-            kernel.Bind<IPrerequisiteCheck, DirectXPrerequisiteCheck>();
-
-            kernel.Get<IErrorLog>().Log("Started game launcher on Windows platform");
+            kernel.Get<IErrorLog>().Log("Started Protobuild Manager on Windows platform");
 
             var startup = kernel.Get<IStartup>();
             startup.Start(args);

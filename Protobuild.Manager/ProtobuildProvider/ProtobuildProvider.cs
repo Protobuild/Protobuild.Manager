@@ -11,13 +11,16 @@ namespace Protobuild.Manager
     {
         private readonly IConfigManager _configManager;
         private readonly IProcessLog _processLog;
+        private readonly IBrandingEngine _brandingEngine;
 
         public ProtobuildProvider(
             IConfigManager configManager,
-            IProcessLog processLog)
+            IProcessLog processLog,
+            IBrandingEngine brandingEngine)
         {
             _configManager = configManager;
             _processLog = processLog;
+            _brandingEngine = brandingEngine;
         }
 
         public async Task<string> GetProtobuild(Action<string> updateStatus)
@@ -35,7 +38,7 @@ namespace Protobuild.Manager
             {
                 downloadNewVersion = true;
             }
-            else
+            else if (_brandingEngine.ProtobuildUpdatePolicy != ProtobuildUpdatePolicy.Never)
             {
                 try
                 {

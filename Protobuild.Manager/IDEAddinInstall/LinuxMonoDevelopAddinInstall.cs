@@ -8,13 +8,16 @@ namespace Protobuild.Manager
     {
         private readonly IExecution _execution;
         private readonly IAddinPackageDownload _addinPackageDownload;
+        private readonly IBrandingEngine _brandingEngine;
 
         public LinuxMonoDevelopAddinInstall(
             IExecution execution,
-            IAddinPackageDownload addinPackageDownload)
+            IAddinPackageDownload addinPackageDownload,
+            IBrandingEngine brandingEngine)
         {
             _execution = execution;
             _addinPackageDownload = addinPackageDownload;
+            _brandingEngine = brandingEngine;
         }
 
         public async Task InstallIfNeeded(bool force)
@@ -55,7 +58,7 @@ namespace Protobuild.Manager
             try
             {
                 var addinPath = await _addinPackageDownload.GetPackageRoot(
-                    "http://protobuild.org/hach-que/Protobuild.IDE.MonoDevelop@monodevelop-5");
+                    _brandingEngine.MonoDevelopAddinPackage);
                 if (addinPath == null)
                 {
                     throw new Exception("Protobuild can't be found!");

@@ -15,21 +15,16 @@
     <Compile Include="AppHandlers\AutomatedBuildAppHandler.cs" />
     <Compile Include="AppHandlers\CancelCreationAppHandler.cs" />
     <Compile Include="AppHandlers\ChannelAppHandler.cs" />
-    <Compile Include="AppHandlers\ClearCacheAppHandler.cs" />
     <Compile Include="AppHandlers\CloseProjectAppHandler.cs" />
     <Compile Include="AppHandlers\CreateNewAppHandler.cs" />
     <Compile Include="AppHandlers\CreatePackageAppHandler.cs" />
-    <Compile Include="AppHandlers\EnableFullCrashDumpsAppHandler.cs" />
     <Compile Include="AppHandlers\FinalizeProjectAppHandler.cs" />
     <Compile Include="AppHandlers\GenerateProjectsAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandler.cs" />
     <Compile Include="AppHandlers\IAppHandlerManager.cs" />
-    <Compile Include="AppHandlers\LoginAppHandler.cs" />
     <Compile Include="AppHandlers\NameProjectAppHandler.cs" />
     <Compile Include="AppHandlers\OpenOtherAppHandler.cs" />
     <Compile Include="AppHandlers\OpenRecentAppHandler.cs" />
-    <Compile Include="AppHandlers\OptionAppHandler.cs" />
-    <Compile Include="AppHandlers\RegisterAppHandler.cs" />
     <Compile Include="AppHandlers\SelectProjectDirAppHandler.cs" />
     <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
     <Compile Include="AppHandlers\SetConsoleStateAppHandler.cs" />
@@ -39,6 +34,7 @@
     <Compile Include="BrandingEngine\EmbeddedBrandingEngine.cs" />
     <Compile Include="BrandingEngine\ExternalBrandingEngine.cs" />
     <Compile Include="BrandingEngine\IBrandingEngine.cs" />
+    <Compile Include="BrandingEngine\ProtobuildUpdatePolicy.cs" />
     <Compile Include="BrowserEmulation\BrowserEmulation.cs" />
     <Compile Include="ConfigManager\ConfigManager.cs" />
     <Compile Include="ConfigManager\IConfigManager.cs" />
@@ -80,13 +76,6 @@
     <Compile Include="MainWindowController.cs">
       <Platforms>MacOS</Platforms>
     </Compile>
-    <Compile Include="News\INewsLoader.cs" />
-    <Compile Include="News\NewsLoader.cs" />
-    <Compile Include="PrerequisiteChecks\AbstractPrerequisiteCheck.cs" />
-    <Compile Include="PrerequisiteChecks\DirectXPrerequisiteCheck.cs" />
-    <Compile Include="PrerequisiteChecks\IPrerequisiteCheck.cs" />
-    <Compile Include="PrerequisiteChecks\Mono380Check.cs" />
-    <Compile Include="PrerequisiteChecks\PrerequisiteCheckStatus.cs" />
     <Compile Include="ProcessExtensions.cs" />
     <Compile Include="ProcessLog\IProcessLog.cs" />
     <Compile Include="ProcessLog\RuntimeServerProcessLog.cs" />

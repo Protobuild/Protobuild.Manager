@@ -11,6 +11,7 @@ namespace Protobuild.Manager
         private readonly IAddinPackageDownload _addinPackageDownload;
         private readonly IConfigManager _configManager;
         private readonly IProcessLog _processLog;
+        private readonly IBrandingEngine _brandingEngine;
 
         private bool _didGacInstall;
 
@@ -18,12 +19,14 @@ namespace Protobuild.Manager
             IExecution execution,
             IAddinPackageDownload addinPackageDownload,
             IConfigManager configManager,
-            IProcessLog processLog)
+            IProcessLog processLog,
+            IBrandingEngine brandingEngine)
         {
             _execution = execution;
             _addinPackageDownload = addinPackageDownload;
             _configManager = configManager;
             _processLog = processLog;
+            _brandingEngine = brandingEngine;
         }
 
         public async Task InstallIfNeeded(bool force)
@@ -83,7 +86,7 @@ namespace Protobuild.Manager
             }
 
             _processLog.WriteInfo("Downloading latest IDE add-in for Visual Studio...");
-            var packageRoot = await _addinPackageDownload.GetPackageRoot("http://protobuild.org/hach-que/Protobuild.IDE.VisualStudio");
+            var packageRoot = await _addinPackageDownload.GetPackageRoot(_brandingEngine.VisualStudioAddinPackage);
             if (packageRoot == null)
             {
                 _processLog.WriteError("Unable to download latest IDE add-in for Visual Studio!");

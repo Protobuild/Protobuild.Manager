@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -70,6 +71,48 @@ namespace Protobuild.Manager
         public string TemplateIDECategory
         {
             get { return GetXmlString("TemplateIDECategory"); }
+        }
+
+        public string VisualStudioAddinPackage
+        {
+            get
+            {
+                var path = GetXmlString("VisualStudioAddinPackage");
+                if (path.StartsWith("file:"))
+                {
+                    path = "local:///" + Path.GetFullPath(path.Substring(5));
+                }
+                return path;
+            }
+        }
+
+        public string MonoDevelopAddinPackage
+        {
+            get
+            {
+                var path = GetXmlString("MonoDevelopAddinPackage");
+                if (path.StartsWith("file:"))
+                {
+                    path = "local:///" + Path.GetFullPath(path.Substring(5));
+                }
+                return path;
+            }
+        }
+
+        public ProtobuildUpdatePolicy ProtobuildUpdatePolicy
+        {
+            get
+            {
+                switch (GetXmlString("ProtobuildUpdatePolicy"))
+                {
+                    case "when-available":
+                        return ProtobuildUpdatePolicy.WhenAvailable;
+                    case "never":
+                        return ProtobuildUpdatePolicy.Never;
+                    default:
+                        return ProtobuildUpdatePolicy.WhenAvailable;
+                }
+            }
         }
     }
 }

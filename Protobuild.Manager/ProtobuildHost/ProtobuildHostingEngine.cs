@@ -52,7 +52,7 @@ namespace Protobuild.Manager
             var internalAssembly = Assembly.Load(bytes);
 
             var moduleInfoType = internalAssembly.GetType("Protobuild.ModuleInfo");
-            var moduleInfoLoad = moduleInfoType.GetMethod("Load");
+            var moduleInfoLoad = moduleInfoType.GetMethod("Load", new Type[] { typeof(string) });
             return new ModuleHost
             {
                 LoadedModule = moduleInfoLoad.Invoke(null,

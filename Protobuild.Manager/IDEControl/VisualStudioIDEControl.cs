@@ -37,19 +37,7 @@ namespace Protobuild.Manager
                 {
                     launchLogic = async dteRef =>
                     {
-                        _runtimeServer.Set("status", "Starting Visual Studio...");
-                        Process.Start(
-                            @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe",
-                            Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln"));
-
-                        while (existing == null)
-                        {
-                            _runtimeServer.Set("status", "Waiting for Visual Studio to open...");
-
-                            await Task.Delay(1000);
-
-                            existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
-                        }
+                        existing = await LaunchVisualStudio(modulePath, moduleName, targetPlatform, vspid, existing);
                     };
                 }
                 else
@@ -252,67 +240,7 @@ namespace Protobuild.Manager
                 {
                     launchLogic = async dteRef =>
                     {
-                        _runtimeServer.Set("status", "Starting Visual Studio...");
-
-                        var versions = new[] { "14.0", "12.0", "11.0", "10.0" };
-                        var started = false;
-                        foreach (var version in versions)
-                        {
-                            var idePath = @"C:\Program Files (x86)\Microsoft Visual Studio " + version +
-                                       @"\Common7\IDE\devenv.exe";
-                            if (File.Exists(idePath))
-                            {
-                                var process = Process.Start(idePath);
-                                if (process != null)
-                                {
-                                    vspid = process.Id;
-                                    started = true;
-                                }
-                                break;
-                            }
-                        }
-
-                        if (!started)
-                        {
-                            _runtimeServer.Set("status", "Unable to find installed version of Visual Studio to start!");
-                        }
-                        else
-                        {
-                            while (existing == null)
-                            {
-                                _runtimeServer.Set("status", "Waiting for Visual Studio to open...");
-
-                                await Task.Delay(1000);
-
-                                existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
-                            }
-
-                            var didLoad = false;
-                            while (!didLoad)
-                            {
-                                dynamic dteAfterStart;
-                                try
-                                {
-                                    dteAfterStart = existing.DTE;
-                                }
-                                catch (COMException ex)
-                                {
-                                    unchecked
-                                    {
-                                        if (ex.HResult == (int) 0x8001010A)
-                                        {
-                                            continue;
-                                        }
-                                    }
-
-                                    throw;
-                                }
-                                
-                                dteAfterStart.Solution.Open(Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln"));
-                                dteAfterStart.ActiveWindow.Activate();
-                                didLoad = true;
-                            }
-                        }
+                        existing = await LaunchVisualStudio(modulePath, moduleName, targetPlatform, vspid, existing);
                     };
                 }
                 else
@@ -393,6 +321,45 @@ namespace Protobuild.Manager
             {
                 _runtimeServer.Set("busy", false);
             }
+        }
+
+        private async Task<dynamic> LaunchVisualStudio(string modulePath, string moduleName, string targetPlatform, int? vspid, dynamic existing)
+        {
+            _runtimeServer.Set("status", "Starting Visual Studio...");
+
+            var versions = new[] {"14.0", "12.0", "11.0", "10.0"};
+            var started = false;
+            foreach (var version in versions)
+            {
+                var idePath = @"C:\Program Files (x86)\Microsoft Visual Studio " + version +
+                              @"\Common7\IDE\devenv.exe";
+                if (File.Exists(idePath))
+                {
+                    Process.Start(
+                        idePath,
+                        "\"" + Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln") + "\"");
+                    started = true;
+                    break;
+                }
+            }
+
+            if (!started)
+            {
+                _runtimeServer.Set("status", "Unable to find installed version of Visual Studio to start!");
+            }
+            else
+            {
+                while (existing == null)
+                {
+                    _runtimeServer.Set("status", "Waiting for Visual Studio to open...");
+
+                    await Task.Delay(1000);
+
+                    existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
+                }
+            }
+
+            return existing;
         }
 
         private dynamic FindExistingVisualStudioInstance(string modulePath, string moduleName, int? forcePid)

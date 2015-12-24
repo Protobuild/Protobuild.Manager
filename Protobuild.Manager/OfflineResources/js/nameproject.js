@@ -1,5 +1,6 @@
 ﻿var pathModifiedByUser = false;
 var defaultPath = null;
+var initializedAdditionalPlatforms = false;
 
 $(document).ready(function () {
     $("#projectFormat").change(function () { updateFormState(); });
@@ -38,6 +39,16 @@ function submitForm() {
 var variantOptions = {};
 
 function updateFormOptions(state) {
+    if (!initializedAdditionalPlatforms) {
+        if (state.additionalPlatformsCount !== undefined && state.additionalPlatformsCount !== null) {
+            for (var i = 0; i < state.additionalPlatformsCount; i++) {
+                var pl = addTemplate("additionalplatform", { name: state["additionalPlatforms" + i] });
+                $("input", pl).attr("name", "platform_" + state["additionalPlatforms" + i]);
+            }
+            initializedAdditionalPlatforms = true;
+        }
+    }
+
     if (state.selectedProjectDir !== undefined && state.selectedProjectDir !== null) {
         $("#path").val(state.selectedProjectDir);
         pathModifiedByUser = true;

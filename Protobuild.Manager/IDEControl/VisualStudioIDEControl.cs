@@ -262,10 +262,12 @@ namespace Protobuild.Manager
                                        @"\Common7\IDE\devenv.exe";
                             if (File.Exists(idePath))
                             {
-                                Process.Start(
-                                    idePath,
-                                    "\"" + Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln") + "\"");
-                                started = true;
+                                var process = Process.Start(idePath);
+                                if (process != null)
+                                {
+                                    vspid = process.Id;
+                                    started = true;
+                                }
                                 break;
                             }
                         }
@@ -283,6 +285,32 @@ namespace Protobuild.Manager
                                 await Task.Delay(1000);
 
                                 existing = FindExistingVisualStudioInstance(modulePath, moduleName, vspid);
+                            }
+
+                            var didLoad = false;
+                            while (!didLoad)
+                            {
+                                dynamic dteAfterStart;
+                                try
+                                {
+                                    dteAfterStart = existing.DTE;
+                                }
+                                catch (COMException ex)
+                                {
+                                    unchecked
+                                    {
+                                        if (ex.HResult == (int) 0x8001010A)
+                                        {
+                                            continue;
+                                        }
+                                    }
+
+                                    throw;
+                                }
+                                
+                                dteAfterStart.Solution.Open(Path.Combine(modulePath, moduleName + "." + targetPlatform + ".sln"));
+                                dteAfterStart.ActiveWindow.Activate();
+                                didLoad = true;
                             }
                         }
                     };
@@ -412,8 +440,8 @@ namespace Protobuild.Manager
                                     return dte;
                                 }
                             }
-
-                            if (
+                            
+                            if (modulePath != null &&
                                 displayName.ToLowerInvariant()
                                     .StartsWith(Path.Combine(modulePath, moduleName + ".").ToLowerInvariant()) &&
                                 displayName.ToLowerInvariant().EndsWith(".sln"))

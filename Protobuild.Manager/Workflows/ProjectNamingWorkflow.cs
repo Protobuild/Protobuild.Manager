@@ -25,6 +25,14 @@
                 if (template.TemplateURI == url)
                 {
                     var a = 0;
+                    foreach (var platform in template.AdditionalPlatforms)
+                    {
+                        _runtimeServer.Set("additionalPlatforms" + a, platform);
+                        a++;
+                    }
+                    _runtimeServer.Set("additionalPlatformsCount", a);
+
+                    a = 0;
                     foreach (var kv in template.AdditionalStandardProjectVariants)
                     {
                         _runtimeServer.Set("templateStandardVariantsID" + a, kv.Key);

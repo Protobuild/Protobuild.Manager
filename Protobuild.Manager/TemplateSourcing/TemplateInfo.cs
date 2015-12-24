@@ -15,5 +15,7 @@ namespace Protobuild.Manager
         public Dictionary<string, VariantOverlay> AdditionalProtobuildVariants { get; set; } 
 
         public List<OptionalVariant> OptionVariants { get; set; }
+        
+        public List<string> AdditionalPlatforms { get; set; }
     }
 }

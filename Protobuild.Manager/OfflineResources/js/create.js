@@ -5,6 +5,11 @@
 function updateState(state) {
     $("#checks").html("");
 
+    if (state.showCancel == true) {
+        $("#toplinks").show();
+        $("#header2").text("Failed to create project!");
+    }
+
     for (var i = 0; i < state.stepCount; i++) {
         var text = state["stepName" + i];
 

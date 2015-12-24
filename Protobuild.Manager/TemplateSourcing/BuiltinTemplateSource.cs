@@ -16,6 +16,7 @@ namespace Protobuild.Manager
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
+                    AdditionalPlatforms = new List<string>(),
                 },
                 new TemplateInfo
                 {
@@ -25,6 +26,7 @@ namespace Protobuild.Manager
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
+                    AdditionalPlatforms = new List<string>(),
                 },
                 new TemplateInfo
                 {
@@ -34,6 +36,7 @@ namespace Protobuild.Manager
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
+                    AdditionalPlatforms = new List<string>(),
                 },
                 new TemplateInfo
                 {
@@ -43,6 +46,7 @@ namespace Protobuild.Manager
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
+                    AdditionalPlatforms = new List<string>(),
                 },
                 new TemplateInfo
                 {
@@ -52,6 +56,7 @@ namespace Protobuild.Manager
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
 					OptionVariants = new List<OptionalVariant>(),
+                    AdditionalPlatforms = new List<string>(),
                 }
             };
         }

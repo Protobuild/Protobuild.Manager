@@ -146,6 +146,8 @@ namespace Protobuild.Manager
                     {
                         _runtimeServer.Set("stepState" + i, "Failed");
                         _runtimeServer.Set("stepMessage" + i, ex.ToString());
+                        _runtimeServer.Set("showCancel", true);
+                        break;
                     }
 
                     i++;
@@ -309,15 +311,18 @@ namespace Protobuild.Manager
             foreach (var v in arg.Template.OptionVariants)
             {
                 var sv =
-                    (isStandard ? v.StandardOptions : v.ProtobuildOptions).First(
+                    (isStandard ? v.StandardOptions : v.ProtobuildOptions).FirstOrDefault(
                         x => x.ID == arg.Parameters[v.ID]);
-                foreach (var enable in sv.EnableServices)
+                if (sv != null)
                 {
-                    servicesSpec += " --enable " + enable;
-                }
-                foreach (var enable in sv.DisableServices)
-                {
-                    servicesSpec += " --disable " + enable;
+                    foreach (var enable in sv.EnableServices)
+                    {
+                        servicesSpec += " --enable " + enable;
+                    }
+                    foreach (var enable in sv.DisableServices)
+                    {
+                        servicesSpec += " --disable " + enable;
+                    }
                 }
             }
 

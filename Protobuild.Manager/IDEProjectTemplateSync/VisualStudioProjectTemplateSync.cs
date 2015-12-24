@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if PLATFORM_WINDOWS
+
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -75,15 +77,12 @@ namespace Protobuild.Manager
                             _brandingEngine.ProductStorageID.TrimStart('.') + "-" + (i++) + ".zip"),
                         ZipArchiveMode.Create))
                 {
-
-#if PLATFORM_WINDOWS
                     // Extract branding icon for Windows.
                     var templateIcon = zip.CreateEntry("Template.ico");
                     using (var stream = templateIcon.Open())
                     {
                         _brandingEngine.WindowsIcon.Save(stream);
                     }
-#endif
 
                     var xml =
                         "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
@@ -154,3 +153,5 @@ namespace Protobuild.Manager
         }
     }
 }
+
+#endif

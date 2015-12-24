@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if PLATFORM_WINDOWS
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -167,3 +169,5 @@ namespace Protobuild.Manager
         }
     }
 }
+
+#endif

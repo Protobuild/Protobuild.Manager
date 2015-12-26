@@ -56,6 +56,7 @@ namespace Protobuild.Manager
                     var standardVariants = ProcessVariants((ArrayList)data["StandardVariants"], directory.FullName);
                     var additionalPlatforms = ((ArrayList) data["AdditionalPlatforms"]).OfType<string>().ToList();
                     var optionalVariants = new List<OptionalVariant>();
+                    var defaults = ((Dictionary<string, object>) data["Defaults"]).ToDictionary(k => k.Key, v => (string) v.Value);
 
                     foreach (var variant in ((ArrayList) data["OptionalVariants"]).OfType<Dictionary<string, object>>())
                     {
@@ -77,6 +78,7 @@ namespace Protobuild.Manager
                         AdditionalStandardProjectVariants = standardVariants,
                         OptionVariants = optionalVariants,
                         AdditionalPlatforms = additionalPlatforms,
+                        Defaults = defaults,
                     });
                 }
             }

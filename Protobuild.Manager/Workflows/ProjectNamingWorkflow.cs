@@ -80,6 +80,15 @@
                     }
                     _runtimeServer.Set("templateOptionalVariantsCount", a);
 
+                    a = 0;
+                    foreach (var @default in template.Defaults)
+                    {
+                        _runtimeServer.Set("defaultsKey" + a, @default.Key);
+                        _runtimeServer.Set("defaultsValue" + a, @default.Value);
+                        a++;
+                    }
+                    _runtimeServer.Set("defaultsCount", a);
+
                     break;
                 }
             }

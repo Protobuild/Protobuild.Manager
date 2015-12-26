@@ -17,5 +17,7 @@ namespace Protobuild.Manager
         public List<OptionalVariant> OptionVariants { get; set; }
         
         public List<string> AdditionalPlatforms { get; set; }
+
+        public Dictionary<string, string> Defaults { get; set; }
     }
 }

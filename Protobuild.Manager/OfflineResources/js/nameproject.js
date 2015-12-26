@@ -1,6 +1,7 @@
 ﻿var pathModifiedByUser = false;
 var defaultPath = null;
 var initializedAdditionalPlatforms = false;
+var defaultsInitialized = false;
 
 $(document).ready(function () {
     $("#projectFormat").change(function () { updateFormState(); });
@@ -125,6 +126,32 @@ function updateFormOptions(state) {
     }
 
     updateFormState();
+
+    if (!defaultsInitialized) {
+        if (state.templateProtobuildVariantsCount !== undefined) {
+            if (state.templateOptionalVariantsCount !== undefined) {
+                if (state.defaultsCount !== undefined) {
+                    for (var a = 0; a < state.defaultsCount; a++) {
+                        if (state["defaultsKey" + a] == "BaseVariant") {
+                            $("#projectFormat").val(state["defaultsValue" + a]);
+                        }
+                    }
+
+                    updateFormState();
+
+                    for (var a = 0; a < state.defaultsCount; a++) {
+                        if (state["defaultsKey" + a] != "BaseVariant") {
+                            $("select#" + state["defaultsKey" + a]).val(state["defaultsValue" + a]);
+                        }
+                    }
+
+                    updateFormState();
+
+                    defaultsInitialized = true;
+                }
+            }
+        }
+    }
 }
 
 function updateFormState() {
@@ -146,6 +173,7 @@ function updateOptionalVariants(type) {
     for (var id in variantOptions) {
         if (variantOptions.hasOwnProperty(id)) {
             var select = $("select#" + id);
+            var val = select.val();
             select.children().remove();
             $.each(variantOptions[id][type], function (key, value) {
                 select.append($('<option>').attr('value', value.id).text(value.name));
@@ -155,6 +183,7 @@ function updateOptionalVariants(type) {
             } else {
                 select.parent().parent().show();
             }
+            select.val(val);
         }
     }
 }

@@ -56,7 +56,7 @@
   
   <!--
   The location of the Visual Studio IDE package to install.  You can change
-  this URL to file:<some relative or absolute file path> if you want to
+  this URL to local-lzma://<some relative or absolute file path> if you want to
   ship a local copy of the package and avoid downloading it from the
   internet.
   -->
@@ -64,7 +64,7 @@
 
   <!--
   The location of the MonoDevelop / Xamarin Studio IDE package to install.
-  You can change this URL to file:<some relative or absolute file path>
+  You can change this URL to local-lzma://<some relative or absolute file path>
   if you want to ship a local copy of the package and avoid downloading
   it from the internet.
   -->

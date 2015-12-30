@@ -8,3 +8,5 @@ obj/
 .vs/
 Protobuild.Manager/Protobuild.Manager.Windows.csproj.user
 *.userprefs
+Installers/Windows/ProtobuildWebInstall.exe
+Windows.tar.lzma

@@ -1,0 +1,2 @@
+# Make sure the install files for Linux / Mac remain intact for Windows publish
+*.sh text eol=lf

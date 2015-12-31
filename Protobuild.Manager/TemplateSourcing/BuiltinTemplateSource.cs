@@ -17,6 +17,7 @@ namespace Protobuild.Manager
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
                     AdditionalPlatforms = new List<string>(),
+                    Defaults = new Dictionary<string, string>(),
                 },
                 new TemplateInfo
                 {
@@ -27,6 +28,7 @@ namespace Protobuild.Manager
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
                     AdditionalPlatforms = new List<string>(),
+                    Defaults = new Dictionary<string, string>(),
                 },
                 new TemplateInfo
                 {
@@ -37,6 +39,7 @@ namespace Protobuild.Manager
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
                     AdditionalPlatforms = new List<string>(),
+                    Defaults = new Dictionary<string, string>(),
                 },
                 new TemplateInfo
                 {
@@ -47,6 +50,7 @@ namespace Protobuild.Manager
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
                     AdditionalPlatforms = new List<string>(),
+                    Defaults = new Dictionary<string, string>(),
                 },
                 new TemplateInfo
                 {
@@ -57,6 +61,7 @@ namespace Protobuild.Manager
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
 					OptionVariants = new List<OptionalVariant>(),
                     AdditionalPlatforms = new List<string>(),
+                    Defaults = new Dictionary<string, string>(),
                 }
             };
         }

@@ -18,8 +18,14 @@ namespace Protobuild.Manager
                 throw new Exception("Can't mark console program as executable");
             }
 
+			var mono = "/usr/bin/mono";
+			if (!File.Exists(mono) && File.Exists("/usr/local/bin/mono"))
+			{
+				mono = "/usr/local/bin/mono";
+			}
+
             var startInfo = new ProcessStartInfo();
-            startInfo.FileName = "/usr/bin/mono";
+            startInfo.FileName = mono;
             startInfo.Arguments = path + " " + arguments;
 			startInfo.WorkingDirectory = new FileInfo(path).Directory.FullName;
 			if (configureStartInfo != null)

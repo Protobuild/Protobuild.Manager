@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Unearth Launcher</string>
+	<string>Protobuild Manager</string>
 	<key>CFBundleIdentifier</key>
 	<string>au.com.redpointgames.ProtobuildManager</string>
 	<key>CFBundleVersion</key>
@@ -18,5 +18,10 @@
 	<string>Protobuild.Icon</string>
 	<key>CFBundleName</key>
 	<string>Protobuild.Manager.MacOS</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true />
+	</dict>
 </dict>
 </plist>

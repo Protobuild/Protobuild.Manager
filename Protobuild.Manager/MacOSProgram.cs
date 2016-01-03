@@ -37,11 +37,6 @@ namespace Protobuild.Manager
 
         public static void Run(string[] args)
 		{
-			using (var writer = new System.IO.StreamWriter("/Users/june/Documents/MonoGame/ProjectCreationTool/test.txt"))
-			{
-				writer.WriteLine(Environment.CurrentDirectory);
-			}
-
 			var kernel = new LightweightKernel();
 			kernel.BindCommon();
 			kernel.BindAndKeepInstance<IUIManager, MacOSUIManager>();

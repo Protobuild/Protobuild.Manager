@@ -84,6 +84,38 @@ namespace Protobuild.Manager
                 }
             }
         }
+
+        public void RemoveEntry(string path)
+        {
+            var recentItemsFile = Path.Combine(_configManager.GetBasePath(), "recent-projects.txt");
+            var recentItems = new List<KeyValuePair<string, string>>();
+
+            if (File.Exists(recentItemsFile))
+            {
+                using (var stream = new StreamReader(recentItemsFile))
+                {
+                    while (!stream.EndOfStream)
+                    {
+                        var title = stream.ReadLine();
+                        var existingPath = stream.ReadLine();
+                        if (existingPath == path)
+                        {
+                            continue;
+                        }
+                        recentItems.Add(new KeyValuePair<string, string>(title, existingPath));
+                    }
+                }
+            }
+
+            using (var stream = new StreamWriter(recentItemsFile))
+            {
+                foreach (var kv in recentItems)
+                {
+                    stream.WriteLine(kv.Key);
+                    stream.WriteLine(kv.Value);
+                }
+            }
+        }
     }
 }
 

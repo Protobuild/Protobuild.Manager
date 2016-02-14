@@ -110,8 +110,11 @@ namespace Protobuild.Manager
 						x =>
 						{
 							x.WorkingDirectory = modulePath;
-							x.UseShellExecute = false;
-						});
+                            x.UseShellExecute = false;
+                            x.RedirectStandardOutput = true;
+                            x.RedirectStandardError = true;
+                        });
+                    _processLog.AttachToProcess(process);
                     await process.WaitForExitAsync();
 
                     _runtimeServer.Set("statusMode", "Okay");
@@ -147,8 +150,11 @@ namespace Protobuild.Manager
 						x =>
 						{
 							x.WorkingDirectory = modulePath;
-							x.UseShellExecute = false;
-						});
+                            x.UseShellExecute = false;
+                            x.RedirectStandardOutput = true;
+                            x.RedirectStandardError = true;
+                        });
+                    _processLog.AttachToProcess(process);
                     await process.WaitForExitAsync();
 
                     _runtimeServer.Set("statusMode", "Okay");

@@ -25,6 +25,7 @@
     <Compile Include="AppHandlers\NameProjectAppHandler.cs" />
     <Compile Include="AppHandlers\OpenOtherAppHandler.cs" />
     <Compile Include="AppHandlers\OpenRecentAppHandler.cs" />
+    <Compile Include="AppHandlers\ResyncProjectsAppHandler.cs" />
     <Compile Include="AppHandlers\SelectProjectDirAppHandler.cs" />
     <Compile Include="AppHandlers\SelectTemplateAppHandler.cs" />
     <Compile Include="AppHandlers\SetConsoleStateAppHandler.cs" />

@@ -35,6 +35,7 @@ function stateChange(state) {
     if (state.busy !== undefined) {
         var elementsToDisable = [
             "#switchProtobuildPlatform",
+            "#resyncNow",
             "#syncNow",
             "#regenerateProjects",
             "#createPackage",
@@ -105,6 +106,7 @@ function stateChange(state) {
     }
 
     if (oldPlatform !== null) {
+        $("#resyncNow").attr('href', 'app:///resync-projects?platform=' + oldPlatform);
         $("#syncNow").attr('href', 'app:///sync-projects?platform=' + oldPlatform);
         $("#regenerateProjects").attr('href', 'app:///generate-projects?platform=' + oldPlatform);
         $("#createPackage").attr('href', 'app:///create-package?platform=' + oldPlatform);

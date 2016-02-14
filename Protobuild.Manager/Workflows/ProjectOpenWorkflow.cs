@@ -81,6 +81,16 @@ namespace Protobuild.Manager
         {
             if (IsStandardProject)
             {
+                if (!Directory.Exists(_path))
+                {
+                    var result = System.Windows.Forms.MessageBox.Show("Directory does not exist.  Remove from history?", _path, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
+                    if (result == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        _recentProjectsManager.RemoveEntry(_path);
+                        _runtimeServer.Goto("index");
+                    }
+                    return;
+                }
                 var directory = new DirectoryInfo(_path);
                 string prefix = null;
                 var platforms = new List<string>();

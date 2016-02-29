@@ -32,8 +32,41 @@ namespace Protobuild.Manager
 				try
 				{
                 	ModuleHost = protobuildHostingEngine.LoadModule(path);
-				}
-				catch (BadImageFormatException)
+                }
+                catch (FileLoadException)
+                {
+                    if (uiManager.AskToRepairCorruptProtobuild())
+                    {
+                        var client = new WebClient();
+                        File.Delete(Path.Combine(path, "Protobuild.exe"));
+                        client.DownloadFile("http://protobuild.org/get", Path.Combine(path, "Protobuild.exe"));
+
+                        try
+                        {
+                            ModuleHost = protobuildHostingEngine.LoadModule(path);
+                        }
+                        catch (FileLoadException)
+                        {
+                            uiManager.FailedToRepairCorruptProtobuild();
+                            IsStandardProject = true;
+                        }
+                        catch (BadImageFormatException)
+                        {
+                            uiManager.FailedToRepairCorruptProtobuild();
+                            IsStandardProject = true;
+                        }
+                        catch (TargetInvocationException)
+                        {
+                            uiManager.UnableToLoadModule();
+                            IsStandardProject = true;
+                        }
+                    }
+                    else
+                    {
+                        IsStandardProject = true;
+                    }
+                }
+                catch (BadImageFormatException)
 				{
 					if (uiManager.AskToRepairCorruptProtobuild())
 					{
@@ -44,8 +77,13 @@ namespace Protobuild.Manager
 						try
 						{
 							ModuleHost = protobuildHostingEngine.LoadModule(path);
-						}
-						catch (BadImageFormatException)
+                        }
+                        catch (FileLoadException)
+                        {
+                            uiManager.FailedToRepairCorruptProtobuild();
+                            IsStandardProject = true;
+                        }
+                        catch (BadImageFormatException)
 						{
 							uiManager.FailedToRepairCorruptProtobuild();
 							IsStandardProject = true;

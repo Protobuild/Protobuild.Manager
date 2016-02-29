@@ -9,8 +9,10 @@ namespace Protobuild.Manager
         public ModuleHost LoadModule(string modulePath)
         {
             var path = Path.Combine(modulePath, "Protobuild.exe");
+            var temp = Path.GetTempFileName();
+            File.Copy(path, temp, true);
 
-            var assembly = Assembly.LoadFrom(path);
+            var assembly = Assembly.LoadFrom(temp);
             var stream = assembly.GetManifestResourceStream("Protobuild.Internal.dll.lzma");
 
             /*

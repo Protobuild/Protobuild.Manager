@@ -52,7 +52,7 @@ namespace Protobuild.Manager
                     updateStatus("Checking for new versions...");
 
                     // Try to check with GitHub to see if the master branches points somewhere else.
-                    var branchJson = await client.DownloadStringTaskAsync("https://api.github.com/repos/hach-que/Protobuild/branches/master");
+                    var branchJson = await client.DownloadStringTaskAsync("https://api.github.com/repos/Protobuild/Protobuild/branches/master");
                     var serializer = new JavaScriptSerializer();
                     var branchInfo = serializer.Deserialize<Dictionary<string, object>>(branchJson);
                     var commitInfo = (Dictionary<string, object>) branchInfo["commit"];

@@ -45,15 +45,14 @@ Section "All Components" CoreComponents ;No components page, name is not importa
   
   SetOutPath '$INSTDIR'
   File '..\..\Protobuild.exe'
-  File '..\..\Protobuild.Manager\bin\Windows\AnyCPU\Release\Protobuild.Manager.exe'
   
-  ExecWait "Protobuild.Manager.exe --silent-setup"
+  nsExec::ExecToLog "Protobuild.exe --install http://protobuild.org/hach-que/Protobuild.Manager"
   
 SectionEnd
 
 Function StartProtobuildManager
 
   SetOutPath '$INSTDIR'
-  Exec "Protobuild.Manager.exe"
+  ExecShell "open" "Protobuild.exe" "--execute Protobuild.Manager" SW_HIDE
 
 FunctionEnd

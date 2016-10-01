@@ -53,6 +53,6 @@ SectionEnd
 Function StartProtobuildManager
 
   SetOutPath '$INSTDIR'
-  ExecShell "open" "Protobuild.exe" "--execute Protobuild.Manager" SW_HIDE
+  ExecShell "open" "$STARTMENU\Protobuild Manager.url"
 
 FunctionEnd

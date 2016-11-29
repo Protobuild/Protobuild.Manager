@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Module>
   <Name>Protobuild.Manager</Name>
+  <Authors>.NET Foundation</Authors>
+  <Description>A cross-platform GUI manager for Protobuild modules.</Description>
+  <LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
+  <ProjectUrl>https://protobuild.org/</ProjectUrl>
+  <IconUrl>https://protobuild.org/favicon.png</IconUrl>
+  <GitRepositoryUrl>https://github.com/Protobuild/Protobuild.Manager</GitRepositoryUrl>
   <DefaultAction>resync</DefaultAction>
   <GenerateNuGetRepositories>true</GenerateNuGetRepositories>
 </Module>

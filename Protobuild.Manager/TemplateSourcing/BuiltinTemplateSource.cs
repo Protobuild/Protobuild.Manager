@@ -12,7 +12,7 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "C# Console",
                     TemplateDescription = "A cross-platform console application that can work on Windows, Mac OS and Linux.",
-                    TemplateURI = "http://protobuild.org/commons/Console",
+                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|Protobuild.Template.Console",
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
@@ -23,7 +23,7 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "C# Library",
                     TemplateDescription = "A cross-platform C# library that can work across desktop and mobile platforms.",
-                    TemplateURI = "http://protobuild.org/commons/Console",
+                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|Protobuild.Template.Library",
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
@@ -34,7 +34,7 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "Protogame Empty Game",
                     TemplateDescription = "A cross-platform Protogame project that renders an blank screen.",
-                    TemplateURI = "http://protobuild.org/Protogame/Template.Blank",
+                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|Protogame.Template.Blank",
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
@@ -45,7 +45,7 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "Protogame 2D Platformer",
                     TemplateDescription = "A cross-platform Protogame project that runs a 2D platformer.",
-                    TemplateURI = "http://protobuild.org/Protogame/Template.Platformer",
+                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|Protogame.Template.Platformer",
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
                     OptionVariants = new List<OptionalVariant>(),
@@ -56,7 +56,7 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "MonoGame 2D Platformer",
                     TemplateDescription = "A cross-platform MonoGame project that runs a 2D platformer.",
-                    TemplateURI = "http://protobuild.org/MonoGame/Template.2DPlatformer@develop",
+                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|MonoGame.Template.Platformer2Ds",
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
 					OptionVariants = new List<OptionalVariant>(),

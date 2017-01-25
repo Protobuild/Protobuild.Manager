@@ -120,7 +120,9 @@ span {}
 #status {
     height: 24px;
     max-height: 40px;
-    overflow-y: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    white-space: nowrap;
 }
 
 div.checkbox {

@@ -60,6 +60,7 @@ $(document).ready(function () {
                 consoleState.rememberedState = "open";
             }
             location.href = "app:///set-console-state?state=open";
+            updateConsole();
             $("#console_contents").scrollTop(1000000);
         }
     });
@@ -88,6 +89,15 @@ function updateConsole() {
     if (consoleState.processLogLineCount === undefined || consoleState.processLogLineCount === null) {
         consoleState.processLogLineCount = 0;
     }
+
+    if (consoleState.rememberedState == "closed") {
+        // Don't include log data in HTML unless we need to.  This improves performance.
+        $("#logs").html('');
+        $("#short_text").html('&#160;' + consoleState.processLogLineCount);
+        consoleLastId = 0;
+        return;
+    }
+
     var oldId = consoleLastId;
     for (var i = consoleLastId; i < consoleState.processLogLineCount; i++) {
         if (consoleState["processLogLine" + i + "Color"] === undefined) {

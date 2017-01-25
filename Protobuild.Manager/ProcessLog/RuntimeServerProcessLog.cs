@@ -33,7 +33,9 @@ namespace Protobuild.Manager
 			    }
 
 			    lock (_lineLock)
-			    {
+                {
+                    _runtimeServer.Set("status", line);
+
                     _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.TrimEnd());
 			        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FFF");
 			        _lineCount++;
@@ -50,7 +52,18 @@ namespace Protobuild.Manager
                 }
 
 			    lock (_lineLock)
-			    {
+                {
+                    /*if (line.Contains("Starting resolution of packages"))
+                    {
+                        _runtimeServer.Set("status", line);
+                    }
+
+                    if (line.Contains("Downloading package"))
+                    {
+                    }*/
+
+                    _runtimeServer.Set("status", line);
+
                     _runtimeServer.Set("processLogLine" + _lineCount + "Text", line.TrimEnd());
 			        _runtimeServer.Set("processLogLine" + _lineCount + "Color", "#FCC");
 			        _lineCount++;

@@ -2,20 +2,20 @@
 
 set package-format nuget/zip
 
-pack . Protobuild.Manager.nupkg Unified
+pack . Protobuild.Manager.nupkg Unified --package-type global-tool
 
 if host Windows
   if file-exists C:\Users\build\Documents\nuget_api_key.txt
-    push C:\Users\build\Documents\nuget_api_key.txt Protobuild.Manager.nupkg https://www.nuget.org/api/v2/package --ignore-on-existing
+    push C:\Users\build\Documents\nuget_api_key.txt Protobuild.Manager.nupkg https://www.nuget.org/api/v2/package --ignore-on-existing --package-type global-tool
   endif
 endif
 if host MacOS
   if file-exists /Users/june/nuget_api_key.txt
-    push /Users/june/nuget_api_key.txt Protobuild.Manager.nupkg https://www.nuget.org/api/v2/package --ignore-on-existing
+    push /Users/june/nuget_api_key.txt Protobuild.Manager.nupkg https://www.nuget.org/api/v2/package --ignore-on-existing --package-type global-tool
   endif
 endif
 if host Linux
   if file-exists /srv/nuget_api_key.txt
-    push /srv/nuget_api_key.txt Protobuild.Manager.nupkg https://www.nuget.org/api/v2/package --ignore-on-existing
+    push /srv/nuget_api_key.txt Protobuild.Manager.nupkg https://www.nuget.org/api/v2/package --ignore-on-existing --package-type global-tool
   endif
 endif

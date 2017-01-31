@@ -73,7 +73,7 @@ namespace Protobuild.Manager
             {
                 _processLog.WriteInfo("Downloading latest version...");
                 updateStatus("Downloading latest version...");
-                await client.DownloadFileTaskAsync("http://protobuild.org/get", cachedPath);
+                await client.DownloadFileTaskAsync("https://github.com/Protobuild/Protobuild/raw/master/Protobuild.exe", cachedPath);
 
                 _processLog.WriteInfo("Download complete.");
 

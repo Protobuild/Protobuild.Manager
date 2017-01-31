@@ -39,7 +39,7 @@ namespace Protobuild.Manager
                     {
                         var client = new WebClient();
                         File.Delete(Path.Combine(path, "Protobuild.exe"));
-                        client.DownloadFile("http://protobuild.org/get", Path.Combine(path, "Protobuild.exe"));
+                        client.DownloadFile("https://github.com/Protobuild/Protobuild/raw/master/Protobuild.exe", Path.Combine(path, "Protobuild.exe"));
 
                         try
                         {
@@ -72,7 +72,7 @@ namespace Protobuild.Manager
 					{
 						var client = new WebClient();
 						File.Delete(Path.Combine(path, "Protobuild.exe"));
-						client.DownloadFile("http://protobuild.org/get", Path.Combine(path, "Protobuild.exe"));
+						client.DownloadFile("https://github.com/Protobuild/Protobuild/raw/master/Protobuild.exe", Path.Combine(path, "Protobuild.exe"));
 
 						try
 						{

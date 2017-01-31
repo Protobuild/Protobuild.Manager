@@ -31,11 +31,11 @@ OutFile 'ProtobuildWebInstall.exe'
 InstallDir '$PROGRAMFILES\${APPNAME}'
 VIProductVersion "1.0.0.0"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "Protobuild Manager"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Protobuild Developers"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" ".NET Foundation"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "1.0.0.0"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "1.0.0.0"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "Protobuild Manager Installer"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright Protobuild Developers"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright .NET Foundation"
 
 RequestExecutionLevel admin
 
@@ -46,7 +46,7 @@ Section "All Components" CoreComponents ;No components page, name is not importa
   SetOutPath '$INSTDIR'
   File '..\..\Protobuild.exe'
   
-  nsExec::ExecToLog "Protobuild.exe --install http://protobuild.org/hach-que/Protobuild.Manager"
+  nsExec::ExecToLog "Protobuild.exe --install https-nuget-v3://api.nuget.org/v3/index.json|Protobuild.Manager"
   
 SectionEnd
 

@@ -1,4 +1,27 @@
 #!/usr/bin/env groovy
-@Library('Protobuild.JenkinsHelpers@0.1')
-import protobuild
-protobuild('Protobuild.Manager', 'https://github.com/Protobuild/Protobuild.Manager')
+stage("Windows") {
+  node('windows') {
+    checkout poll: false, changelog: false, scm: scm
+    bat ("Protobuild.exe --upgrade-all")
+    bat ('Protobuild.exe --automated-build')
+    archiveArtifacts 'Installers/Windows/ProtobuildWebInstall.exe'
+  }
+}
+
+stage("Mac") {
+  node('mac') {
+    checkout poll: false, changelog: false, scm: scm
+    sh ("mono Protobuild.exe --upgrade-all")
+    sh ("mono Protobuild.exe --automated-build")
+    archiveArtifacts 'Installers/MacOS/install.sh'
+  }
+}
+
+stage("Linux") {
+  node('linux') {
+    checkout poll: true, changelog: true, scm: scm
+    sh ("mono Protobuild.exe --upgrade-all")
+    sh ("mono Protobuild.exe --automated-build")
+    archiveArtifacts 'Installers/Linux/install.sh'
+  }
+}

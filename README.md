@@ -13,7 +13,7 @@ A cross-platform GUI manager for Protobuild projects.  It's goals are:
 
 On Windows, we provide a web installer.  You need an internet connection while the installer is running to complete the installation.
 
-[Download for Windows](https://s3.amazonaws.com/redpointx/ProtobuildWebInstall.exe)
+[Download for Windows](https://github.com/Protobuild/Protobuild.Manager/releases/download/latest/ProtobuildWindowsInstall.exe)
 
 ### macOS
 
@@ -24,7 +24,7 @@ On macOS, we provide a script to complete the installation.  You will need to do
 After you have installed Mono, open a terminal, and then run:
 
 ```bash
-curl -L https://s3.amazonaws.com/redpointx/ProtobuildMacOSInstall.sh | bash
+curl -L https://github.com/Protobuild/Protobuild.Manager/releases/download/latest/ProtobuildMacOSInstall.sh | bash
 ```
 
 ### Linux
@@ -37,7 +37,7 @@ On Linux, we provide a script to complete the installation.  Depending on your d
 # Install Mono and GTK# 3 with the following command:
 sudo dnf install mono-core gtk-sharp3
 # Run the script to install Protobuild Manager:
-curl -L https://s3.amazonaws.com/redpointx/ProtobuildLinuxInstall.sh | bash
+curl -L https://github.com/Protobuild/Protobuild.Manager/releases/download/latest/ProtobuildLinuxInstall.sh | bash
 ```
 
 #### OpenSUSE
@@ -46,7 +46,7 @@ curl -L https://s3.amazonaws.com/redpointx/ProtobuildLinuxInstall.sh | bash
 # Install Mono, GTK# 3 and WebKit GTK 3 with the following command:
 sudo zypper in mono-core gtk-sharp3 libwebkitgtk-3_0_0
 # Run the script to install Protobuild Manager:
-curl -L https://s3.amazonaws.com/redpointx/ProtobuildLinuxInstall.sh | bash
+curl -L https://github.com/Protobuild/Protobuild.Manager/releases/download/latest/ProtobuildLinuxInstall.sh | bash
 ```
 
 #### Ubuntu
@@ -56,7 +56,9 @@ curl -L https://s3.amazonaws.com/redpointx/ProtobuildLinuxInstall.sh | bash
 sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
 sudo apt update
 # Install Mono, GTK# 3, WebKit GTK 3 and extra libraries with the following command:
-sudo apt install mono-runtime gtk-sharp3 libwebkitgtk-3.0-0 libmono-system-web-extensions4.0-cil 
+sudo apt install mono-runtime gtk-sharp3 libwebkitgtk-3.0-0 libmono-system-web-extensions4.0-cil
+# Run the script to install Protobuild Manager:
+curl -L https://github.com/Protobuild/Protobuild.Manager/releases/download/latest/ProtobuildLinuxInstall.sh | bash
 ```
 
 #### Other Distros

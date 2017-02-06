@@ -27,7 +27,7 @@ namespace Protobuild.Manager
 
         public async Task Sync()
         {
-            var vsVersions = new[] {"2010","2012","2013","2015"};
+            var vsVersions = new[] {"2010","2012","2013","2015","2017"};
 
             foreach (var version in vsVersions)
             {

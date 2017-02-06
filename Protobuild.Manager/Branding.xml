@@ -60,7 +60,7 @@
   ship a local copy of the package and avoid downloading it from the
   internet.
   -->
-  <VisualStudioAddinPackage>http://protobuild.org/hach-que/Protobuild.IDE.VisualStudio</VisualStudioAddinPackage>
+  <VisualStudioAddinPackage>https-nuget-v3://api.nuget.org/v3/index.json|Protobuild.IDE.VisualStudio</VisualStudioAddinPackage>
 
   <!--
   The location of the MonoDevelop / Xamarin Studio IDE package to install.

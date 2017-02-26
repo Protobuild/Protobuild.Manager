@@ -56,7 +56,7 @@ namespace Protobuild.Manager
                 {
                     TemplateName = "MonoGame 2D Platformer",
                     TemplateDescription = "A cross-platform MonoGame project that runs a 2D platformer.",
-                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|MonoGame.Template.Platformer2Ds",
+                    TemplateURI = "https-nuget-v3://api.nuget.org/v3/index.json|MonoGame.Template.Platformer2D",
                     AdditionalProtobuildVariants = new Dictionary<string, VariantOverlay>(),
                     AdditionalStandardProjectVariants = new Dictionary<string, VariantOverlay>(),
 					OptionVariants = new List<OptionalVariant>(),

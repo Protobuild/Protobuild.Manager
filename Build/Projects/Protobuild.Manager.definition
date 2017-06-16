@@ -50,6 +50,7 @@
     <Compile Include="Execution\WindowsExecution.cs" />
     <Compile Include="GameUpdater.cs" />
     <Compile Include="Gtk3WebKit.cs" />
+    <Compile Include="HttpUtility.cs" />
     <Compile Include="IDEAddinInstall\AddinPackageDownload.cs" />
     <Compile Include="IDEAddinInstall\IAddinPackageDownload.cs" />
     <Compile Include="IDEAddinInstall\IIDEAddinInstall.cs" />

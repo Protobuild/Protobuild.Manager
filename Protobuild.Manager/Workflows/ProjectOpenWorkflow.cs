@@ -17,11 +17,11 @@ namespace Protobuild.Manager
         private readonly IProtobuildHostingEngine _protobuildHostingEngine;
 
         public ProjectOpenWorkflow(
-			RuntimeServer runtimeServer, 
-			IProtobuildHostingEngine protobuildHostingEngine,
-            IRecentProjectsManager recentProjectsManager, 
-			IUIManager uiManager,
-			string path)
+            RuntimeServer runtimeServer,
+            IProtobuildHostingEngine protobuildHostingEngine,
+            IRecentProjectsManager recentProjectsManager,
+            IUIManager uiManager,
+            string path)
         {
             _runtimeServer = runtimeServer;
             _recentProjectsManager = recentProjectsManager;
@@ -29,9 +29,9 @@ namespace Protobuild.Manager
 
             if (File.Exists(Path.Combine(path, "Protobuild.exe")))
             {
-				try
-				{
-                	ModuleHost = protobuildHostingEngine.LoadModule(path);
+                try
+                {
+                    ModuleHost = protobuildHostingEngine.LoadModule(path);
                 }
                 catch (FileLoadException)
                 {
@@ -67,16 +67,16 @@ namespace Protobuild.Manager
                     }
                 }
                 catch (BadImageFormatException)
-				{
-					if (uiManager.AskToRepairCorruptProtobuild())
-					{
-						var client = new WebClient();
-						File.Delete(Path.Combine(path, "Protobuild.exe"));
-						client.DownloadFile("https://github.com/Protobuild/Protobuild/raw/master/Protobuild.exe", Path.Combine(path, "Protobuild.exe"));
+                {
+                    if (uiManager.AskToRepairCorruptProtobuild())
+                    {
+                        var client = new WebClient();
+                        File.Delete(Path.Combine(path, "Protobuild.exe"));
+                        client.DownloadFile("https://github.com/Protobuild/Protobuild/raw/master/Protobuild.exe", Path.Combine(path, "Protobuild.exe"));
 
-						try
-						{
-							ModuleHost = protobuildHostingEngine.LoadModule(path);
+                        try
+                        {
+                            ModuleHost = protobuildHostingEngine.LoadModule(path);
                         }
                         catch (FileLoadException)
                         {
@@ -84,26 +84,26 @@ namespace Protobuild.Manager
                             IsStandardProject = true;
                         }
                         catch (BadImageFormatException)
-						{
-							uiManager.FailedToRepairCorruptProtobuild();
-							IsStandardProject = true;
-						}
-						catch (TargetInvocationException)
-						{
-							uiManager.UnableToLoadModule();
-							IsStandardProject = true;
-						}
-					}
-					else
-					{
-						IsStandardProject = true;
-					}
-				}
-				catch (TargetInvocationException)
-				{
-					uiManager.UnableToLoadModule();
-					IsStandardProject = true;
-				}
+                        {
+                            uiManager.FailedToRepairCorruptProtobuild();
+                            IsStandardProject = true;
+                        }
+                        catch (TargetInvocationException)
+                        {
+                            uiManager.UnableToLoadModule();
+                            IsStandardProject = true;
+                        }
+                    }
+                    else
+                    {
+                        IsStandardProject = true;
+                    }
+                }
+                catch (TargetInvocationException)
+                {
+                    uiManager.UnableToLoadModule();
+                    IsStandardProject = true;
+                }
             }
             else
             {
@@ -171,6 +171,12 @@ namespace Protobuild.Manager
                 _runtimeServer.Set("isStandard", false);
                 _runtimeServer.Set("supportedPlatformCount", 0);
             }
+
+#if PLATFORM_MACOS
+            // Force reference to System.Runtime for macOS, which we need to load
+            // Protobuild.exe.
+            var t = typeof(System.Runtime.GCSettings).FullName;
+#endif
 
             _recentProjectsManager.AddEntry(
                 _runtimeServer.Get<string>("loadedModuleName"),
